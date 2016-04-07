@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="icon" href="./images/logo.ico">
+
+		<title>Mundo Movil</title>
+
+		<link href="./css/bootstrap.css" rel="stylesheet">
+		<link href="./css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+		<link href="./css/estilo.css" rel="stylesheet">
+
+	</head>
+
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top barra-nav">
+		  <div class="container">
+			<div class="navbar-header">
+				<div class="container-fluid">
+					<a class="navbar-brand" rel="home" href="#" title="Mundo Movil">
+						<img class="logo img-responsive" src="./images/letra.png">
+					</a>
+				</div>
+			  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-sec">
+					<li><a href="#">NOTICIAS</a></li>
+					<li><a href="#">TUTORIALES</a></li>
+					<li><a href="#">FOROS</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-sec2">
+					<li class="busqueda">
+						<a class="btn btn-link" onclick="mostrar_busqueda()">
+							<span class="glyphicon glyphicon-search"></span>
+						</a>
+					</li>
+					<li>
+						<a class="btn btn-link" onclick="mostrar_login()">
+							<span class="glyphicon glyphicon-user"></span>
+						</a>
+					</li>
+					<!--<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hola, Diego <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Perfil</a></li>
+							<li><a href="#">Administrar usuarios</a></li>
+							<li><a href="#">Cerrar sesi&oacute;n</a></li>
+						</ul>
+					</li>-->
+				</ul>
+			</div>
+		  </div>
+		</nav>
+		<div class="container content">
+			<div class="row vistaNoticia">
+				<div class="col-md-12">
+					<!--Desde aqui-->
+					<span id="panelAdminMos">
+						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
+					</span>
+					<div id="panelAdmin" class="row botonesNoticia">
+						<div class="col-md-12">
+							<h4>Panel de administraci&oacute;n de noticia</h4>
+							<a href="" class="btn btn-default">Modificar</a>
+							<a href="javascript:preguntarEliminar('http://www.google.es')" class="btn btn-default">Eliminar</a>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="ocultar_panel_creacion()">&times;</button>
+						</div>
+					</div>
+					 <!--Mostrar hasta aqui si es creador-->
+					<div class="row cuerpo-not">
+						<div class="row">
+							<div class="col-md 12 tituloNot2">
+								<h2>
+									Así imaginan el diseño del iPhone SE justo antes de su presentación
+								</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="imgNot">
+										<img src="./img/imgNot2.jpg" alt="imagen noticia" class="img-responsive">
+								</div>
+								<div class="datosNot">
+									<div class="row">
+										<div class="col-md-6 fec">
+											Fecha: 22-03-2016 | 12:36
+										</div>
+										<div class="col-md-6 aut">
+											Autor:
+												<a href="" >
+													 Diego
+												</a>
+										</div>
+									</div>
+								</div>
+								<div class="resNot">
+									Empezamos la Actualidad ROM de esta semana, con interesantes novedades en el mundo de la Scene Android, como pueda ser la llegada de la primera versión estable y oficial de una compilación CyanogenMod 13, la actualización de SuperSU o la publicación del código fuente del Kernel para el Samsung Galaxy S7 Edge Exynos. Esto y mucho más, a continuación.
+								</div>
+								<div class="clavNot text-muted">
+									<a href="">
+										Android
+									</a>
+									<a href="">
+										smartphone
+									</a>
+									<a href="">
+										rom
+									</a>
+									<a href="">
+										samsung
+									</a>
+								</div>
+								<div class="textoNoticia">
+									Nos encontramos ante un terminal que ha sufrido a su alrededor los mismos rumores de aquel iPhone 5C destinado a ser el primer smartphone “barato” de Apple y que finalmente no lo fue tanto. Lo primero que destaca a la hora de mostrar las diferencias entre ambos dispositivos es que aquel terminal estaba fabricado con el plástico como principal componente, mientras que el iPhone SE sigue la línea de diseño de sus hermanos mayores, es decir, en esta ocasión pasamos del plástico al metal y cristal para dar forma a un terminal que sigue la línea de diseño del iPhone 5S
+									Relacionado con el diseño encontramos una de las pocas características en común que comparten ambos terminales, su pantalla. En este sentido no podemos encontrar ninguna novedad ya que se mantiene la pantalla de 4 pulgadas que ya conocemos y hemos visto en el iPhone 5C. Ninguna de las pantallas cuentan con la tecnología 3D Touch.
+									Pero si en términos de display no encontramos demasiadas diferencias, no sucede lo mismo con las especificaciones internas del dispositivo. El iPhone SE trabaja con el chip A9, el mismo encargado de alimentar los últimos iPhone 6s presentes en el mercado. Esto lo alejar por completo del antiguo smartphone de bajo coste de la marca, y su CPU A6. La presencia de este chip permite encontrar funciones específicas de los últimos modelos de iPhone que no estaban presentes en el iPhone 5C, como “Live Photos”, Apple Pay y, por supuesto, el Touch ID, el sensor de huellas dactilares que vio la luz con el iPhone 5S.
+									EL apartado multimedia es otro de los que más han evolucionado a lo largo del tiempo, y este iPhone SE puede presumir de presentar el mismo equipo fotográfico que el iPhone 6s, es decir una cámara de 12 megapíxeles con grabación de vídeo en 4K. Si echamos la vista atrás podemos recordar que la cámara principal del iPhone 5C estaba protagonizada por un un sensor de 8 megapíxeles, mientras que la cámara secundaria alcanzaba los 1,2 píxeles (que en esta ocasión crece hasta los 5).
+									En lo que respecta a términos de conectividad, ambos smartphones presentan las mismas características, a excepción de la compatibilidad NFC por la que trabaja Apple Pay, ya que ambos smartphones son compatibles con redes 4G.
+								</div>
+								<div class="comentariosNoticia">
+									<div class="titComNot">
+										<h3>80 COMENTARIOS</h3>
+									</div>
+									<div class="row">
+										<div class="col-md-2"></div>
+										<div class="col-md-8">
+											<div class="panelCom">
+												<h4>Deja tu comentario</h4>
+												<a href="javascript:mostrar_comentario_noticia('null')" class="btn btn-warning">Comentar</a>
+											</div>
+											<div class="coment">
+												<!--Bucle-->
+												<div class="comentario">
+													<div class="row cabeceraCom">
+														<div class="col-md-7 aut">
+															#1 <a href="">
+																	petete300 
+																</a>
+														</div>
+														<div class="col-md-5 fec">
+															22-03-2016 | 12:36
+														</div>
+													</div>
+													<div class="row cuerpoCom">
+														<div class="col-md-12">
+															<a onmouseover="mostrar_respuesta_comentario()" onmouseout="ocultar_respuesta_comentario()" >#1</a>
+															<div id="comentarioRespuesta" class="well">
+																Dice asi que es
+															</div>
+															Reconocido por él mismo, por Xavi, y por la prensa tanto de Madrid como de Barcelona que el señor Iker Casillas llamó a Xavier Hernández para acercar posturas y pedirle disculpas por los piques surgidos en los clásicos precedentes. Genio, XDD.
+
+														</div>
+													</div>
+													<div class="row pieCom">
+														<div class="col-md-12">
+															<a href="javascript:mostrar_comentario_noticia('')" class="btn btn-default">
+																Responder
+															</a>
+														</div>
+													</div>
+												</div>
+												<!--Tope-->
+												<div class="pieComNot"></div>
+											</div>
+										</div>
+										<div class="col-md-2"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="paginacion">
+						<ul class="pagination">
+							<li>
+								<a href="#" aria-label="Anterior">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li><a href="#">1</a></li>
+							<li class="active"><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li>
+								<a href="#" aria-label="Siguiente">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<footer id="footer" class="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="text-muted">
+							Traballo Fin de Grao 2016. Escola Superior de Enxeñer&iacute;a Inform&aacute;tica.
+							Diego Neira Fern&aacute;ndez	
+						</p>
+					</div>
+				</div>
+			</div>
+			<!--Boton de scroll to top-->
+			
+			<span id="top-link-block" class="hidden">
+				<a href="#top" class="well well-sm"  onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+			</span>
+		</footer>
+	<!--Sombra de pagina-->
+	
+	<div id="fade" class="black_overlay"></div>
+	
+	
+	<!--- Formularios busqueda -->
+		
+		<div id="formBusqueda" class="formulario-js">
+			<div class="panel panel-default" data-lightbox="busqueda">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Buscar en MundoMovil
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="ocultar_busqueda()">&times;</button>
+					</h3>
+				</div>
+				<form id="idformBusq" method="POST" action="">
+					<div class="panel-body">
+					Introduzca los t&eacute;minos de su b&uacute;squeda y pulse en Buscar
+						<input type="text" class="form-control prim-imp" name="" placeholder="...">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="radio">
+									<label>
+										<input type="radio" name="opciones" id="opciones_1" value="opcion_1">
+										Noticias
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="opciones" id="opciones_2" value="opcion_2">
+										Tutoriales
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="opciones" id="opciones_3" value="opcion_3">
+										Foros
+									</label>
+								</div>
+							</div>
+							<div class="col-md-7">
+								<div class="radio">
+									<label>
+										Filtrar por:
+										<select class="form-control select-filtro" name="">
+											  <option value="autor">autor</option>
+											  <option value="contenido">contenido</option>
+											  <option value="palabras">palabras clave</option>
+										</select>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer btn-form">						
+						<button type="reset" class="btn btn-default" onclick="ocultar_busqueda()">Cancelar</button>
+						<button type="button" class="btn btn-primary">Buscar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<!--Formulario login-->
+		
+		<div id="formLogin" class="formulario-js">
+			<div class="panel panel-default" data-lightbox="busqueda">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Entrar en MundoMovil
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="ocultar_login()">&times;</button>
+					</h3>
+				</div>
+				<form id="idformLogin" method="POST" action="">
+					<div class="panel-body">
+						<div class="form-group">
+							<input type="text" class="form-control inp-log" name="" placeholder="Introduce E-mail">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control inp-log" name="" placeholder="Introduce contrase&ntilde;a">
+						</div>
+					</div>
+					<div class="panel-footer">
+						<div class="row">
+							<div class="col-md-6">
+								<a class="btn btn-link" onclick="mostrar_registro()">
+									¿No tienes cuenta? Reg&iacute;strate ahora
+								</a>
+							</div>
+							<div class="col-md-6 btn-form">
+								<button type="reset" class="btn btn-default" onclick="ocultar_login()">Cancelar</button>
+								<button type="button" class="btn btn-primary">Entrar</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<!--Formulario registro-->
+		
+		<div id="formRegistro" class="formulario-js">
+			<div class="panel panel-default" data-lightbox="busqueda">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Registrarse en MundoMovil
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="ocultar_registro()">&times;</button>
+					</h3>
+				</div>
+				<form id="idformLogin" method="POST" action="">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-7">
+								<div class="form-group">
+									<input type="text" class="form-control inp-log" name="" placeholder="Nombre usuario">
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control inp-log" name="" placeholder="E-mail">
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control inp-log" name="" placeholder="Ubicaci&oacute;n">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control inp-log" name="" placeholder="Contrase&ntilde;a">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control inp-log" name="" placeholder="Repite contrase&ntilde;a">
+								</div>
+							</div>
+							<div class="col-md-5 imagenReg">
+								<div class="form-group img-regis">
+									<img id="imgPerfil" src="./images/perfil.jpg" alt="ImagenPerfil" class="img-rounded img-responsive">
+								</div>
+								<div class="form-group">
+									<label for="ejemplo_archivo_1">Selecciona avatar</label>
+									<div class="inp-file">
+										<input type="file" id="files" name="files[]">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer btn-form">
+						<button type="reset" class="btn btn-default" onclick="ocultar_registro()">Cancelar</button>
+						<button type="button" class="btn btn-primary">Registrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<!--- Formularios enviar mensaje -->
+		
+		<div id="formComentNoticia" class="formulario-js">
+			<div class="panel panel-default" data-lightbox="busqueda">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Comentar noticia
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="ocultar_comentario_noticia">&times;</button>
+					</h3>
+				</div>
+				<form id="idformBusq" method="POST" action="">
+					<div class="panel-body">
+						Introduzca el contenido del comentario y pulse Enviar
+						<div></div>
+						<label class="lbl-dest">Comentario:</label>
+						<textarea type="text" class="form-control" name="" placeholder="..."></textarea>
+					</div>
+					<div class="panel-footer btn-form">						
+						<button type="reset" class="btn btn-default" onclick="ocultar_comentario_noticia()">Cancelar</button>
+						<button type="button" class="btn btn-primary">Enviar</button>
+					</div>
+					<div id="idRespComNot"></div>
+				</form>
+			</div>
+		</div>
+	
+		
+		<script src="./js/jquery.js"></script>
+		<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+		<script src="./js/bootstrap.js"></script>
+		<script src="./js/ie10-viewport-bug-workaround.js"></script>
+		<script src="./js/ie-emulation-modes-warning.js"></script>
+		<script src="js/javascript.js" type="text/javascript" ></script>
+	  
+
+	</body>
+</html>
