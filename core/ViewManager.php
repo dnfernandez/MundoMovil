@@ -245,7 +245,7 @@ class ViewManager
 
 
     /**
-     * Establece la layout que va a ser usada cuando renderLayout sea llamado
+     * Establece el layout que va a ser usado cuando renderLayout sea llamado
      * @param $layout
      */
     public function setLayout($layout)

@@ -186,11 +186,18 @@ class UsuarioMapper
      * Metodo que actualiza la fecha/hora de la última conexión al sistema
      */
 
-    public function actualizarFechaConexion($id_usuario)
+    public function actualizarFechaConexion($id_usuario=null, $email=null)
     {
-        if ($this->existe($id_usuario)) {
-            $stmt = $this->db->prepare("update usuario set fecha_conex = NOW() where id_usuario=?");
-            $stmt->execute(array($id_usuario));
+        if($id_usuario!=null) {
+            if ($this->existe($id_usuario)) {
+                $stmt = $this->db->prepare("update usuario set fecha_conex = NOW() where id_usuario=?");
+                $stmt->execute(array($id_usuario));
+            }
+        }elseif($email!=null){
+            if ($this->existe(null,null,$email)) {
+                $stmt = $this->db->prepare("update usuario set fecha_conex = NOW() where email=?");
+                $stmt->execute(array($email));
+            }
         }
     }
 
@@ -307,4 +314,12 @@ class UsuarioMapper
         }
     }
 
+    /**
+     * Metodo que permite obtener el ultimo id de un usuario para utilizarlo en su foto de perfil
+     * @return mixed
+     */
+    public function obtenerUltimoIdUsuario(){
+        $stmt = $this->db->query("select max(id_usuario) as max_id from usuario");
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
 }

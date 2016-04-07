@@ -3,6 +3,8 @@ require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $base = $view->getBase();
 $usuarioActual = $view->getVariable("usuarioActual");
+$mensajeSucces = $view->getVariable("mensajeSucces");
+$mensajeError = $view->getVariable("mensajeError");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,7 +25,10 @@ $usuarioActual = $view->getVariable("usuarioActual");
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
+    <link href="css/alertify.min.css" rel="stylesheet">
+    <link href="css/default.min.css" rel="stylesheet">
     <script src="plugins/ckeditor/ckeditor.js"></script>
+    <script src="js/alertify.min.js" type="text/javascript"></script>
 
 </head>
 
@@ -82,6 +87,14 @@ $usuarioActual = $view->getVariable("usuarioActual");
 
 <!------------------------------------ Las vistas vienen aqui ------------------------------------------------->
 <?= $view->getFragment(ViewManager::DEFAULT_FRAGMENT) ?>
+
+<?php
+if (isset($mensajeSucces)) {
+    echo '<script>
+               alertify.success("' . $mensajeSucces . '")
+            </script>';
+}
+?>
 
 <footer id="footer" class="footer">
     <div class="container">
@@ -217,37 +230,37 @@ $usuarioActual = $view->getVariable("usuarioActual");
                         onclick="ocultar_registro()">&times;</button>
             </h3>
         </div>
-        <form id="idformLogin" method="POST" action="">
+        <form id="idformRegistro" method="POST" action="usuario/registro" enctype="multipart/form-data">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-7">
                         <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="" placeholder="Nombre usuario">
+                            <input type="text" class="form-control inp-log" name="nom_usuario" placeholder="Nombre usuario">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="" placeholder="E-mail">
+                            <input type="text" class="form-control inp-log" name="email" placeholder="E-mail">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="" placeholder="Ubicaci&oacute;n">
+                            <input type="text" class="form-control inp-log" name="ubicacion" placeholder="Ubicaci&oacute;n">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control inp-log" name="" placeholder="Contrase&ntilde;a">
+                            <input type="password" class="form-control inp-log" name="contrasenha" placeholder="Contrase&ntilde;a">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control inp-log" name=""
+                            <input type="password" class="form-control inp-log" name="contrasenha2"
                                    placeholder="Repite contrase&ntilde;a">
                         </div>
                     </div>
                     <div class="col-md-5 imagenReg">
                         <div class="form-group img-regis">
-                            <img id="imgPerfil" src="./images/perfil.jpg" alt="ImagenPerfil"
+                            <img id="imgPerfil" src="images/perfil.jpg" alt="ImagenPerfil"
                                  class="img-rounded img-responsive">
                         </div>
                         <div class="form-group">
                             <label>Selecciona avatar</label>
 
                             <div class="inp-file">
-                                <input type="file" id="files" name="files[]">
+                                <input type="file" id="files" name="img_perfil">
                             </div>
                         </div>
                     </div>
@@ -255,7 +268,7 @@ $usuarioActual = $view->getVariable("usuarioActual");
             </div>
             <div class="panel-footer btn-form">
                 <button type="reset" class="btn btn-default" onclick="ocultar_registro()">Cancelar</button>
-                <button type="button" class="btn btn-primary">Registrar</button>
+                <button type="submit" class="btn btn-primary">Registrar</button>
             </div>
         </form>
     </div>
@@ -268,7 +281,6 @@ $usuarioActual = $view->getVariable("usuarioActual");
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 <script src="js/ie-emulation-modes-warning.js"></script>
 <script src="js/javascript.js" type="text/javascript"></script>
-
 
 </body>
 </html>

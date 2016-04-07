@@ -238,13 +238,15 @@ foreach ($respuestaMapper->listarRespuestasUsuario(1, 1, 1) as $res) {
     echo "Id respuesta: " . $res["id_respuesta"] . " --- Id usuario: " . $res["id_usuario"] . " --- Nombre usuario: " .
         $res["nom_usuario"] . " --- Tipo: " . $res["tipo_votacion"] . "<br>";
 }
-$tot= $respuestaMapper->contarTotal(1);
-echo "<br>Total de algo: ".$tot;
-$tot= $respuestaMapper->contarPositivos(1);
-echo "<br>Total de positivos: ".$tot;
-$tot= $respuestaMapper->contarNegativos(1);
-echo "<br>Total de negativos: ".$tot;
+$tot = $respuestaMapper->contarTotal(1);
+echo "<br>Total de algo: " . $tot;
+$tot = $respuestaMapper->contarPositivos(1);
+echo "<br>Total de positivos: " . $tot;
+$tot = $respuestaMapper->contarNegativos(1);
+echo "<br>Total de negativos: " . $tot;
 
-$user32 = $usuarioMapper->listarUsuarioConcreto(null,"diego@gmail.com");
+$user32 = $usuarioMapper->listarUsuarioConcreto(null, "diego@gmail.com");
 echo "<br>Usuario concreto: " . $user32[0] . " -- " . $user32[11] . "<br>";
 print_r($user32);
+
+echo "<br>El ultimo id es: " . $usuarioMapper->obtenerUltimoIdUsuario()["max_id"];
