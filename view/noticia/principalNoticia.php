@@ -2,7 +2,7 @@
 require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
-$noticias = $view->getVariable("noticias");
+$noticias = $view->getVariable("noticias",array());
 $total = $view->getVariable("total");
 if (is_numeric($_GET["pag"])) {
     $pag = $_GET["pag"];
@@ -20,7 +20,7 @@ if (is_numeric($_GET["pag"])) {
                     <div id="panelAdmin" class="row botonesNoticia">
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de noticia</h4>
-                            <a href="crearNoticia.html" class="btn btn-default">Crear</a>
+                            <a href="noticia/crear" class="btn btn-default">Crear</a>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                     onclick="ocultar_panel_creacion()">&times;</button>
                         </div>
@@ -50,7 +50,7 @@ if (is_numeric($_GET["pag"])) {
                                     <div class="col-md-6 fec">
                                         <?php
                                         $date = date_create($noticia["fecha"]);
-                                        echo date_format($date, 'H:i:s d/m/Y');
+                                        echo date_format($date, 'd.m.Y | H:i');
                                         ?>
                                     </div>
                                     <div class="col-md-6 aut">
@@ -147,7 +147,9 @@ if (is_numeric($_GET["pag"])) {
                         }
                     } elseif (isset($pag) && $pag > 2 && $pag <= $num_pag - 2) {
                         for ($i = $pag - 2; $i <= $num_pag && $i <= $pag + 2; $i++) {
-                            if ($i == $pag) {
+                            if ($i <= 0) {
+
+                            } elseif ($i == $pag) {
                                 echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
                                 echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
@@ -155,7 +157,9 @@ if (is_numeric($_GET["pag"])) {
                         }
                     } elseif (isset($pag) && $pag == $num_pag - 1) {
                         for ($i = $pag - 3; $i <= $num_pag && $i <= $pag + 1; $i++) {
-                            if ($i == $pag) {
+                            if ($i <= 0) {
+
+                            } elseif ($i == $pag) {
                                 echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
                                 echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
@@ -163,7 +167,9 @@ if (is_numeric($_GET["pag"])) {
                         }
                     } elseif (isset($pag) && $pag == $num_pag) {
                         for ($i = $pag - 4; $i <= $num_pag && $i <= $pag; $i++) {
-                            if ($i == $pag) {
+                            if ($i <= 0) {
+
+                            } elseif ($i == $pag) {
                                 echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
                                 echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
@@ -176,7 +182,7 @@ if (is_numeric($_GET["pag"])) {
                             echo '<a href="noticia/index?pag=' . ($pag + 1) . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';
-                        } elseif (!isset($pag)) {
+                        } elseif (!isset($pag) && $num_pag>1) {
                             echo '<a href="noticia/index?pag=' . 2 . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';

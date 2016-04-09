@@ -49,7 +49,7 @@ class NoticiaMapper
 
     public function listarNoticiaPorId($id_noticia)
     {
-        $stmt = $this->db->prepare("select * from noticia where id_noticia=?");
+        $stmt = $this->db->prepare("select * from noticia, usuario where usuario.id_usuario=noticia.id_usuario and id_noticia=?");
         $stmt->execute(array($id_noticia));
         $noticia = $stmt->fetch(PDO::FETCH_BOTH);
         if ($noticia != null) {
@@ -145,6 +145,16 @@ class NoticiaMapper
 
     public function contarNoticias(){
         $stmt = $this->db->query("select count(*) as total from noticia");
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo para obtener el ultimo id de noticia
+     * @return mixed
+     */
+    public function obtenerUltimoIdNoticia()
+    {
+        $stmt = $this->db->query("select max(id_noticia) as max_id from noticia");
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
 }

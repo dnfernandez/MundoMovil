@@ -76,7 +76,7 @@ $mensajeError = $view->getVariable("mensajeError");
                             <?php if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
                                 <li><a href="#">Administrar usuarios</a></li>
                             <?php endif; ?>
-                            <li><a href="usuario/logout">Cerrar sesi&oacute;n</a></li>
+                            <li><a href="usuario/logout" onclick="javascript:recarga2()">Cerrar sesi&oacute;n</a></li>
                         </ul>
                     </li>
                 <?php endif ?>
@@ -92,6 +92,12 @@ $mensajeError = $view->getVariable("mensajeError");
 if (isset($mensajeSucces)) {
     echo '<script>
                alertify.success("' . $mensajeSucces . '")
+            </script>';
+}
+
+if (isset($mensajeError)) {
+    echo '<script>
+               alertify.error("' . $mensajeError . '")
             </script>';
 }
 ?>
@@ -175,7 +181,7 @@ if (isset($mensajeSucces)) {
             </div>
             <div class="panel-footer btn-form">
                 <button type="reset" class="btn btn-default" onclick="ocultar_busqueda()">Cancelar</button>
-                <button type="button" class="btn btn-primary">Buscar</button>
+                <button type="button" class="btn btn-primary" >Buscar</button>
             </div>
         </form>
     </div>
@@ -211,7 +217,7 @@ if (isset($mensajeSucces)) {
                     </div>
                     <div class="col-md-6 btn-form">
                         <button type="reset" class="btn btn-default" onclick="ocultar_login()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="recarga2()">Entrar</button>
                     </div>
                 </div>
             </div>

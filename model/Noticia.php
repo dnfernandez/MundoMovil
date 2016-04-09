@@ -184,9 +184,9 @@ class Noticia
             $errors["pal_clavN"] = "El campo palabras clave no puede estar vacio";
         }
 
-        if (strpos($this->rutaImagen, $this->id_noticia . ".") == false) {
+        /*if (strpos($this->rutaImagen, $this->id_noticia . ".") == false) {
             $errors["rutaImagenN"] = "El campo imagen resumen no puede estar vacio";
-        }
+        }*/
 
         if (strlen($this->texto) < 1) {
             $errors["textoN"] = "El campo texto no puede estar vacio";

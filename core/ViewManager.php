@@ -99,7 +99,7 @@ class ViewManager
         /**
          * Se crea la direccion base hasta que se encuentra algun controlador
          */
-        $arrayControladores = array("noticia","tutorial","foro","mensaje","comentario","pregunta","respuesta","usuario");
+        $arrayControladores = array("noticia", "tutorial", "foro", "mensaje", "comentario", "pregunta", "respuesta", "usuario");
         $base = "";
         foreach ($array as $a) {
             if (in_array($a, $arrayControladores)) {
@@ -136,7 +136,7 @@ class ViewManager
      * Se cambia la salida del fragmento actual. Para ello se guarda
      * el fragemento actual antes de ser cambiado.
      * Las subsecuencias de salida se acumularan en el fragmento especificado.
-     * @param $nombre. Nombre del fragmento que se va a guardar
+     * @param $nombre . Nombre del fragmento que se va a guardar
      */
 
     public function moverAFragmento($nombre)
@@ -288,11 +288,17 @@ class ViewManager
      * la pagina en donde estaba el usuario, justo antes de hacer la
      * solicitud actual.
      * @param null $cadenaPregunta
+     * @return bool
      */
+
     public function redirectToReferer($cadenaPregunta = NULL)
     {
-        header("Location: " . $_SERVER["HTTP_REFERER"] . (isset($cadenaPregunta) ? "&$cadenaPregunta" : ""));
-        die();
+        if (!empty($_SERVER["HTTP_REFERER"])) {
+            header("Location: " . $_SERVER["HTTP_REFERER"] . (isset($cadenaPregunta) ? "&$cadenaPregunta" : ""));
+            die();
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -20,9 +20,9 @@ class ComentarioNoticiaMapper
 
     public function insertar(ComentarioNoticia $comentario)
     {
-        $stmt = $this->db->prepare("insert into comentario_noticia(id_com_noticia,id_noticia, id_usuario, texto, fecha, id_com_respondido) values (?,?,?,?,?,?)");
+        $stmt = $this->db->prepare("insert into comentario_noticia(id_com_noticia,id_noticia, id_usuario, texto, fecha, id_com_respondido) values (?,?,?,?,NOW(),?)");
         $stmt->execute(array($comentario->getIdComNoticia(), $comentario->getIdNoticia(), $comentario->getIdUsuario(),
-            $comentario->getTexto(), $comentario->getFecha(), $comentario->getIdComRespondido()));
+            $comentario->getTexto(), $comentario->getIdComRespondido()));
     }
 
     /**
@@ -40,7 +40,7 @@ class ComentarioNoticiaMapper
         }
         $inicio = ($pag - 1) * $limite;
 
-        $stmt = $this->db->prepare("select * from comentario_noticia where id_noticia=? limit ?,?");
+        $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? limit ?,?");
         $stmt->execute(array($id_noticia, $inicio, $limite));
         $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $comentarios2 = array();
@@ -62,4 +62,34 @@ class ComentarioNoticiaMapper
         return $comentarios2;
     }
 
+    /**
+     * Metodo que cuenta el numero total de comentarios de una noticia
+     * @param $id_noticia
+     * @return mixed
+     */
+    public function contarComentariosNoticia($id_noticia){
+        $stmt = $this->db->prepare("select count(*) as total from comentario_noticia where id_noticia=?");
+        $stmt->execute(array($id_noticia));
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que devuelve un array con los id_com_noticia y unos "ids secuenciales" asociados
+     * @param $id_noticia
+     * @return array
+     */
+    public function calcularIdSecuenciales($id_noticia){
+        $stmt = $this->db->prepare("select * from comentario_noticia where id_noticia=?");
+        $stmt->execute(array($id_noticia));
+        $comentarios = $stmt->fetchAll(PDO::FETCH_BOTH);
+        $array = array();
+
+        $cont=1;
+        foreach($comentarios as $comentario){
+            $array[$comentario["id_com_noticia"]]=$cont;
+            $cont++;
+        }
+
+        return $array;
+    }
 }

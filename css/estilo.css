@@ -579,7 +579,7 @@ a.btn {
     margin-bottom: 4em;
 }
 
-#comentarioRespuesta {
+.comentarioRespuesta {
     position: relative;
     z-index: 100;
     display: none;

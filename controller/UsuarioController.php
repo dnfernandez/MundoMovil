@@ -38,9 +38,9 @@ class UsuarioController extends BaseController
             $error = null;
             $email = $_POST["email"];
             $contrasenha = $_POST["contrasenha"];
-            if ($this->usuarioMapper->comprobarEstadoUsuario(null, $email)) {
-                if (!$this->usuarioMapper->comprobarBaneoUsuario(null, $email)) {
-                    if ($this->usuarioMapper->comprobarUsuario($email, $contrasenha)) {
+            if ($this->usuarioMapper->comprobarUsuario($email, $contrasenha)) {
+                if ($this->usuarioMapper->comprobarEstadoUsuario(null, $email)) {
+                    if (!$this->usuarioMapper->comprobarBaneoUsuario(null, $email)) {
                         $_SESSION["usuarioActual"] = $email;
                         $this->usuarioMapper->actualizarFechaConexion(null, $email);
                         $this->view->setVariable("mensajeSucces", "Usuario logueado correctamente", true);
@@ -50,13 +50,13 @@ class UsuarioController extends BaseController
                             $this->view->redirectToReferer();
                         }
                     } else {
-                        $error = "Login incorrecto";
+                        $error = "Usuario baneado";
                     }
                 } else {
-                    $error = "Usuario baneado";
+                    $error = "Este usuario todav&iacute;a no esta activado";
                 }
             } else {
-                $error = "Este usuario todav&iacute;a no esta activado";
+                $error = "Login incorrecto";
             }
             $this->view->setFlash($error);
             $datos = array("email" => $email);
@@ -89,7 +89,11 @@ class UsuarioController extends BaseController
     public function logout()
     {
         session_destroy();
-        $this->view->redirectToReferer();
+        session_start();
+        $this->view->setVariable("mensajeError","Usuario desconectado",true);
+        if(!$this->view->redirectToReferer()){
+            $this->view->redirect("noticia","index");
+        }
     }
 
     /**
