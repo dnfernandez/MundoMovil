@@ -385,7 +385,7 @@ a.btn {
 
 .fixed_class {
     position: absolute;
-    bottom: 4.5%;
+    bottom: 4.5em;
 }
 
 .paginacion {
@@ -835,4 +835,17 @@ a.btn {
     -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .1);
     box-shadow: 1px 2px 4px rgba(0, 0, 0, .1);
     z-index: 1;
+}
+
+.error-especial{
+    color:red;
+    font-weight: bold;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    text-align: justify;
+    padding-top: 0.25em;
+}
+
+#error1, #error2, #error3, #error4{
+    display: none;
 }

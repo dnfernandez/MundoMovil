@@ -149,12 +149,12 @@ class UsuarioMapper
             $pag = 1;
         }
         $inicio = ($pag - 1) * $limite;
-        if ($nom_usuario!=null) {
+        if ($nom_usuario != null) {
             $stmt = $this->db->prepare("select * from usuario where nom_usuario like ? limit ?,?");
-            $stmt->execute(array('%'.$nom_usuario.'%',$inicio, $limite));
-        } elseif ($email!=null) {
+            $stmt->execute(array('%' . $nom_usuario . '%', $inicio, $limite));
+        } elseif ($email != null) {
             $stmt = $this->db->prepare("select * from usuario where email like ? limit ?,?");
-            $stmt->execute(array('%'.$email.'%',$inicio, $limite));
+            $stmt->execute(array('%' . $email . '%', $inicio, $limite));
         } else {
             $stmt = $this->db->prepare("select * from usuario limit ?,?");
             $stmt->execute(array($inicio, $limite));
@@ -186,15 +186,15 @@ class UsuarioMapper
      * Metodo que actualiza la fecha/hora de la última conexión al sistema
      */
 
-    public function actualizarFechaConexion($id_usuario=null, $email=null)
+    public function actualizarFechaConexion($id_usuario = null, $email = null)
     {
-        if($id_usuario!=null) {
+        if ($id_usuario != null) {
             if ($this->existe($id_usuario)) {
                 $stmt = $this->db->prepare("update usuario set fecha_conex = NOW() where id_usuario=?");
                 $stmt->execute(array($id_usuario));
             }
-        }elseif($email!=null){
-            if ($this->existe(null,null,$email)) {
+        } elseif ($email != null) {
+            if ($this->existe(null, null, $email)) {
                 $stmt = $this->db->prepare("update usuario set fecha_conex = NOW() where email=?");
                 $stmt->execute(array($email));
             }
@@ -290,7 +290,7 @@ class UsuarioMapper
      * Metodo que actualiza el estado de un usuario (pasa de inactivo(0) a activo(1))
      */
 
-    public function actualizaEstadoUsuario($id_usuario)
+    private function actualizaEstadoUsuario($id_usuario)
     {
         if ($this->existe($id_usuario)) {
             $stmt = $this->db->prepare("update usuario set estado=1 where id_usuario=?");
@@ -311,6 +311,9 @@ class UsuarioMapper
         $id_usuario = $id_usuario["id_usuario"];
         if (!$this->comprobarEstadoUsuario($id_usuario)) {
             $this->actualizaEstadoUsuario($id_usuario);
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -318,8 +321,21 @@ class UsuarioMapper
      * Metodo que permite obtener el ultimo id de un usuario para utilizarlo en su foto de perfil
      * @return mixed
      */
-    public function obtenerUltimoIdUsuario(){
+    public function obtenerUltimoIdUsuario()
+    {
         $stmt = $this->db->query("select max(id_usuario) as max_id from usuario");
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que permite obtener el cod_validacion de un usuario
+     * @param $email
+     * @return mixed
+     */
+    public function obtenerCodigoActivacionUsuario($email)
+    {
+        $stmt = $this->db->prepare("select cod_validacion from usuario where email=?");
+        $stmt->execute(array($email));
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
 }

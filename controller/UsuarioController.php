@@ -3,6 +3,7 @@
 require_once(__DIR__ . "/../controller/BaseController.php");
 require_once(__DIR__ . "/../model/Usuario.php");
 require_once(__DIR__ . "/../model/UsuarioMapper.php");
+require_once(__DIR__ . "/../core/SendMail.php");
 
 class UsuarioController extends BaseController
 {
@@ -149,7 +150,8 @@ class UsuarioController extends BaseController
                             try {
                                 $usuario->validoParaCrear();
                                 $this->usuarioMapper->insertar($usuario);
-                                $this->view->setVariable("mensajeRegistro", "Ha sido registrado en MundoMovil como: <b>" . $nom_usuario . "</b> de manera satisfactoria.<br> Le enviaremos un email, para activar su cuenta, al correo: <b>" . $email . "</b>.", true);
+                                $this->view->setVariable("mensajeRegistro", "Ha sido registrado en MundoMovil como: <strong>" . $nom_usuario . "</strong> de manera satisfactoria.<br> Le enviaremos un email, para activar su cuenta, al correo: <strong>" . $email . "</strong>.", true);
+                                enviar_email($usuario);
                                 $this->view->redirect("usuario", "login_error");
                             } catch (ValidationException $ex) {
                                 $errores = $ex->getErrors();
@@ -190,5 +192,26 @@ class UsuarioController extends BaseController
         }
     }
 
+    /**
+     * Metodo que permite activar la cuenta de un usuario
+     *
+     * Para ello se comprueba el codigo de validacion obtenido por $_GET y se activa a dicho
+     * usuario. Se redirige a ventana de login
+     */
+
+    public function activar()
+    {
+        if (isset($_GET["cod_act"]) && !empty($_GET["cod_act"])) {
+            $cod_act = $_GET["cod_act"];
+            if ($this->usuarioMapper->comprobarCodigoValidacion($cod_act)) {
+                $this->view->setVariable("mensajeSucces", "El usuario ha sido activado", true);
+            } else {
+                $this->view->setVariable("mensajeError", "No se ha podido activar al usuario", true);
+            }
+            $this->view->redirect("usuario", "login_error");
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
+    }
 
 }

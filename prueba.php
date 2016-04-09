@@ -18,10 +18,10 @@ $noticiaMapper->insertar($noticia);
 $noticia2 = new Noticia(1,"escobeta","asadora","asa as","2.","asd","2016-02-02 00:00:00",1);
 $noticiaMapper->actualizar($noticia2);*/
 
-$noticias = $noticiaMapper->listarNoticiasFiltro(1, null, null, null);
+$noticias = $noticiaMapper->listarNoticiasFiltro(1,null,null,null);
 if ($noticias != null) {
     foreach ($noticias as $not) {
-        echo $not["id_noticia"] . " ---- Fecha: " . $not["fecha"] . "<br>";
+        echo $not["id_noticia"] . " ---- Fecha: " . $not["nom_usuario"] . "<br>";
     }
 }
 
@@ -250,3 +250,24 @@ echo "<br>Usuario concreto: " . $user32[0] . " -- " . $user32[11] . "<br>";
 print_r($user32);
 
 echo "<br>El ultimo id es: " . $usuarioMapper->obtenerUltimoIdUsuario()["max_id"];
+
+
+$directorio = getcwd();
+$d_actual = explode("/", $directorio);
+$d_actual = $d_actual[count($d_actual) - 1];
+$pos = strpos($_SERVER["REQUEST_URI"], $d_actual);
+$uri = substr($_SERVER["REQUEST_URI"], 0, $pos) . $d_actual;
+
+
+if ($_SERVER["SERVER_PORT"] == 80) {
+    $url = $_SERVER["HTTP_HOST"] . $uri . "/usuario/activar?cod_act=";
+} else {
+    $url = $_SERVER["HTTP_HOST"] . ":" . $_SERVER["SERVER_PORT"] . $uri . "/usuario/activar?cod_act=";
+}
+echo "<br>" . $url."<br>Cod_act: ".$usuarioMapper->obtenerCodigoActivacionUsuario("diego@gmail.com")["cod_validacion"];
+
+$num_pag=35;
+
+for($i=1;$i<=$num_pag && $i<=5;$i++){
+    echo "<br> Redondeo: ".ceil(10/3);
+}

@@ -196,16 +196,16 @@ class Usuario
             $errors["nomUsuario"] = "El campo nombre usuario no puede estar vacio";
         }
 
-        if (strlen($this->email) < 1) {
-            $errors["email"] = "El campo email no puede estar vacio";
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $errors["email"] = "El email no es v&aacute;lido";
         }
 
         if (strlen($this->ubicacion) < 1) {
             $errors["ubicacion"] = "El campo ubicacion no puede estar vacio";
         }
 
-        if (strlen($this->contrasenha) < 1) {
-            $errors["contrasenha"] = "El campo contrase&ntilde;a no puede estar vacio";
+        if (strlen($this->contrasenha) < 5) {
+            $errors["contrasenha"] = "La contrase&ntilde;a no puede ser inferior a 5 caracteres";
         }
 
         if (strpos($this->avatar, $this->id_usuario . ".") == false) {

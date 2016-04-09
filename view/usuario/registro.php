@@ -34,21 +34,54 @@ $datos = $view->getVariable("datos");
                             <label>Nombre de usuario</label>
                             <input type="text" class="form-control inp-log" name="nom_usuario"
                                    value="<?php echo $datos['nom_usuario']; ?>">
+
+                            <div id="errorE1" class="error-especial">
+                                <?php if (isset($errores["nomUsuario"]) && !empty($errores["nomUsuario"])):
+                                    echo '<script>
+                                            document.getElementById("errorE1").style.display = "block !important";
+                                          </script>';
+                                    echo $errores["nomUsuario"];
+                                endif; ?>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
                             <input type="text" class="form-control inp-log" name="email"
                                    value="<?php echo $datos['email']; ?>">
+                            <div id="errorE2" class="error-especial">
+                                <?php if (isset($errores["email"]) && !empty($errores["email"])):
+                                    echo '<script>
+                                            document.getElementById("errorE2").style.display = "block !important";
+                                          </script>';
+                                    echo $errores["email"];
+                                endif; ?>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Ubicaci&oacute;n</label>
                             <input type="text" class="form-control inp-log" name="ubicacion"
                                    value="<?php echo $datos['ubicacion']; ?>">
+                            <div id="errorE3" class="error-especial">
+                                <?php if (isset($errores["ubicacion"]) && !empty($errores["ubicacion"])):
+                                    echo '<script>
+                                            document.getElementById("errorE3").style.display = "block !important";
+                                          </script>';
+                                    echo $errores["ubicacion"];
+                                endif; ?>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Contrasen&ntilde;a</label>
                             <input type="password" class="form-control inp-log" name="contrasenha"
                                    placeholder="Contrase&ntilde;a">
+                            <div id="errorE4" class="error-especial">
+                                <?php if (isset($errores["contrasenha"]) && !empty($errores["contrasenha"])):
+                                    echo '<script>
+                                            document.getElementById("errorE4").style.display = "block !important";
+                                          </script>';
+                                    echo $errores["contrasenha"];
+                                endif; ?>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Repite contrase&ntilde;a</label>
@@ -60,7 +93,7 @@ $datos = $view->getVariable("datos");
                         <div class="form-group img-regis">
                             <img id="imgPerfil"
                                 <?php if (isset($datos["img_perfil"]) && $datos["img_perfil"] != ""):
-                                    echo 'src="'.$datos["img_perfil"].'" alt="ImagenPerfil"';
+                                    echo 'src="' . $datos["img_perfil"] . '" alt="ImagenPerfil"';
                                 else:
                                     echo 'src="images/perfil.jpg" alt="ImagenPerfil"';
                                 endif; ?>

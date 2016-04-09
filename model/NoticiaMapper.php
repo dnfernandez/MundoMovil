@@ -18,9 +18,9 @@ class NoticiaMapper
 
     public function insertar(Noticia $noticia)
     {
-        $stmt = $this->db->prepare("insert into noticia(id_noticia, titulo, resumen, pal_clave, rutaImagen, texto, fecha, id_usuario) values(?,?,?,?,?,?,?,?)");
+        $stmt = $this->db->prepare("insert into noticia(id_noticia, titulo, resumen, pal_clave, rutaImagen, texto, fecha, id_usuario) values(?,?,?,?,?,?,NOW(),?)");
         $stmt->execute(array($noticia->getIdNoticia(), $noticia->getTitulo(),
-            $noticia->getResumen(), $noticia->getPalClave(), $noticia->getRutaImagen(), $noticia->getTexto(), $noticia->getFecha(), $noticia->getIdUsuario()));
+            $noticia->getResumen(), $noticia->getPalClave(), $noticia->getRutaImagen(), $noticia->getTexto(), $noticia->getIdUsuario()));
     }
 
     /**
@@ -89,11 +89,11 @@ class NoticiaMapper
         $inicio = ($pag - 1) * $limite;
 
         if ($autor != null) {
-            $stmt = $this->db->prepare("select * from noticia where noticia.id_usuario like :elemento order by fecha desc limit :ini,:lim");
+            $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario and usuario.nom_usuario like :elemento order by fecha desc limit :ini,:lim");
             $stmt->execute(array(':elemento' => '%' . $autor . '%', ':ini' => $inicio, ':lim' => $limite));
         } elseif ($pal_clave != null) {
             $arrayClave = explode(" ", $pal_clave);
-            $sentencia = "select * from noticia where";
+            $sentencia = "select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario";
             $execute = array();
             $cont = 1;
             foreach ($arrayClave as $cla) {
@@ -113,10 +113,10 @@ class NoticiaMapper
             $stmt->execute($execute);
 
         } elseif ($texto != null) {
-            $stmt = $this->db->prepare("select * from noticia where noticia.texto like :elemento or noticia.titulo like :elemento2 order by fecha desc limit :ini,:lim");
+            $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario noticia.texto like :elemento or noticia.titulo like :elemento2 order by fecha desc limit :ini,:lim");
             $stmt->execute(array(':elemento' => '%' . $texto . '%', ':elemento2' => '%' . $texto . '%', ':ini' => $inicio, ':lim' => $limite));
         } else {
-            $stmt = $this->db->prepare("select * from noticia order by fecha desc limit ?,?");
+            $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario order by fecha desc limit ?,?");
             $stmt->execute(array($inicio, $limite));
         }
         $noticias = $stmt->fetchAll(PDO::FETCH_BOTH);
@@ -132,9 +132,19 @@ class NoticiaMapper
      * Metodo para contar el numero de noticias hechas por un usuario
      */
 
-    public function contarTotal($id_usuario){
+    public function contarTotal($id_usuario)
+    {
         $stmt = $this->db->prepare("select count(*) as total from noticia where id_usuario=?");
         $stmt->execute(array($id_usuario));
         return $stmt->fetchColumn();
+    }
+
+    /**
+     * Metodo para contar el numero de paginas existentes de noticias (cada pagina tiene 10 noticias)
+     */
+
+    public function contarNoticias(){
+        $stmt = $this->db->query("select count(*) as total from noticia");
+        return $stmt->fetch(PDO::FETCH_BOTH);
     }
 }

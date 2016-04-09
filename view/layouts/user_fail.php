@@ -5,6 +5,7 @@ $base = $view->getBase();
 $usuarioActual = $view->getVariable("usuarioActual");
 $mensajeSucces = $view->getVariable("mensajeSucces");
 $mensajeRegistro = $view->getVariable("mensajeRegistro");
+$mensajeError = $view->getVariable("mensajeError");
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +52,14 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                alertify.alert("MundoMovil","' . $mensajeRegistro . '");
             </script>';
             }
+
+            if (isset($mensajeError)) {
+                echo '<script>
+               alertify.error("' . $mensajeError . '");
+            </script>';
+            }
             ?>
+
         </div>
     </div>
 </div>
