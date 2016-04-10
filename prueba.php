@@ -18,12 +18,14 @@ $noticiaMapper->insertar($noticia);
 $noticia2 = new Noticia(1,"escobeta","asadora","asa as","2.","asd","2016-02-02 00:00:00",1);
 $noticiaMapper->actualizar($noticia2);*/
 
-$noticias = $noticiaMapper->listarNoticiasFiltro(1,null,null,null);
+$noticias = $noticiaMapper->listarNoticiasFiltro(1,null,"lg",null);
 if ($noticias != null) {
     foreach ($noticias as $not) {
-        echo $not["id_noticia"] . " ---- Fecha: " . $not["nom_usuario"] . "<br>";
+        echo $not["id_noticia"] . " ---- Usuario: " . $not["id_usuario"] ." --- Titulo: ".$not["titulo"] ." --- Palabras: ".$not["pal_clave"] ."<br>";
     }
 }
+
+echo "<br> TOTAL: ".$noticiaMapper->contarNoticias(null,null,"modificaciones")["total"]."<br>";
 
 /*$lnotId = $noticiaMapper->listarNoticiaPorId(10);
 

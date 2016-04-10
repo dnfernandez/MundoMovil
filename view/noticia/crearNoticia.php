@@ -2,6 +2,7 @@
 require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
+$datos = $view->getVariable("datos");
 ?>
 <div class="container content">
     <div class="row">
@@ -18,21 +19,29 @@ $usuarioActual = $view->getVariable("usuarioActual");
                             <div class="col-md-7">
                                 <div class="form-group">
                                     <label>T&iacute;tulo</label>
-                                    <input type="text" class="form-control inp-log" name="titulo" placeholder="">
+                                    <input type="text" class="form-control inp-log" name="titulo"
+                                           value="<?php echo $datos['titulo']; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Resumen</label>
-                                    <textarea type="text" class="form-control" name="resumen" placeholder=""></textarea>
+                                    <textarea type="text" class="form-control"
+                                              name="resumen"><?php echo $datos['resumen']; ?></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Palabras clave</label>
                                     <input type="text" class="form-control inp-log" name="pal_clave"
-                                           placeholder="smartphone sony android ...">
+                                           placeholder="smartphone sony android ..."
+                                           value="<?php echo $datos['pal_clave']; ?>">
                                 </div>
                             </div>
                             <div class="col-md-5 imagenReg2">
                                 <div class="form-group img-noticia">
-                                    <img id="imgPerfil" src="images/notFound.jpg" alt="ImagenNoticia"
+                                    <img id="imgPerfil"
+                                        <?php if (isset($datos["img_noticia"]) && $datos["img_noticia"] != ""):
+                                            echo 'src="' . $datos["img_noticia"] . '" alt="ImagenNoticia"';
+                                        else:
+                                            echo 'src="images/notFound.jpg" alt="ImagenNoticia"';
+                                        endif; ?>
                                          class="img-rounded img-responsive">
                                 </div>
                                 <div class="form-group">
@@ -49,7 +58,7 @@ $usuarioActual = $view->getVariable("usuarioActual");
                                 <div class="form-group">
                                     <label>Cuerpo de noticia</label>
                                     <textarea id="textareaCuerpoNoticia" type="text" class="form-control" name="texto"
-                                              placeholder=""></textarea>
+                                              placeholder=""><?php echo $datos['texto']; ?></textarea>
                                     <script type="text/javascript">
                                         CKEDITOR.replace('textareaCuerpoNoticia');
                                         CKEDITOR.config.height = '35em';

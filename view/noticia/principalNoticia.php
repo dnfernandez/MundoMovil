@@ -2,11 +2,14 @@
 require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
-$noticias = $view->getVariable("noticias",array());
+$noticias = $view->getVariable("noticias", array());
 $total = $view->getVariable("total");
-if (is_numeric($_GET["pag"])) {
-    $pag = $_GET["pag"];
+if (isset($_GET["pag"])) {
+    if (is_numeric($_GET["pag"])) {
+        $pag = $_GET["pag"];
+    }
 }
+$filtro = $view->getVariable("filtro", "index");
 ?>
 
 <div class="container content">
@@ -38,7 +41,7 @@ if (is_numeric($_GET["pag"])) {
                         <div class="pantNot">
                             <div class="tituloNot">
                                 <h3><a href="<?php echo "noticia/ver?id=" . $noticia["id_noticia"]; ?>">
-                                        <?php echo $noticia["titulo"]; ?>
+                                        <?php echo htmlentities($noticia["titulo"]); ?>
                                     </a></h3>
                             </div>
                             <div class="imgNot">
@@ -56,23 +59,31 @@ if (is_numeric($_GET["pag"])) {
                                     <div class="col-md-6 aut">
                                         escrito por
                                         <a href="<?php echo 'usuario/ver?id=' . $noticia["id_usuario"]; ?>">
-                                            <?php echo $noticia["nom_usuario"]; ?>
+                                            <?php echo htmlentities($noticia["nom_usuario"]); ?>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="resNot">
-                                <?php echo $noticia["resumen"]; ?>
+                                <?php echo htmlentities($noticia["resumen"]); ?>
                             </div>
                             <div class="clavNot text-muted">
                                 <?php
                                 $claves = explode(" ", $noticia["pal_clave"]);
                                 foreach ($claves as $c) {
-                                    echo '<a href="noticia/filtro_etiqueta?etiqueta=' . $c . '">
-                                            ' . $c . '
-                                        </a>';
+                                    echo '
+                                        <form class="form_filtrado" id=id' . $c . ' method="post" action="noticia/filtro">
+                                            <a onclick="document.getElementById(\'id' . $c . '\').submit();">
+                                            ' . htmlentities($c) . '
+                                            </a>
+                                            <input type="hidden" name="opciones" value="noticia">
+                                            <input type="hidden" name="texto" value="'.$c.'">
+                                            <input type="hidden" name="tipo_filtro" value="palabras">
+                                        </form>
+                                    ';
                                 }
                                 ?>
+
                             </div>
                         </div>
                         <!--Hasta aqui en bucle-->
@@ -117,7 +128,7 @@ if (is_numeric($_GET["pag"])) {
                 <ul class="pagination">
                     <li>
                         <?php if (isset($pag) && $pag > 1) {
-                            echo '<a href = "noticia/index?pag=' . ($pag - 1) . '" aria-label = "Anterior" >
+                            echo '<a href = "noticia/' . $filtro . '?pag=' . ($pag - 1) . '" aria-label = "Anterior" >
                                     <span aria-hidden = "true" >&laquo;</span >
                                 </a >';
                         } else {
@@ -132,17 +143,17 @@ if (is_numeric($_GET["pag"])) {
                     if (!isset($pag) || $pag == 1) {
                         for ($i = 1; $i <= $num_pag && $i <= 5; $i++) {
                             if ($i == 1) {
-                                echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == 2) {
                         for ($i = 1; $i <= $num_pag && $i <= 5; $i++) {
                             if ($i == 2) {
-                                echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag > 2 && $pag <= $num_pag - 2) {
@@ -150,9 +161,9 @@ if (is_numeric($_GET["pag"])) {
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == $num_pag - 1) {
@@ -160,9 +171,9 @@ if (is_numeric($_GET["pag"])) {
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == $num_pag) {
@@ -170,20 +181,20 @@ if (is_numeric($_GET["pag"])) {
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/index?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     }
                     ?>
                     <li>
                         <?php if (isset($pag) && $pag < $num_pag) {
-                            echo '<a href="noticia/index?pag=' . ($pag + 1) . '" aria-label="Siguiente">
+                            echo '<a href="noticia/' . $filtro . '?pag=' . ($pag + 1) . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';
-                        } elseif (!isset($pag) && $num_pag>1) {
-                            echo '<a href="noticia/index?pag=' . 2 . '" aria-label="Siguiente">
+                        } elseif (!isset($pag) && $num_pag > 1) {
+                            echo '<a href="noticia/' . $filtro . '?pag=' . 2 . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';
                         } else {

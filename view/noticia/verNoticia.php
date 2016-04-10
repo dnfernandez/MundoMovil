@@ -18,7 +18,7 @@ $id_comentarios = $view->getVariable("id_comentarios");
         <div class="col-md-12">
             <!--Desde aqui-->
             <?php if (isset($usuarioActual)):
-                if (($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador") && $usuarioActual->getIdUsuario() == $noticia["id_usuario"]): ?>
+                if (($usuarioActual->getRol() == "administrador") || ($usuarioActual->getRol() == "moderador" && $usuarioActual->getIdUsuario() == $noticia["id_usuario"])): ?>
                     <span id="panelAdminMos">
 						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
 					</span>
@@ -26,8 +26,25 @@ $id_comentarios = $view->getVariable("id_comentarios");
                     <div id="panelAdmin" class="row botonesNoticia">
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de noticia</h4>
-                            <a href="" class="btn btn-default">Modificar</a>
-                            <a href="javascript:preguntarEliminar('http://www.google.es')" class="btn btn-default">Eliminar</a>
+
+                            <form id="modificarNot" method="post" action="noticia/modificar">
+
+                                <a onclick="document.getElementById('modificarNot').submit();" class="btn btn-default">Modificar</a>
+                                <input type="hidden" name="id_noticia" value="<?php echo $noticia["id_noticia"]; ?>">
+                                <input type="hidden" name="id_usuario_not"
+                                       value="<?php echo $noticia["id_usuario"]; ?>">
+                            </form>
+
+                            <form id="borrarNot" method="post" action="noticia/eliminar">
+                                <a
+                                    onclick="javascript:alertify.confirm('¿Est\u00E1 seguro de querer eliminar la noticia?').autoCancel(10).set('title','MundoMovil')
+                                        .set('onok', function(closeEvent){ document.getElementById('borrarNot').submit();} );"
+                                    class="btn btn-default">Eliminar
+                                </a>
+                                <input type="hidden" name="id_noticia" value="<?php echo $noticia["id_noticia"]; ?>">
+                                <input type="hidden" name="id_usuario_not"
+                                       value="<?php echo $noticia["id_usuario"]; ?>">
+                            </form>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                     onclick="ocultar_panel_creacion()">&times;</button>
                         </div>
@@ -39,7 +56,7 @@ $id_comentarios = $view->getVariable("id_comentarios");
                 <div class="row">
                     <div class="col-md 12 tituloNot2">
                         <h2>
-                            <?php echo $noticia["titulo"]; ?>
+                            <?php echo htmlentities($noticia["titulo"]); ?>
                         </h2>
                     </div>
                 </div>
@@ -60,21 +77,28 @@ $id_comentarios = $view->getVariable("id_comentarios");
                                 <div class="col-md-6 aut">
                                     Autor:
                                     <a href="<?php echo 'usuario/ver?id=' . $noticia["id_usuario"]; ?>">
-                                        <?php echo $noticia["nom_usuario"]; ?>
+                                        <?php echo htmlentities($noticia["nom_usuario"]); ?>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="resNot">
-                            <?php echo $noticia["resumen"]; ?>
+                            <?php echo htmlentities($noticia["resumen"]); ?>
                         </div>
                         <div class="clavNot text-muted">
                             <?php
                             $claves = explode(" ", $noticia["pal_clave"]);
                             foreach ($claves as $c) {
-                                echo '<a href="noticia/filtro_etiqueta?etiqueta=' . $c . '">
-                                            ' . $c . '
-                                        </a>';
+                                echo '
+                                    <form class="form_filtrado" id=id' . $c . ' method="post" action="noticia/filtro">
+                                        <a onclick="document.getElementById(\'id' . $c . '\').submit();">
+                                        ' . htmlentities($c) . '
+                                        </a>
+                                        <input type="hidden" name="opciones" value="noticia">
+                                        <input type="hidden" name="texto" value="' . $c . '">
+                                        <input type="hidden" name="tipo_filtro" value="palabras">
+                                    </form>
+                                ';
                             }
                             ?>
                         </div>
@@ -108,7 +132,7 @@ $id_comentarios = $view->getVariable("id_comentarios");
                                                         echo "#" . $id_comentarios[$comentario["id_com_noticia"]];
                                                         ?> <a
                                                             href="<?php echo 'usuario/ver?id=' . $comentario["id_usuario"]; ?>">
-                                                            <?php echo $comentario["nom_usuario"]; ?>
+                                                            <?php echo htmlentities($comentario["nom_usuario"]); ?>
                                                         </a>
                                                     </div>
                                                     <div class="col-md-5 fec">
@@ -128,10 +152,10 @@ $id_comentarios = $view->getVariable("id_comentarios");
                                                             <div
                                                                 id="<?php echo "comentarioRespuesta" . $comentario["id_com_noticia"]; ?>"
                                                                 class="comentarioRespuesta well">
-                                                                <?php echo $comentario[0]; ?>
+                                                                <?php echo htmlentities($comentario[0]); ?>
                                                             </div>
                                                         <?php endif; ?>
-                                                        <?php echo $comentario["texto"] . "<br>"; ?>
+                                                        <?php echo htmlentities($comentario["texto"]) . "<br>"; ?>
                                                     </div>
                                                 </div>
                                                 <div class="row pieCom">

@@ -29,8 +29,8 @@ class NoticiaMapper
 
     public function actualizar(Noticia $noticia)
     {
-        $stmt = $this->db->prepare("update noticia set titulo=?, resumen=?, pal_clave=?, rutaImagen=?, texto=?, fecha=? where id_noticia=?");
-        $stmt->execute(array($noticia->getTitulo(), $noticia->getResumen(), $noticia->getPalClave(), $noticia->getRutaImagen(), $noticia->getTexto(), $noticia->getFecha(), $noticia->getIdNoticia()));
+        $stmt = $this->db->prepare("update noticia set titulo=?, resumen=?, pal_clave=?, rutaImagen=?, texto=?, fecha=NOW() where id_noticia=?");
+        $stmt->execute(array($noticia->getTitulo(), $noticia->getResumen(), $noticia->getPalClave(), $noticia->getRutaImagen(), $noticia->getTexto(), $noticia->getIdNoticia()));
     }
 
     /**
@@ -93,7 +93,7 @@ class NoticiaMapper
             $stmt->execute(array(':elemento' => '%' . $autor . '%', ':ini' => $inicio, ':lim' => $limite));
         } elseif ($pal_clave != null) {
             $arrayClave = explode(" ", $pal_clave);
-            $sentencia = "select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario";
+            $sentencia = "select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario and (";
             $execute = array();
             $cont = 1;
             foreach ($arrayClave as $cla) {
@@ -105,7 +105,7 @@ class NoticiaMapper
                 array_push($execute, "%$cla%");
                 $cont++;
             }
-            $sentencia .= " order by fecha desc limit ?,?";
+            $sentencia .= ") order by fecha desc limit ?,?";
             array_push($execute, "$inicio");
             array_push($execute, "$limite");
 
@@ -113,7 +113,7 @@ class NoticiaMapper
             $stmt->execute($execute);
 
         } elseif ($texto != null) {
-            $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario noticia.texto like :elemento or noticia.titulo like :elemento2 order by fecha desc limit :ini,:lim");
+            $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario and (noticia.texto like :elemento or noticia.titulo like :elemento2) order by fecha desc limit :ini,:lim");
             $stmt->execute(array(':elemento' => '%' . $texto . '%', ':elemento2' => '%' . $texto . '%', ':ini' => $inicio, ':lim' => $limite));
         } else {
             $stmt = $this->db->prepare("select * from noticia, usuario where noticia.id_usuario=usuario.id_usuario order by fecha desc limit ?,?");
@@ -141,10 +141,39 @@ class NoticiaMapper
 
     /**
      * Metodo para contar el numero de paginas existentes de noticias (cada pagina tiene 10 noticias)
+     * pudiendo contar filtrando por autor, pal_clave y texto
      */
 
-    public function contarNoticias(){
-        $stmt = $this->db->query("select count(*) as total from noticia");
+    public function contarNoticias($autor = null, $pal_clave = null, $texto = null){
+        if ($autor != null) {
+            $stmt = $this->db->prepare("select count(*) as total from noticia, usuario where noticia.id_usuario=usuario.id_usuario and usuario.nom_usuario like :elemento");
+            $stmt->execute(array(':elemento' => '%' . $autor . '%'));
+        } elseif ($pal_clave != null) {
+            $arrayClave = explode(" ", $pal_clave);
+            $sentencia = "select count(*) as total from noticia where ";
+            $execute = array();
+            $cont = 1;
+            foreach ($arrayClave as $cla) {
+                if ($cont < count($arrayClave)) {
+                    $sentencia .= " noticia.pal_clave like ? OR ";
+                } else {
+                    $sentencia .= " noticia.pal_clave like ? ";
+                }
+                array_push($execute, "%$cla%");
+                $cont++;
+            }
+
+            $stmt = $this->db->prepare($sentencia);
+            $stmt->execute($execute);
+
+        } elseif ($texto != null) {
+            $stmt = $this->db->prepare("select count(*) as total from noticia where noticia.texto like :elemento or noticia.titulo like :elemento2");
+            $stmt->execute(array(':elemento' => '%' . $texto . '%', ':elemento2' => '%' . $texto . '%'));
+        } else {
+            $stmt = $this->db->prepare("select count(*) as total from noticia");
+            $stmt->execute();
+        }
+
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
 

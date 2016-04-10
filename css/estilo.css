@@ -504,9 +504,13 @@ a.btn {
     float: left;
 }
 
-.botonesNoticia button {
+.botonesNoticia button{
     margin-top: -0.7em;
     margin-right: -1.1em;
+}
+
+.botonesNoticia form{
+    display: inline;
 }
 
 .cuerpo-not {
@@ -848,4 +852,9 @@ a.btn {
 
 #error1, #error2, #error3, #error4{
     display: none;
+}
+
+.form_filtrado{
+    display: inline;
+    cursor: pointer;
 }

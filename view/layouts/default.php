@@ -139,28 +139,28 @@ if (isset($mensajeError)) {
                         onclick="ocultar_busqueda()">&times;</button>
             </h3>
         </div>
-        <form id="idformBusq" method="POST" action="">
+        <form id="idformBusq" method="POST" onsubmit="defineActionBusqueda()">
             <div class="panel-body">
                 Introduzca los t&eacute;minos de su b&uacute;squeda y pulse en Buscar
-                <input type="text" class="form-control prim-imp" name="" placeholder="...">
+                <input type="text" class="form-control prim-imp" name="texto" placeholder="...">
 
                 <div class="row">
                     <div class="col-md-5">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="opciones" id="opciones_1" value="opcion_1">
+                                <input type="radio" name="opciones" id="opciones_1" checked="checked" value="noticia">
                                 Noticias
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="opciones" id="opciones_2" value="opcion_2">
+                                <input type="radio" name="opciones" id="opciones_2" value="tutorial">
                                 Tutoriales
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="opciones" id="opciones_3" value="opcion_3">
+                                <input type="radio" name="opciones" id="opciones_3" value="foro">
                                 Foros
                             </label>
                         </div>
@@ -169,7 +169,7 @@ if (isset($mensajeError)) {
                         <div class="radio">
                             <label>
                                 Filtrar por:
-                                <select class="form-control select-filtro" name="">
+                                <select class="form-control select-filtro" name="tipo_filtro">
                                     <option value="autor">autor</option>
                                     <option value="contenido">contenido</option>
                                     <option value="palabras">palabras clave</option>
@@ -181,7 +181,7 @@ if (isset($mensajeError)) {
             </div>
             <div class="panel-footer btn-form">
                 <button type="reset" class="btn btn-default" onclick="ocultar_busqueda()">Cancelar</button>
-                <button type="button" class="btn btn-primary" >Buscar</button>
+                <button type="submit" class="btn btn-primary">Buscar</button>
             </div>
         </form>
     </div>
@@ -241,16 +241,19 @@ if (isset($mensajeError)) {
                 <div class="row">
                     <div class="col-md-7">
                         <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="nom_usuario" placeholder="Nombre usuario">
+                            <input type="text" class="form-control inp-log" name="nom_usuario"
+                                   placeholder="Nombre usuario">
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control inp-log" name="email" placeholder="E-mail">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="ubicacion" placeholder="Ubicaci&oacute;n">
+                            <input type="text" class="form-control inp-log" name="ubicacion"
+                                   placeholder="Ubicaci&oacute;n">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control inp-log" name="contrasenha" placeholder="Contrase&ntilde;a">
+                            <input type="password" class="form-control inp-log" name="contrasenha"
+                                   placeholder="Contrase&ntilde;a">
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control inp-log" name="contrasenha2"

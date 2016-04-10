@@ -1,0 +1,16 @@
+#Crear zona privada
+AuthType Basic
+AuthName "Zona Privada"
+AuthUserFile /var/www/.htpasswd
+Require valid-user
+
+#Impedir acceso a carpetas
+Options All -Indexes
+
+#Activar rewrite
+RewriteEngine on
+
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+
+RewriteRule (.)* index.php [L]

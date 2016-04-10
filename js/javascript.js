@@ -218,6 +218,26 @@ function recarga2() {
     window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
 }
 
+/**
+ * Funcion que permite definir el action del formulario de buqueda
+ * para poder filtrar por noticias, foros o tutoriales
+ */
+
+function defineActionBusqueda() {
+    var formulario = document.getElementById('idformBusq');
+    var noticias = document.getElementById('opciones_1');
+    var tutoriales = document.getElementById('opciones_2');
+    var foros = document.getElementById('opciones_3');
+
+    if (foros.checked) {
+        formulario.action = "pregunta/filtro";
+    }else if(tutoriales.checked){
+        formulario.action = "tutorial/filtro";
+    }else if(noticias.checked){
+        formulario.action = "noticia/filtro";
+    }
+
+}
 
 
 
