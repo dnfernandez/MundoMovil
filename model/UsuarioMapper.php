@@ -59,8 +59,8 @@ class UsuarioMapper
 
     public function actualizar(Usuario $usuario)
     {
-        $stmt = $this->db->prepare("update usuario set nom_usuario=?, email=?, contrasenha=?, ubicacion=?, avatar=? where id_usuario=?");
-        $stmt->execute(array($usuario->getNomUsuario(), $usuario->getEmail(), $usuario->getContrasenha(), $usuario->getUbicacion(), $usuario->getAvatar(), $usuario->getIdUsuario()));
+        $stmt = $this->db->prepare("update usuario set contrasenha=?, ubicacion=?, avatar=? where id_usuario=?");
+        $stmt->execute(array($usuario->getContrasenha(), $usuario->getUbicacion(), $usuario->getAvatar(), $usuario->getIdUsuario()));
     }
 
     /**

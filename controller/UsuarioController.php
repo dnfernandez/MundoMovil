@@ -4,10 +4,14 @@ require_once(__DIR__ . "/../controller/BaseController.php");
 require_once(__DIR__ . "/../model/Usuario.php");
 require_once(__DIR__ . "/../model/UsuarioMapper.php");
 require_once(__DIR__ . "/../core/SendMail.php");
+require_once(__DIR__ . "/../model/NoticiaMapper.php");
+require_once(__DIR__ . "/../model/TutorialMapper.php");
 
 class UsuarioController extends BaseController
 {
     private $usuarioMapper;
+    private $noticiaMapper;
+    private $tutorialMapper;
 
     /**
      * UsuarioController constructor.
@@ -17,6 +21,8 @@ class UsuarioController extends BaseController
         parent::__construct();
 
         $this->usuarioMapper = new UsuarioMapper();
+        $this->noticiaMapper = new NoticiaMapper();
+        $this->tutorialMapper = new TutorialMapper();
     }
 
     /**
@@ -90,9 +96,9 @@ class UsuarioController extends BaseController
     {
         session_destroy();
         session_start();
-        $this->view->setVariable("mensajeError","Usuario desconectado",true);
-        if(!$this->view->redirectToReferer()){
-            $this->view->redirect("noticia","index");
+        $this->view->setVariable("mensajeError", "Usuario desconectado", true);
+        if (!$this->view->redirectToReferer()) {
+            $this->view->redirect("noticia", "index");
         }
     }
 
@@ -216,6 +222,102 @@ class UsuarioController extends BaseController
         } else {
             $this->view->redirect("noticia", "index");
         }
+    }
+
+    /**
+     * Metodo que obtiene las estadísticas de un usuario y las renderiza en Perfil General
+     */
+
+    public function general()
+    {
+        if (isset($this->usuarioActual)) {
+            $id_usuario = $this->usuarioActual->getIdUsuario();
+            $num_not = $this->noticiaMapper->contarTotal($id_usuario);
+            $num_tut = $this->tutorialMapper->contarTotal($id_usuario);
+            //$num_preg
+            //$num_res
+            //$num_pos
+            //$num_neg
+
+            $datos = array("num_not" => $num_not, "num_tut" => $num_tut);
+            $this->view->setVariable("datos", $datos);
+            $this->view->render("usuario", "perfilGeneral");
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que renderiza el perfil del usuario actual
+     */
+
+    public function perfil()
+    {
+        if (isset($this->usuarioActual)) {
+            $this->view->render("usuario", "perfilPerfil");
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    public function modificar()
+    {
+        if (isset($this->usuarioActual)) {
+            $ubicacion = $_POST["ubicacion"];
+            $contrasenha = $_POST["contrasenha"];
+            $contrasenha2 = $_POST["contrasenha2"];
+
+            $formato_valido = true;
+
+            if (isset($_FILES["img_perfil"]['name']) && $_FILES["img_perfil"]['name'] != "") {
+                $cadena = basename($_FILES['img_perfil']['name']);
+                $total = strpos($cadena, ".");
+                $extensionImg = substr($cadena, $total);
+                $extensionImg = strtolower($extensionImg);
+                if (!in_array($extensionImg, [".jpg", ".png", ".jpeg", ".gif"])) {
+                    $target_path = "images/perfil.jpg";
+                    $formato_valido = false;
+                } else {
+                    $target_path = "img_perfil/";
+                    $target_path = $target_path . "perfil" . $this->usuarioActual->getIdUsuario() . $extensionImg;
+                    move_uploaded_file($_FILES['img_perfil']['tmp_name'], $target_path);
+                }
+            }
+
+            if ($formato_valido == false || $target_path=="") {
+                $target_path = $this->usuarioActual->getAvatar();
+                $formato_valido = true;
+            }
+
+            if (!empty($ubicacion)) {
+                if ($contrasenha == $contrasenha2) {
+                    if ($contrasenha == "") {
+                        $contrasenha = $this->usuarioActual->getContrasenha();
+                    }
+                    if ($formato_valido == true) {
+
+                        $usuario = new Usuario($this->usuarioActual->getIdUsuario(), $this->usuarioActual->getNomUsuario(), $this->usuarioActual->getEmail(),
+                            $ubicacion, $contrasenha, $target_path, null, "0000-00-00 00:00", $this->usuarioActual->getRol());
+
+                        try {
+                            $usuario->validoParaActualizar();
+                            $this->usuarioMapper->actualizar($usuario);
+                            $this->view->setVariable("mensajeSucces", "Cambios guardados correctamente", true);
+                            $this->view->redirect("usuario", "perfil");
+                        } catch (ValidationException $ex) {
+                            $errores = $ex->getErrors();
+                            $this->view->setVariable("errores", $errores, true);
+                        }
+                    }
+                } else {
+                    $this->view->setVariable("mensajeError", "Las contrase&ntilde;as no coinciden", true);
+                }
+            } else {
+                $this->view->setVariable("mensajeError", "El campo ubicaci&oacute;n no puede estar vac&iacute;o", true);
+            }
+            $this->view->redirect("usuario", "perfil");
+        }
+        $this->view->redirect("noticia", "index");
     }
 
 }

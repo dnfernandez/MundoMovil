@@ -855,6 +855,12 @@ a.btn {
     padding-top: 0.25em;
 }
 
+.error-especial2{
+    color:red;
+    font-weight: bold;
+    animation: backgroundflash 5s forwards;
+}
+
 #error1, #error2, #error3, #error4{
     display: none;
 }
@@ -866,4 +872,9 @@ a.btn {
 
 .enlaces-sinHref{
     cursor: pointer;
+}
+
+@keyframes backgroundflash {
+    75% { opacity:1.0}
+    100% {opacity:0.0; display:none}
 }

@@ -72,7 +72,7 @@ $mensajeError = $view->getVariable("mensajeError");
                            aria-expanded="false">Hola, <?php echo $usuarioActual->getNomUsuario(); ?> <span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Perfil</a></li>
+                            <li><a href="usuario/general">Perfil</a></li>
                             <?php if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
                                 <li><a href="#">Administrar usuarios</a></li>
                             <?php endif; ?>
