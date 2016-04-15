@@ -2,7 +2,7 @@
 require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
-$noticias = $view->getVariable("noticias", array());
+$tutoriales = $view->getVariable("tutoriales", array());
 $total = $view->getVariable("total");
 if (isset($_GET["pag"])) {
     if (is_numeric($_GET["pag"])) {
@@ -14,85 +14,76 @@ $filtro = $view->getVariable("filtro", "index");
 
 <div class="container content">
     <div class="row">
-        <div class="col-md-12">
-            <?php if (isset($usuarioActual)):
-                if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
-                    <span id="panelAdminMos">
-                        <a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
-                    </span>
-                    <div id="panelAdmin" class="row botonesNoticia">
-                        <div class="col-md-12">
-                            <h4>Panel de administraci&oacute;n de noticia</h4>
-                            <a href="noticia/crear" class="btn btn-default">Crear</a>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    onclick="ocultar_panel_creacion()">&times;</button>
-                        </div>
+        <div class="col-md-12 ">
+            <!---Si es usuario validado en el sistema--->
+            <?php if (isset($usuarioActual)): ?>
+                <span id="panelAdminMos">
+						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
+					</span>
+                <div id="panelAdmin" class="row botonesNoticia">
+                    <div class="col-md-12">
+                        <h4>Panel de administraci&oacute;n de tutorial</h4>
+                        <a href="tutorial/crear" class="btn btn-default">Crear</a>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                onclick="ocultar_panel_creacion()">&times;</button>
                     </div>
-                <?php endif;
-            endif; ?>
+                </div>
+            <?php endif; ?>
             <!---->
             <div class="row">
                 <div class="col-md-9 bloqNot" id="bloqNot">
                     <div class="page-header encabezado">
-                        NOTICIAS
+                        TUTORIALES
                     </div>
                     <!--Repetir en bucle-->
-                    <?php foreach ($noticias as $noticia): ?>
-                        <div class="pantNot">
+                    <?php foreach ($tutoriales as $tutorial): ?>
+                        <div class="pantTut">
                             <div class="tituloNot">
-                                <h3><a href="<?php echo "noticia/ver?id=" . $noticia["id_noticia"]; ?>">
-                                        <?php echo htmlentities($noticia["titulo"]); ?>
+                                <h3><a href="tutorial/ver?id=<?php echo $tutorial['id_tutorial']; ?>">
+                                        <?php echo htmlentities($tutorial["titulo"]); ?>
                                     </a></h3>
                             </div>
-                            <div class="imgNot">
-                                <img src="<?php echo $noticia["rutaImagen"]; ?>" alt="imagen noticia"
-                                     class="img-responsive">
-                            </div>
-                            <div class="datosNot">
+                            <div class="datosNot datosTut">
                                 <div class="row">
                                     <div class="col-md-6 fec">
                                         <?php
-                                        $date = date_create($noticia["fecha"]);
+                                        $date = date_create($tutorial["fecha"]);
                                         echo date_format($date, 'd.m.Y | H:i');
                                         ?>
                                     </div>
                                     <div class="col-md-6 aut">
                                         escrito por
                                         <?php if (!isset($usuarioActual)) {
-                                            echo '<a class="enlaces-sinHref" onclick="javascript:alertify.message(\'Debes estar identificado en el sistema\')">' . htmlentities($noticia["nom_usuario"]) . '</a>';
+                                            echo '<a class="enlaces-sinHref" onclick="javascript:alertify.message(\'Debes estar identificado en el sistema\')">' . htmlentities($tutorial["nom_usuario"]) . '</a>';
                                         } else {
-                                            echo '<a href="usuario/ver?id=' . $noticia["id_usuario"] . '">
-                                            ' . htmlentities($noticia["nom_usuario"]) . '
+                                            echo '<a href="usuario/ver?id=' . $tutorial["id_usuario"] . '">
+                                            ' . htmlentities($tutorial["nom_usuario"]) . '
                                         </a>';
                                         }
                                         ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="resNot">
-                                <?php echo htmlentities($noticia["resumen"]); ?>
-                            </div>
                             <div class="clavNot text-muted">
                                 <?php
-                                $claves = explode(" ", $noticia["pal_clave"]);
+                                $claves = explode(" ", $tutorial["pal_clave"]);
                                 foreach ($claves as $c) {
                                     echo '
-                                        <form class="form_filtrado" id=id' . $c . ' method="post" action="noticia/filtro">
+                                        <form class="form_filtrado" id=id' . $c . ' method="post" action="tutorial/filtro">
                                             <a onclick="document.getElementById(\'id' . $c . '\').submit();">
                                             ' . htmlentities($c) . '
                                             </a>
-                                            <input type="hidden" name="opciones" value="noticia">
-                                            <input type="hidden" name="texto" value="'.$c.'">
+                                            <input type="hidden" name="opciones" value="tutorial">
+                                            <input type="hidden" name="texto" value="' . $c . '">
                                             <input type="hidden" name="tipo_filtro" value="palabras">
                                         </form>
                                     ';
                                 }
                                 ?>
-
                             </div>
                         </div>
-                        <!--Hasta aqui en bucle-->
                     <?php endforeach; ?>
+                    <!--Hasta aqui en bucle-->
                 </div>
                 <div class="col-md-3" id="idPanelPubli">
                     <div id="panel-inf1" class="panel-inf1 panel-fixed">
@@ -111,14 +102,14 @@ $filtro = $view->getVariable("filtro", "index");
                         </div>
                         <div class="panel2">
                             <div class="cab-inf">
-                                <h2>¿Quieres aprender nuevos trucos?</h2>
+                                <h2>¿Quieres estar al d&iacute;a en el mundo de la tecnolog&iacute;a?</h2>
                             </div>
                             <div class="centro-inf">
-                                <h3>Sigue nuestros tutoriales</h3>
+                                <h3>Consulta nuestras noticias</h3>
                             </div>
                             <div class="pie-inf">
-                                <a href="tutorial/index">
-                                    <img src="images/tutoriales.png" alt="Foro MundoMovil">
+                                <a href="noticia/index">
+                                    <img src="images/noticias.png" alt="Foro MundoMovil">
                                 </a>
                             </div>
                         </div>
@@ -133,7 +124,7 @@ $filtro = $view->getVariable("filtro", "index");
                 <ul class="pagination">
                     <li>
                         <?php if (isset($pag) && $pag > 1) {
-                            echo '<a href = "noticia/' . $filtro . '?pag=' . ($pag - 1) . '" aria-label = "Anterior" >
+                            echo '<a href = "tutorial/' . $filtro . '?pag=' . ($pag - 1) . '" aria-label = "Anterior" >
                                     <span aria-hidden = "true" >&laquo;</span >
                                 </a >';
                         } else {
@@ -148,17 +139,17 @@ $filtro = $view->getVariable("filtro", "index");
                     if (!isset($pag) || $pag == 1) {
                         for ($i = 1; $i <= $num_pag && $i <= 5; $i++) {
                             if ($i == 1) {
-                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == 2) {
                         for ($i = 1; $i <= $num_pag && $i <= 5; $i++) {
                             if ($i == 2) {
-                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag > 2 && $pag <= $num_pag - 2) {
@@ -166,9 +157,9 @@ $filtro = $view->getVariable("filtro", "index");
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == $num_pag - 1) {
@@ -176,9 +167,9 @@ $filtro = $view->getVariable("filtro", "index");
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     } elseif (isset($pag) && $pag == $num_pag) {
@@ -186,20 +177,20 @@ $filtro = $view->getVariable("filtro", "index");
                             if ($i <= 0) {
 
                             } elseif ($i == $pag) {
-                                echo '<li class="active"><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li class="active"><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             } else {
-                                echo '<li><a href="noticia/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
+                                echo '<li><a href="tutorial/' . $filtro . '?pag=' . $i . '">' . $i . '</a></li>';
                             }
                         }
                     }
                     ?>
                     <li>
                         <?php if (isset($pag) && $pag < $num_pag) {
-                            echo '<a href="noticia/' . $filtro . '?pag=' . ($pag + 1) . '" aria-label="Siguiente">
+                            echo '<a href="tutorial/' . $filtro . '?pag=' . ($pag + 1) . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';
                         } elseif (!isset($pag) && $num_pag > 1) {
-                            echo '<a href="noticia/' . $filtro . '?pag=' . 2 . '" aria-label="Siguiente">
+                            echo '<a href="tutorial/' . $filtro . '?pag=' . 2 . '" aria-label="Siguiente">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>';
                         } else {

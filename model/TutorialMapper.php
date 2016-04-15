@@ -21,9 +21,8 @@ class TutorialMapper
 
     public function insertar(Tutorial $tutorial)
     {
-        $stmt = $this->db->prepare("insert into tutorial(id_tutorial, titulo, pal_clave, texto, fecha, id_usuario) values(?,?,?,?,?,?)");
-        $stmt->execute(array($tutorial->getIdTutorial(), $tutorial->getTitulo(), $tutorial->getPalClave(), $tutorial->getTexto(),
-            $tutorial->getFecha(), $tutorial->getIdUsuario()));
+        $stmt = $this->db->prepare("insert into tutorial(id_tutorial, titulo, pal_clave, texto, fecha, id_usuario) values(?,?,?,?,NOW(),?)");
+        $stmt->execute(array($tutorial->getIdTutorial(), $tutorial->getTitulo(), $tutorial->getPalClave(), $tutorial->getTexto(),$tutorial->getIdUsuario()));
     }
 
     /**
@@ -32,8 +31,8 @@ class TutorialMapper
 
     public function actualizar(Tutorial $tutorial)
     {
-        $stmt = $this->db->prepare("update tutorial set titulo=?, pal_clave=?, texto=?, fecha=? where id_tutorial=?");
-        $stmt->execute(array($tutorial->getTitulo(), $tutorial->getPalClave(), $tutorial->getTexto(), $tutorial->getFecha(), $tutorial->getIdTutorial()));
+        $stmt = $this->db->prepare("update tutorial set titulo=?, pal_clave=?, texto=?, fecha=NOW() where id_tutorial=?");
+        $stmt->execute(array($tutorial->getTitulo(), $tutorial->getPalClave(), $tutorial->getTexto(), $tutorial->getIdTutorial()));
     }
 
     /**
@@ -65,7 +64,7 @@ class TutorialMapper
 
     public function listarPorId($id_tutorial)
     {
-        $stmt = $this->db->prepare("select * from tutorial where id_tutorial=?");
+        $stmt = $this->db->prepare("select * from tutorial, usuario where tutorial.id_usuario=usuario.id_usuario and id_tutorial=?");
         $stmt->execute(array($id_tutorial));
         $tutorial = $stmt->fetch(PDO::FETCH_BOTH);
         if ($tutorial != null) {
@@ -93,11 +92,11 @@ class TutorialMapper
         $inicio = ($pag - 1) * $limite;
 
         if ($autor != null) {
-            $stmt = $this->db->prepare("select * from tutorial where tutorial.id_usuario like :elemento order by fecha desc limit :ini,:lim");
+            $stmt = $this->db->prepare("select * from tutorial, usuario where tutorial.id_usuario=usuario.id_usuario and usuario.nom_usuario like :elemento order by fecha desc limit :ini,:lim");
             $stmt->execute(array(':elemento' => '%' . $autor . '%', ':ini' => $inicio, ':lim' => $limite));
         } elseif ($pal_clave != null) {
             $arrayClave = explode(" ", $pal_clave);
-            $sentencia = "select * from tutorial where";
+            $sentencia = "select * from tutorial, usuario where tutorial.id_usuario=usuario.id_usuario and (";
             $execute = array();
             $cont = 1;
             foreach ($arrayClave as $cla) {
@@ -109,7 +108,7 @@ class TutorialMapper
                 array_push($execute, "%$cla%");
                 $cont++;
             }
-            $sentencia .= " order by fecha desc limit ?,?";
+            $sentencia .= ") order by fecha desc limit ?,?";
             array_push($execute, "$inicio");
             array_push($execute, "$limite");
 
@@ -117,10 +116,10 @@ class TutorialMapper
             $stmt->execute($execute);
 
         } elseif ($texto != null) {
-            $stmt = $this->db->prepare("select * from tutorial where tutorial.texto like :elemento or tutorial.titulo like :elemento2 order by fecha desc limit :ini,:lim");
+            $stmt = $this->db->prepare("select * from tutorial, usuario where usuario.id_usuario=tutorial.id_usuario and (tutorial.texto like :elemento or tutorial.titulo like :elemento2) order by fecha desc limit :ini,:lim");
             $stmt->execute(array(':elemento' => '%' . $texto . '%', ':elemento2' => '%' . $texto . '%', ':ini' => $inicio, ':lim' => $limite));
         } else {
-            $stmt = $this->db->prepare("select * from tutorial order by fecha desc limit ?,?");
+            $stmt = $this->db->prepare("select * from tutorial, usuario where usuario.id_usuario=tutorial.id_usuario order by fecha desc limit ?,?");
             $stmt->execute(array($inicio, $limite));
         }
         $tutoriales = $stmt->fetchAll(PDO::FETCH_BOTH);
@@ -136,9 +135,48 @@ class TutorialMapper
      * Metodo para contar el numero de tutoriales hechos por un usuario
      */
 
-    public function contarTotal($id_usuario){
+    public function contarTotal($id_usuario)
+    {
         $stmt = $this->db->prepare("select count(*) as total from tutorial where id_usuario=?");
         $stmt->execute(array($id_usuario));
         return $stmt->fetchColumn();
+    }
+
+    /**
+     * Metodo para contar el numero de paginas existentes de tutoriales (cada pagina tiene 10 tutoriales)
+     * pudiendo contar filtrando por autor, pal_clave y texto
+     */
+
+    public function contarTutoriales($autor = null, $pal_clave = null, $texto = null){
+        if ($autor != null) {
+            $stmt = $this->db->prepare("select count(*) as total from tutorial, usuario where tutorial.id_usuario=usuario.id_usuario and usuario.nom_usuario like :elemento");
+            $stmt->execute(array(':elemento' => '%' . $autor . '%'));
+        } elseif ($pal_clave != null) {
+            $arrayClave = explode(" ", $pal_clave);
+            $sentencia = "select count(*) as total from tutorial where ";
+            $execute = array();
+            $cont = 1;
+            foreach ($arrayClave as $cla) {
+                if ($cont < count($arrayClave)) {
+                    $sentencia .= " tutorial.pal_clave like ? OR ";
+                } else {
+                    $sentencia .= " tutorial.pal_clave like ? ";
+                }
+                array_push($execute, "%$cla%");
+                $cont++;
+            }
+
+            $stmt = $this->db->prepare($sentencia);
+            $stmt->execute($execute);
+
+        } elseif ($texto != null) {
+            $stmt = $this->db->prepare("select count(*) as total from tutorial where tutorial.texto like :elemento or tutorial.titulo like :elemento2");
+            $stmt->execute(array(':elemento' => '%' . $texto . '%', ':elemento2' => '%' . $texto . '%'));
+        } else {
+            $stmt = $this->db->prepare("select count(*) as total from tutorial");
+            $stmt->execute();
+        }
+
+        return $stmt->fetch(PDO::FETCH_BOTH);
     }
 }

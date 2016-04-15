@@ -2,7 +2,10 @@
 require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
-$noticia = $view->getVariable("noticia");
+$noticia = $view->getVariable("noticiaD");
+if (!isset($noticia)) {
+    $noticia = $view->getVariable("noticia");
+}
 ?>
 
 <div class="container content">
@@ -68,7 +71,7 @@ $noticia = $view->getVariable("noticia");
                             </div>
                         </div>
                         <div class="panel-footer btn-form">
-                            <button type="button" class="btn btn-default">Cancelar</button>
+                            <button type="button" onclick="window.location.href='noticia/ver?id=<?php echo $noticia["id_noticia"];?>'" class="btn btn-default">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                 </form>

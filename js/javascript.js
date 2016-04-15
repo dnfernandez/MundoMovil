@@ -6,6 +6,7 @@ function mostrar_busqueda() {
     document.getElementById("formLogin").style.display = "none";
     document.getElementById("formRegistro").style.display = "none";
     document.getElementById("formComentNoticia").style.display = "none";
+    document.getElementById("formComentTutorial").style.display = "none";
 }
 
 function mostrar_login() {
@@ -14,6 +15,7 @@ function mostrar_login() {
     document.getElementById("formBusqueda").style.display = "none";
     document.getElementById("formRegistro").style.display = "none";
     document.getElementById("formComentNoticia").style.display = "none";
+    document.getElementById("formComentTutorial").style.display = "none";
 }
 
 function mostrar_registro() {
@@ -22,6 +24,7 @@ function mostrar_registro() {
     document.getElementById("formBusqueda").style.display = "none";
     document.getElementById("formLogin").style.display = "none";
     document.getElementById("formComentNoticia").style.display = "none";
+    document.getElementById("formComentTutorial").style.display = "none";
 }
 
 function mostrar_enviar_mensaje(usuario) {
@@ -40,9 +43,14 @@ function mostrar_comentario_noticia(comentario) {
         document.getElementById("idRespComNot").innerHTML = "<input type='hidden' name='idComRes' value='" + comentario + "' >";
     }
     document.getElementById("fade").style.display = "block";
-    document.getElementById("formLogin").style.display = "none";
-    document.getElementById("formRegistro").style.display = "none";
-    document.getElementById("formBusqueda").style.display = "none";
+}
+
+function mostrar_comentario_tutorial(comentario) {
+    document.getElementById("formComentTutorial").style.display = "block";
+    if (comentario) {
+        document.getElementById("idRespComTut").innerHTML = "<input type='hidden' name='idComRes' value='" + comentario + "' >";
+    }
+    document.getElementById("fade").style.display = "block";
 }
 
 function mostrar_respuesta_comentario(id_comentario) {
@@ -105,6 +113,11 @@ function ocultar_comentario_noticia() {
     document.getElementById("fade").style.display = "none";
 }
 
+function ocultar_comentario_tutorial() {
+    document.getElementById("formComentTutorial").style.display = "none";
+    document.getElementById("fade").style.display = "none";
+}
+
 function ocultar_respuesta_comentario(id_comentario) {
     document.getElementById("comentarioRespuesta" + id_comentario).style.display = "none";
 }
@@ -159,9 +172,12 @@ document.getElementById('files').addEventListener('change', archivo, false);
 $(window).scroll(function () {
     if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
         var heightObj = document.getElementById("bloqNot");
-        document.getElementById("idPanelPubli").style.height = heightObj.offsetHeight + "px";
-        $('#panel-inf1').addClass('fixed_class');
-        $('#panel-inf1').removeClass('panel-fixed');
+        var panel = document.getElementById("idPanelPubli");
+        if (heightObj.offsetHeight > 600) {
+            panel.style.height = heightObj.offsetHeight + "px";
+            $('#panel-inf1').addClass('fixed_class');
+            $('#panel-inf1').removeClass('panel-fixed');
+        }
     } else {
         $('#panel-inf1').addClass('panel-fixed');
         $('#panel-inf1').removeClass('fixed_class');
@@ -231,34 +247,10 @@ function defineActionBusqueda() {
 
     if (foros.checked) {
         formulario.action = "pregunta/filtro";
-    }else if(tutoriales.checked){
+    } else if (tutoriales.checked) {
         formulario.action = "tutorial/filtro";
-    }else if(noticias.checked){
+    } else if (noticias.checked) {
         formulario.action = "noticia/filtro";
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

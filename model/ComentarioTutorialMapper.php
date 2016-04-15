@@ -22,9 +22,18 @@ class ComentarioTutorialMapper
 
     public function insertar(ComentarioTutorial $comentario)
     {
-        $stmt = $this->db->prepare("insert into comentario_tutorial(id_com_tutorial,id_tutorial, id_usuario, texto, fecha, id_com_respondido) values (?,?,?,?,?,?)");
+        $stmt = $this->db->prepare("insert into comentario_tutorial(id_com_tutorial,id_tutorial, id_usuario, texto, fecha, id_com_respondido) values (?,?,?,?,NOW(),?)");
         $stmt->execute(array($comentario->getIdComTutorial(), $comentario->getIdTutorial(), $comentario->getIdUsuario(),
-            $comentario->getTexto(), $comentario->getFecha(), $comentario->getIdComRespondido()));
+            $comentario->getTexto(), $comentario->getIdComRespondido()));
+    }
+
+    /**
+     * Elimina el comentario cuyo id es pasado como argumento
+     * @param $id_comentario
+     */
+    public function eliminar($id_comentario){
+        $stmt = $this->db->prepare("delete from comentario_tutorial where id_com_tutorial=? ");
+        $stmt->execute(array($id_comentario));
     }
 
     /**
@@ -42,7 +51,7 @@ class ComentarioTutorialMapper
         }
         $inicio = ($pag - 1) * $limite;
 
-        $stmt = $this->db->prepare("select * from comentario_tutorial where id_tutorial=? limit ?,?");
+        $stmt = $this->db->prepare("select * from comentario_tutorial, usuario where comentario_tutorial.id_usuario = usuario.id_usuario and id_tutorial=? limit ?,?");
         $stmt->execute(array($id_tutorial, $inicio, $limite));
         $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $comentarios2 = array();
@@ -62,6 +71,37 @@ class ComentarioTutorialMapper
             array_push($comentarios2, $com);
         }
         return $comentarios2;
+    }
+
+    /**
+     * Metodo que cuenta el numero total de comentarios de un tutorial
+     * @param $id_tutorial
+     * @return mixed
+     */
+    public function contarComentariosTutorial($id_tutorial){
+        $stmt = $this->db->prepare("select count(*) as total from comentario_tutorial where id_tutorial=?");
+        $stmt->execute(array($id_tutorial));
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que devuelve un array con los id_com_tutorial y unos "ids secuenciales" asociados
+     * @param $id_tutorial
+     * @return array
+     */
+    public function calcularIdSecuenciales($id_tutorial){
+        $stmt = $this->db->prepare("select * from comentario_tutorial where id_tutorial=?");
+        $stmt->execute(array($id_tutorial));
+        $comentarios = $stmt->fetchAll(PDO::FETCH_BOTH);
+        $array = array();
+
+        $cont=1;
+        foreach($comentarios as $comentario){
+            $array[$comentario["id_com_tutorial"]]=$cont;
+            $cont++;
+        }
+
+        return $array;
     }
 
 

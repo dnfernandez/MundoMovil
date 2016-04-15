@@ -208,7 +208,7 @@ body {
     margin-top: -5px;
 }
 
-#formBusqueda, #formLogin, #formRegistro, #formMensajeEnv, #formComentNoticia, #formCrearForo, #formModificarForo, #formCrearRespuesta {
+#formBusqueda, #formLogin, #formRegistro, #formMensajeEnv, #formComentNoticia, #formCrearForo, #formModificarForo, #formCrearRespuesta, #formComentTutorial {
     position: fixed;
     top: 20%;
     left: 0;
@@ -536,9 +536,13 @@ a.btn {
     margin-top: -2.5em;
 }
 
-.textoNoticia img, .textoNoticia iframe {
+.textoNoticia img {
     max-width: 100%;
     height: auto !important;
+}
+
+.textoNoticia iframe{
+    max-width: 100% !important;
 }
 
 .titComNot {
@@ -604,6 +608,7 @@ a.btn {
     display: none;
     text-align: left;
 }
+
 
 .datosVerTut {
     margin-top: -2em;
@@ -856,5 +861,9 @@ a.btn {
 
 .form_filtrado{
     display: inline;
+    cursor: pointer;
+}
+
+.enlaces-sinHref{
     cursor: pointer;
 }

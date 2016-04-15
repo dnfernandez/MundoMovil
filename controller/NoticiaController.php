@@ -109,6 +109,7 @@ class NoticiaController extends BaseController
                 $this->view->setVariable("id_comentarios", $array_id);
                 $this->view->render("noticia", "verNoticia");
             } else {
+                $this->view->setVariable("mensajeError","No existe noticia con ese id",true);
                 $this->view->redirect("noticia", "index");
             }
         } else {
@@ -295,9 +296,9 @@ class NoticiaController extends BaseController
     {
         if (isset($this->usuarioActual)) {
             if ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador") {
-                if ($_POST["id_noticia"]) {
-                    $id_notica = $_POST["id_noticia"];
-                    $id_usuario = $_POST["id_usuario_not"];
+                if (isset($_GET["id"])) {
+                    $id_notica = $_GET["id"];
+                    $id_usuario = $this->noticiaMapper->listarNoticiaPorId($id_notica)["id_usuario"];
 
                     if ($this->usuarioActual->getIdUsuario() == $id_usuario || $this->usuarioActual->getRol() == "administrador") {
                         $noticia = $this->noticiaMapper->listarNoticiaPorId($id_notica);
@@ -308,7 +309,7 @@ class NoticiaController extends BaseController
                         $this->view->redirect("noticia", "ver", "id=" . $id_notica);
                     }
                 } else {
-                    //$this->view->setVariable("mensajeError", "Se necesita id_noticia", true);
+                    $this->view->setVariable("mensajeError", "Se necesita id_noticia", true);
                     $this->view->redirect("noticia", "index");
                 }
             } else {
@@ -333,7 +334,7 @@ class NoticiaController extends BaseController
     {
         if (isset($this->usuarioActual)) {
             if ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador") {
-                if ($_POST["id_noticia"]) {
+                if (isset($_POST["id_noticia"])) {
                     $id_notica = $_POST["id_noticia"];
                     $id_usuario = $_POST["id_usuario_not"];
 
@@ -387,10 +388,10 @@ class NoticiaController extends BaseController
                             $error = "No puede haber campos vac&iacute;os";
                         }
                         $datos = array("id_noticia" => $id_notica, "titulo" => $_POST["titulo"], "resumen" => $_POST["resumen"],
-                            "pal_clave" => $_POST["pal_clave"], "img_noticia" => $target_path, "texto" => $_POST["texto"], "id_usuario" => $id_usuario);
-                        $this->view->setVariable("noticia", $datos, true);
+                            "pal_clave" => $_POST["pal_clave"], "rutaImagen" => $target_path, "texto" => $_POST["texto"], "id_usuario" => $id_usuario);
+                        $this->view->setVariable("noticiaD", $datos, true);
                         $this->view->setVariable("mensajeError", $error, true);
-                        $this->view->redirect("noticia", "ver", "id=" . $id_notica);
+                        $this->view->redirect("noticia", "modificar", "id=" . $id_notica);
 
 
                     } else {
@@ -429,5 +430,29 @@ class NoticiaController extends BaseController
         }
 
         $this->view->redirect("noticia","index","filtro");
+    }
+
+    /**
+     * Metodo que permite eliminar un comentario
+     *
+     * Solo pueden eliminar un comentario los moderadores y administradores
+     * en caso de que no cumpla con las reglas de participacion.
+     * Entonces si es administrador o moderador el usuario validado
+     * se elimina el comentario, sino se redirige a la pagina de inicio de noticias
+     */
+
+    public function eliminar_comentario(){
+        if(isset($this->usuarioActual) && ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador")){
+            if(isset($_GET["id"])){
+                $this->comentarioNoticiaMapper->eliminar($_GET["id"]);
+                $this->view->setVariable("mensajeSucces", "Comentario eliminado con &eacute;xito",true);
+                $this->view->redirectToReferer();
+            }else{
+                $this->view->setVariable("mensajeError","No existe ese comentario",true);
+            }
+        }else{
+            $this->view->setVariable("mensajeError","No tienes permisos para realizar esa acci&oacute;n",true);
+        }
+        $this->view->redirect("noticia","index");
     }
 }

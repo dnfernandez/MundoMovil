@@ -26,6 +26,16 @@ class ComentarioNoticiaMapper
     }
 
     /**
+     * Elimina el comentario cuyo id es pasado como argumento
+     * @param $id_comentario
+     */
+    public function eliminar($id_comentario){
+        $stmt = $this->db->prepare("delete from comentario_noticia where id_com_noticia=? ");
+        $stmt->execute(array($id_comentario));
+    }
+
+
+    /**
      * @param $id_noticia
      * @return array
      * Metodo que permite listar los comentarios de una noticia,
