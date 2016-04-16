@@ -23,11 +23,11 @@ class MensajeMapper
 
     public function insertar(Mensaje $mensaje)
     {
-        $stmt = $this->db->prepare("insert into mensaje_enviado (id_mensaje_env, texto, fecha, emisor, receptor) values (?,?,?,?,?)");
-        $stmt->execute(array($mensaje->getIdMensaje(), $mensaje->getTexto(), $mensaje->getFecha(), $mensaje->getEmisor(), $mensaje->getReceptor()));
+        $stmt = $this->db->prepare("insert into mensaje_enviado (id_mensaje_env, texto, fecha, emisor, receptor) values (?,?,NOW(),?,?)");
+        $stmt->execute(array($mensaje->getIdMensaje(), $mensaje->getTexto(), $mensaje->getEmisor(), $mensaje->getReceptor()));
 
-        $stmt2 = $this->db->prepare("insert into mensaje_recibido (id_mensaje_rec, texto, fecha, emisor, receptor) values (?,?,?,?,?)");
-        $stmt2->execute(array($mensaje->getIdMensaje(), $mensaje->getTexto(), $mensaje->getFecha(), $mensaje->getEmisor(), $mensaje->getReceptor()));
+        $stmt2 = $this->db->prepare("insert into mensaje_recibido (id_mensaje_rec, texto, fecha, emisor, receptor) values (?,?,NOW(),?,?)");
+        $stmt2->execute(array($mensaje->getIdMensaje(), $mensaje->getTexto(), $mensaje->getEmisor(), $mensaje->getReceptor()));
     }
 
     /**
@@ -56,15 +56,15 @@ class MensajeMapper
      * Metodo para listar los mensajes enviados
      */
 
-    public function listarMensajesEnviados($pag = 1)
+    public function listarMensajesEnviados($pag = 1, $id_usuario)
     {
         $limite = 15;
         if ($pag < 1) {
             $pag = 1;
         }
         $inicio = ($pag - 1) * $limite;
-        $stmt = $this->db->prepare("select * from mensaje_enviado limit ?,?");
-        $stmt->execute(array($inicio, $limite));
+        $stmt = $this->db->prepare("select * from mensaje_enviado, usuario where mensaje_enviado.emisor=? and mensaje_enviado.receptor=usuario.id_usuario order by fecha desc limit ?,?");
+        $stmt->execute(array($id_usuario, $inicio, $limite));
         $mensajes = $stmt->fetchAll(PDO::FETCH_BOTH);
         if ($mensajes != null) {
             return $mensajes;
@@ -74,24 +74,46 @@ class MensajeMapper
     }
 
     /**
+     * Metodo para contar los mensajes enviados
+     */
+
+    public function contarMensajesEnviados($id_usuario)
+    {
+        $stmt = $this->db->prepare("select count(*) as total from mensaje_enviado where mensaje_enviado.emisor=? ");
+        $stmt->execute(array($id_usuario));
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
      * Metodo para listar los mensajes recibidos
      */
 
-    public function listarMensajesRecibidos($pag = 1)
+    public function listarMensajesRecibidos($pag = 1, $id_usuario)
     {
         $limite = 15;
         if ($pag < 1) {
             $pag = 1;
         }
         $inicio = ($pag - 1) * $limite;
-        $stmt = $this->db->prepare("select * from mensaje_recibido limit ?,?");
-        $stmt->execute(array($inicio, $limite));
+        $stmt = $this->db->prepare("select * from mensaje_recibido, usuario where receptor=? and mensaje_recibido.emisor=usuario.id_usuario order by fecha desc limit ?,?");
+        $stmt->execute(array($id_usuario, $inicio, $limite));
         $mensajes = $stmt->fetchAll(PDO::FETCH_BOTH);
         if ($mensajes != null) {
             return $mensajes;
         } else {
             return null;
         }
+    }
+
+    /**
+     * Metodo para contar los mensajes recibidos
+     */
+
+    public function contarMensajesRecibidos($id_usuario)
+    {
+        $stmt = $this->db->prepare("select count(*) as total from mensaje_recibido where mensaje_recibido.receptor=? ");
+        $stmt->execute(array($id_usuario));
+        return $stmt->fetch(PDO::FETCH_BOTH);
     }
 
 

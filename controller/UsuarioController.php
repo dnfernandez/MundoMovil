@@ -6,12 +6,16 @@ require_once(__DIR__ . "/../model/UsuarioMapper.php");
 require_once(__DIR__ . "/../core/SendMail.php");
 require_once(__DIR__ . "/../model/NoticiaMapper.php");
 require_once(__DIR__ . "/../model/TutorialMapper.php");
+require_once(__DIR__ . "/../model/PreguntaMapper.php");
+require_once(__DIR__ . "/../model/RespuestaMapper.php");
 
 class UsuarioController extends BaseController
 {
     private $usuarioMapper;
     private $noticiaMapper;
     private $tutorialMapper;
+    private $preguntaMapper;
+    private $respuestaMapper;
 
     /**
      * UsuarioController constructor.
@@ -23,6 +27,8 @@ class UsuarioController extends BaseController
         $this->usuarioMapper = new UsuarioMapper();
         $this->noticiaMapper = new NoticiaMapper();
         $this->tutorialMapper = new TutorialMapper();
+        $this->preguntaMapper = new PreguntaMapper();
+        $this->respuestaMapper = new RespuestaMapper();
     }
 
     /**
@@ -234,12 +240,12 @@ class UsuarioController extends BaseController
             $id_usuario = $this->usuarioActual->getIdUsuario();
             $num_not = $this->noticiaMapper->contarTotal($id_usuario);
             $num_tut = $this->tutorialMapper->contarTotal($id_usuario);
-            //$num_preg
-            //$num_res
-            //$num_pos
-            //$num_neg
+            $num_preg = $this->preguntaMapper->contarTotal($id_usuario);
+            $num_res = $this->respuestaMapper->contarTotal($id_usuario);
+            $num_pos = $this->respuestaMapper->contarPositivos($id_usuario);
+            $num_neg = $this->respuestaMapper->contarNegativos($id_usuario);
 
-            $datos = array("num_not" => $num_not, "num_tut" => $num_tut);
+            $datos = array("num_not" => $num_not, "num_tut" => $num_tut, "num_preg" => $num_preg, "num_res" => $num_res, "num_pos" => $num_pos, "num_neg" => $num_neg);
             $this->view->setVariable("datos", $datos);
             $this->view->render("usuario", "perfilGeneral");
         } else {
@@ -284,7 +290,7 @@ class UsuarioController extends BaseController
                 }
             }
 
-            if ($formato_valido == false || $target_path=="") {
+            if ($formato_valido == false || $target_path == "") {
                 $target_path = $this->usuarioActual->getAvatar();
                 $formato_valido = true;
             }

@@ -443,6 +443,7 @@ a.btn {
 
 .tablaMen .primEl {
     border-left: none;
+    text-align: left;
 }
 
 .tablaMen a {
@@ -877,4 +878,8 @@ a.btn {
 @keyframes backgroundflash {
     75% { opacity:1.0}
     100% {opacity:0.0; display:none}
+}
+
+.no-leido{
+    font-weight: bold;
 }

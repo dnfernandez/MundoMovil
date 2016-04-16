@@ -290,6 +290,13 @@ if (isset($mensajeError)) {
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 <script src="js/ie-emulation-modes-warning.js"></script>
 <script src="js/javascript.js" type="text/javascript"></script>
+<script src="js/jquery-latest.js" type="text/javascript" ></script>
+<script src="js/jquery.tablesorter.js" type="text/javascript" ></script>
+<script>
+    $(function(){
+        $('#tab_ordena').tablesorter();
+    });
+</script>
 
 </body>
 </html>

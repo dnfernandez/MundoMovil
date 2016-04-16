@@ -33,20 +33,20 @@ $datos = $view->getVariable("datos");
                                 <li>Fecha registro:
                                     <?php
                                         $date = date_create($usuarioActual->getFechaReg());
-                                        echo date_format($date, 'H:i d.m.Y');
+                                        echo date_format($date, 'H:i - d.m.Y');
                                     ?></li>
                                 <li>&Uacute;ltima conexi&oacute;n:
                                     <?php
                                         $date = date_create($usuarioActual->getFechaConex());
-                                        echo date_format($date, 'H:i d.m.Y');
+                                        echo date_format($date, 'H:i - d.m.Y');
                                     ?></li>
                                 <li>N&uacute;mero de noticias: <?php echo $datos["num_not"]; ?></li>
                                 </li>
                                 <li>N&uacute;mero de tutoriales: <?php echo $datos["num_tut"]; ?></li>
-                                <li>N&uacute;mero de preguntas en foro: 56</li>
-                                <li>N&uacute;mero de respuestas en foro: 96</li>
-                                <li>Votos positivos: 100</li>
-                                <li>Votos negativos: 200</li>
+                                <li>N&uacute;mero de preguntas en foro:<?php echo $datos["num_preg"]; ?></li>
+                                <li>N&uacute;mero de respuestas en foro: <?php echo $datos["num_res"]; ?></li>
+                                <li>Votos positivos: <?php echo $datos["num_pos"]; ?></li>
+                                <li>Votos negativos: <?php echo $datos["num_neg"]; ?></li>
                             </ul>
                         </div>
                     </div>
