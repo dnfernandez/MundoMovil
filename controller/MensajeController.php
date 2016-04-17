@@ -108,4 +108,48 @@ class MensajeController extends BaseController
         }
         $this->view->redirect("noticia", "index");
     }
+
+    /**
+     * Metodo que permite enviar un mensaje
+     */
+
+    public function enviar()
+    {
+        $error = false;
+        if (isset($this->usuarioActual)) {
+            if (!empty($_POST["id_usuario_dest"])) {
+                if (!empty($_POST["texto"])) {
+                    $destinatario = $_POST["id_usuario_dest"];
+                    $texto = $_POST["texto"];
+                    $emisor = $this->usuarioActual->getIdUsuario();
+
+                    $mensaje = new Mensaje(null,$texto,null,$emisor,$destinatario);
+
+                    try{
+                        $mensaje->validoParaCrear();
+                        $this->mensajeMapper->insertar($mensaje);
+                        $this->view->setVariable("mensajeSucces","Mensaje enviado correctamente",true);
+                        $this->view->redirectToReferer();
+                    }catch (ValidationException $ex){
+                        $errores = $ex->getErrors();
+                        $this->view->setVariable("errores", $errores, true);
+                    }
+
+                } else {
+                    $error = "El texto no puede estar vac&iacute;o";
+                }
+            } else {
+                $error = "Se id de usuario destinatario";
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+        }
+
+        if ($error != false) {
+            $this->view->setVariable("mensajeError", $error, true);
+            if (!$this->view->redirectToReferer()) {
+                $this->view->redirect("noticia", "index");
+            }
+        }
+    }
 }

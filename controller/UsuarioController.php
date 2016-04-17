@@ -266,6 +266,21 @@ class UsuarioController extends BaseController
         }
     }
 
+    /**
+     * Metodo que permite modificar los datos de un usuario, tales como
+     * contraseña, ubicacion y foto de perfil
+     *
+     * Para ello se comprueba que exista un usuario identificado en el sistema.
+     * Si la imagen de perfil se modifica se copia la nueva imagen al servidor
+     * y se obtiene la nueva ruta, en caso contrario se obtiene la ruta anterior.
+     *
+     * Si las contraseñas estan vacías, se entiende que no se quieren modificar,
+     * por lo tanto se obtiene la contraseña antigua para no modificarla.
+     *
+     * Finalmente se modifica al usuario con los cambios realizados, en caso de
+     * fallo se muestran los errores correspondientes.
+     */
+
     public function modificar()
     {
         if (isset($this->usuarioActual)) {
@@ -324,6 +339,48 @@ class UsuarioController extends BaseController
             $this->view->redirect("usuario", "perfil");
         }
         $this->view->redirect("noticia", "index");
+    }
+
+    /**
+     * Metodo que permite ver informacion de otros usuarios
+     */
+
+    public function ver()
+    {
+        $error = false;
+        if (isset($this->usuarioActual)) {
+            if (isset($_GET["id"]) && !empty($_GET["id"])) {
+                $id_usuario = $_GET["id"];
+                if ($this->usuarioMapper->existe($id_usuario)) {
+                    $usuario = $this->usuarioMapper->listarUsuarioPorId($id_usuario);
+                    $num_not = $this->noticiaMapper->contarTotal($id_usuario);
+                    $num_tut = $this->tutorialMapper->contarTotal($id_usuario);
+                    $num_preg = $this->preguntaMapper->contarTotal($id_usuario);
+                    $num_res = $this->respuestaMapper->contarTotal($id_usuario);
+                    $num_pos = $this->respuestaMapper->contarPositivos($id_usuario);
+                    $num_neg = $this->respuestaMapper->contarNegativos($id_usuario);
+
+                    $datos = array("num_not" => $num_not, "num_tut" => $num_tut, "num_preg" => $num_preg, "num_res" => $num_res, "num_pos" => $num_pos, "num_neg" => $num_neg);
+
+                    $datos = array_merge($usuario, $datos);
+                    $this->view->setVariable("datos", $datos);
+                    $this->view->render("usuario", "perfilOtrosUsuarios");
+                } else {
+                    $error = "No existe un usuario con ese id";
+                }
+            } else {
+                $error = "Se necesita id de usuario";
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+        }
+
+        if ($error != false) {
+            $this->view->setVariable("mensajeError", $error, true);
+            if (!$this->view->redirectToReferer()) {
+                $this->view->redirect("noticia", "index");
+            }
+        }
     }
 
 }

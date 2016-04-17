@@ -67,10 +67,11 @@ if (isset($_GET["pag"])) {
                                             </a>
                                         </td>
                                         <td class="col-md-2">
-                                            <form id="borrarMen" method="post" action="mensaje/eliminarEnv">
+                                            <form id="borrarMenEnv<?php echo $mensaje["id_mensaje_env"]; ?>"
+                                                  method="post" action="mensaje/eliminarEnv">
                                                 <a
                                                     onclick="javascript:alertify.confirm('¿Est\u00E1 seguro de querer eliminar el mensaje?').autoCancel(10).set('title','MundoMovil')
-                                                    .set('onok', function(closeEvent){ document.getElementById('borrarMen').submit();} );"
+                                                        .set('onok', function(closeEvent){ document.getElementById('borrarMenEnv<?php echo $mensaje["id_mensaje_env"]; ?>').submit();} );recarga2();"
                                                     class="enlaces-sinHref glyphicon glyphicon-trash">
                                                 </a>
                                                 <input type="hidden" name="id_mensaje"

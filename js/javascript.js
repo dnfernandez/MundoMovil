@@ -27,10 +27,10 @@ function mostrar_registro() {
     document.getElementById("formComentTutorial").style.display = "none";
 }
 
-function mostrar_enviar_mensaje(usuario) {
+function mostrar_enviar_mensaje(id_usuario,usuario) {
     document.getElementById("formMensajeEnv").style.display = "block";
     document.getElementById("idDestinatario").innerHTML = usuario;
-    document.getElementById("idDesHid").innerHTML = "<input type='hidden' name='destinatario' value='" + usuario + "' >";
+    document.getElementById("idDesHid").innerHTML = "<input type='hidden' name='id_usuario_dest' value='" + id_usuario + "' >";
     document.getElementById("fade").style.display = "block";
     document.getElementById("formLogin").style.display = "none";
     document.getElementById("formRegistro").style.display = "none";
