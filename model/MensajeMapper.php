@@ -143,7 +143,7 @@ class MensajeMapper
 
     public function listarMensajeEnviado($id_mensaje)
     {
-        $stmt = $this->db->prepare("select * from mensaje_enviado where id_mensaje_env=?");
+        $stmt = $this->db->prepare("select * from mensaje_enviado, usuario where mensaje_enviado.receptor=usuario.id_usuario and id_mensaje_env=?");
         $stmt->execute(array($id_mensaje));
         $mensaje = $stmt->fetch(PDO::FETCH_BOTH);
         if ($mensaje != null) {
@@ -160,7 +160,7 @@ class MensajeMapper
 
     public function listarMensajeRecibido($id_mensaje)
     {
-        $stmt = $this->db->prepare("select * from mensaje_recibido where id_mensaje_rec=?");
+        $stmt = $this->db->prepare("select * from mensaje_recibido, usuario where mensaje_recibido.emisor=usuario.id_usuario and id_mensaje_rec=?");
         $stmt->execute(array($id_mensaje));
         $mensaje = $stmt->fetch(PDO::FETCH_BOTH);
         if ($mensaje != null) {

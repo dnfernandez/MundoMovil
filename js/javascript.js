@@ -27,7 +27,7 @@ function mostrar_registro() {
     document.getElementById("formComentTutorial").style.display = "none";
 }
 
-function mostrar_enviar_mensaje(id_usuario,usuario) {
+function mostrar_enviar_mensaje(id_usuario, usuario) {
     document.getElementById("formMensajeEnv").style.display = "block";
     document.getElementById("idDestinatario").innerHTML = usuario;
     document.getElementById("idDesHid").innerHTML = "<input type='hidden' name='id_usuario_dest' value='" + id_usuario + "' >";
@@ -254,3 +254,17 @@ function defineActionBusqueda() {
     }
 
 }
+
+
+$(document).ready(function () {
+    // Interceptamos el evento submit
+    $('#formPanelOcul,#formPanelMos').submit(function () {
+        // Enviamos el formulario usando AJAX
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+        })
+        return false;
+    });
+})

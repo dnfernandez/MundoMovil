@@ -147,6 +147,9 @@ class UsuarioController extends BaseController
                     $error = "Formato de imagen no v&aacute;lido";
                     $target_path = "images/perfil.jpg";
                     $formato_valido = false;
+                } elseif ($_FILES["img_perfil"]['size'] == 0) {
+                    $error = "La nueva imagen superaba el tama&ntilde;o m&aacute;ximo permitido";
+                    $formato_valido = false;
                 } else {
                     $target_path = "img_perfil/";
                     $target_path = $target_path . "perfil" . $temp . $extensionImg;
@@ -298,11 +301,15 @@ class UsuarioController extends BaseController
                 if (!in_array($extensionImg, [".jpg", ".png", ".jpeg", ".gif"])) {
                     $target_path = "images/perfil.jpg";
                     $formato_valido = false;
+                } elseif ($_FILES["img_perfil"]['size'] == 0) {
+                    $this->view->setVariable("mensajeError", "La nueva imagen superaba el tama&ntilde;o m&aacute;ximo permitido", true);
+                    $formato_valido = false;
                 } else {
                     $target_path = "img_perfil/";
                     $target_path = $target_path . "perfil" . $this->usuarioActual->getIdUsuario() . $extensionImg;
                     move_uploaded_file($_FILES['img_perfil']['tmp_name'], $target_path);
                 }
+
             }
 
             if ($formato_valido == false || $target_path == "") {
@@ -380,6 +387,19 @@ class UsuarioController extends BaseController
             if (!$this->view->redirectToReferer()) {
                 $this->view->redirect("noticia", "index");
             }
+        }
+    }
+
+    /**
+     * Metodo que permite almacenar en una variable de sesion si se ha
+     * de mostrar el panel de administración u ocultarlo
+     */
+
+    public function preferencias()
+    {
+        if (isset($this->usuarioActual)) {
+            $visibilidad = $_POST["visibilidad"];
+            $_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"] = $visibilidad;
         }
     }
 

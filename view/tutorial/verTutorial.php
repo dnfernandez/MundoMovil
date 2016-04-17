@@ -18,23 +18,19 @@ $id_comentarios = $view->getVariable("id_comentarios");
             <!--Desde aqui-->
             <?php if (isset($usuarioActual)):
                 if (($usuarioActual->getRol() == "administrador") || ($usuarioActual->getRol() == "moderador") || ($usuarioActual->getIdUsuario() == $tutorial["id_usuario"])): ?>
-                    <span id="panelAdminMos">
-						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
-					</span>
-
+                    <form id="formPanelMos" method="post" action="usuario/preferencias">
+                        <span id="panelAdminMos">
+                            <button type="submit" onclick="mostrar_panel_creacion()"
+                                    class="btn-panel glyphicon glyphicon-menu-down"></button>
+                        </span>
+                        <input type="hidden" name="visibilidad" value="mostrar">
+                    </form>
                     <div id="panelAdmin" class="row botonesNoticia">
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de tutorial</h4>
 
-                            <!--<form id="modificarTut" method="post" action="tutorial/modificar">
-
-                                <a onclick="document.getElementById('modificarTut').submit();" class="btn btn-default">Modificar</a>
-                                <input type="hidden" name="id_tutorial" value="<?php //echo $tutorial["id_tutorial"]; ?>">
-                                <input type="hidden" name="id_usuario_tut"
-                                       value="<?php //echo $tutorial["id_usuario"]; ?>">
-                            </form>-->
-
-                            <a href="tutorial/modificar?id=<?php echo $tutorial['id_tutorial'];?>" class="btn btn-default">Modificar</a>
+                            <a href="tutorial/modificar?id=<?php echo $tutorial['id_tutorial']; ?>"
+                               class="btn btn-default">Modificar</a>
 
                             <form id="borrarTut" method="post" action="tutorial/eliminar">
                                 <a
@@ -47,10 +43,26 @@ $id_comentarios = $view->getVariable("id_comentarios");
                                        value="<?php echo $tutorial["id_usuario"]; ?>">
                             </form>
 
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    onclick="ocultar_panel_creacion()">&times;</button>
+                            <form id="formPanelOcul" method="post" action="usuario/preferencias">
+                                <button type="submit" class="close" data-dismiss="modal" aria-hidden="true"
+                                        onclick="ocultar_panel_creacion()">&times;</button>
+                                <input type="hidden" name="visibilidad" value="ocultar">
+                            </form>
                         </div>
                     </div>
+                    <?php
+                    if (isset($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) && ($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) == "ocultar") {
+                        echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "none";
+                            document.getElementById("panelAdminMos").style.display = "block";
+                        </script>';
+                    } else {
+                        echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "block";
+                            document.getElementById("panelAdminMos").style.display = "none";
+                        </script>';
+                    }
+                    ?>
                 <?php endif;
             endif; ?>
             <!--Mostrar hasta aqui si es creador-->

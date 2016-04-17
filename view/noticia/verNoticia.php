@@ -19,10 +19,13 @@ $id_comentarios = $view->getVariable("id_comentarios");
             <!--Desde aqui-->
             <?php if (isset($usuarioActual)):
                 if (($usuarioActual->getRol() == "administrador") || ($usuarioActual->getRol() == "moderador" && $usuarioActual->getIdUsuario() == $noticia["id_usuario"])): ?>
-                    <span id="panelAdminMos">
-						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
-					</span>
-
+                    <form id="formPanelMos" method="post" action="usuario/preferencias">
+                        <span id="panelAdminMos">
+                            <button type="submit" onclick="mostrar_panel_creacion()"
+                                    class="btn-panel glyphicon glyphicon-menu-down"></button>
+                        </span>
+                        <input type="hidden" name="visibilidad" value="mostrar">
+                    </form>
                     <div id="panelAdmin" class="row botonesNoticia">
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de noticia</h4>
@@ -36,14 +39,31 @@ $id_comentarios = $view->getVariable("id_comentarios");
                                         .set('onok', function(closeEvent){ document.getElementById('borrarNot').submit();} );"
                                     class="btn btn-default">Eliminar
                                 </a>
-                                <input type="hidden" name="id_noticia" value="<?php echo $noticia["id_noticia"]; ?>">
+                                <input type="hidden" name="id_noticia"
+                                       value="<?php echo $noticia["id_noticia"]; ?>">
                                 <input type="hidden" name="id_usuario_not"
                                        value="<?php echo $noticia["id_usuario"]; ?>">
                             </form>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    onclick="ocultar_panel_creacion()">&times;</button>
+                            <form id="formPanelOcul" method="post" action="usuario/preferencias">
+                                <button type="submit" class="close" data-dismiss="modal" aria-hidden="true"
+                                        onclick="ocultar_panel_creacion()">&times;</button>
+                                <input type="hidden" name="visibilidad" value="ocultar">
+                            </form>
                         </div>
                     </div>
+                    <?php
+                    if (isset($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) && ($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) == "ocultar") {
+                        echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "none";
+                            document.getElementById("panelAdminMos").style.display = "block";
+                        </script>';
+                    } else {
+                        echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "block";
+                            document.getElementById("panelAdminMos").style.display = "none";
+                        </script>';
+                    }
+                    ?>
                 <?php endif;
             endif; ?>
             <!--Mostrar hasta aqui si es creador-->

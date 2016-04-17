@@ -478,6 +478,7 @@ a.btn {
 .vistaMensaje .texto {
     text-align: justify;
     border-left: 1px solid #DDDDDD;
+    min-height: 3em;
 }
 
 .footerMensajes a {
@@ -882,4 +883,11 @@ a.btn {
 
 .no-leido{
     font-weight: bold;
+}
+
+.btn-panel{
+    border:none;
+    background: none;
+    color: #146daf;
+    padding: 0.75em;
 }

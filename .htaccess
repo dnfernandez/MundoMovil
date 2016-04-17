@@ -4,6 +4,10 @@ AuthName "Zona Privada"
 AuthUserFile /var/www/.htpasswd
 Require valid-user
 
+#Aumentar tamaño de subida de archivos al servidor
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+
 #Impedir acceso a carpetas
 Options All -Indexes
 

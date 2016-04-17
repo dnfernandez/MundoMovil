@@ -17,17 +17,37 @@ $filtro = $view->getVariable("filtro", "index");
         <div class="col-md-12 ">
             <!---Si es usuario validado en el sistema--->
             <?php if (isset($usuarioActual)): ?>
-                <span id="panelAdminMos">
-						<a onclick="mostrar_panel_creacion()" class="btn glyphicon glyphicon-menu-down"></a>
-					</span>
-                <div id="panelAdmin" class="row botonesNoticia">
-                    <div class="col-md-12">
-                        <h4>Panel de administraci&oacute;n de tutorial</h4>
-                        <a href="tutorial/crear" class="btn btn-default">Crear</a>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                onclick="ocultar_panel_creacion()">&times;</button>
+                <form id="formPanelMos" method="post" action="usuario/preferencias">
+                        <span id="panelAdminMos">
+                            <button type="submit" onclick="mostrar_panel_creacion()"
+                                    class="btn-panel glyphicon glyphicon-menu-down"></button>
+                        </span>
+                    <input type="hidden" name="visibilidad" value="mostrar">
+                </form>
+                <form id="formPanelOcul" method="post" action="usuario/preferencias">
+                    <div id="panelAdmin" class="row botonesNoticia">
+                        <div class="col-md-12">
+                            <h4>Panel de administraci&oacute;n de tutorial</h4>
+                            <a href="tutorial/crear" class="btn btn-default">Crear</a>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                    onclick="ocultar_panel_creacion()">&times;</button>
+                        </div>
                     </div>
-                </div>
+                    <input type="hidden" name="visibilidad" value="ocultar">
+                </form>
+                <?php
+                if (isset($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) && ($_SESSION["__sesion__herramienta__"]["__visibilidad_panel__"]) == "ocultar") {
+                    echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "none";
+                            document.getElementById("panelAdminMos").style.display = "block";
+                        </script>';
+                } else {
+                    echo '<script type="text/javascript">
+                            document.getElementById("panelAdmin").style.display = "block";
+                            document.getElementById("panelAdminMos").style.display = "none";
+                        </script>';
+                }
+                ?>
             <?php endif; ?>
             <!---->
             <div class="row">

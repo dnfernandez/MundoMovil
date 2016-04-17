@@ -123,14 +123,14 @@ class MensajeController extends BaseController
                     $texto = $_POST["texto"];
                     $emisor = $this->usuarioActual->getIdUsuario();
 
-                    $mensaje = new Mensaje(null,$texto,null,$emisor,$destinatario);
+                    $mensaje = new Mensaje(null, $texto, null, $emisor, $destinatario);
 
-                    try{
+                    try {
                         $mensaje->validoParaCrear();
                         $this->mensajeMapper->insertar($mensaje);
-                        $this->view->setVariable("mensajeSucces","Mensaje enviado correctamente",true);
+                        $this->view->setVariable("mensajeSucces", "Mensaje enviado correctamente", true);
                         $this->view->redirectToReferer();
-                    }catch (ValidationException $ex){
+                    } catch (ValidationException $ex) {
                         $errores = $ex->getErrors();
                         $this->view->setVariable("errores", $errores, true);
                     }
@@ -140,6 +140,82 @@ class MensajeController extends BaseController
                 }
             } else {
                 $error = "Se id de usuario destinatario";
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+        }
+
+        if ($error != false) {
+            $this->view->setVariable("mensajeError", $error, true);
+            if (!$this->view->redirectToReferer()) {
+                $this->view->redirect("noticia", "index");
+            }
+        }
+    }
+
+    /**
+     * Metodo que permite ver un mensaje enviado
+     */
+
+    public function enviado()
+    {
+        $error = false;
+        if (isset($this->usuarioActual)) {
+            $id_usuario = $this->usuarioActual->getIdUsuario();
+            if (isset($_GET["id"])) {
+                $id_mensaje = $_GET["id"];
+                $mensaje = $this->mensajeMapper->listarMensajeEnviado($id_mensaje);
+                if ($mensaje != null) {
+                    $emisor = $mensaje["emisor"];
+                    if ($emisor == $id_usuario) {
+                        $this->view->setVariable("mensaje", $mensaje);
+                        $this->view->render("mensaje", "perfilVerMenEnv");
+                    } else {
+                        $error = "No tienes permiso para ver ese mensaje";
+                    }
+                } else {
+                    $error = "No existe un mensaje con ese id";
+                }
+            } else {
+                $error = "Se necesita id de mensaje";
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+        }
+
+        if ($error != false) {
+            $this->view->setVariable("mensajeError", $error, true);
+            if (!$this->view->redirectToReferer()) {
+                $this->view->redirect("noticia", "index");
+            }
+        }
+    }
+
+    /**
+     * Metodo que permite ver un mensaje recibido
+     */
+
+    public function recibido()
+    {
+        $error = false;
+        if (isset($this->usuarioActual)) {
+            $id_usuario = $this->usuarioActual->getIdUsuario();
+            if (isset($_GET["id"])) {
+                $id_mensaje = $_GET["id"];
+                $mensaje = $this->mensajeMapper->listarMensajeRecibido($id_mensaje);
+                if ($mensaje != null) {
+                    $receptor = $mensaje["receptor"];
+                    if ($receptor == $id_usuario) {
+                        $this->view->setVariable("mensaje", $mensaje);
+                        $this->view->render("mensaje", "perfilVerMenRec");
+                    } else {
+                        $error = "No tienes permiso para ver ese mensaje";
+                    }
+                } else {
+                    $error = "No existe un mensaje con ese id";
+                }
+            } else {
+                $error = "Se necesita id de mensaje";
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
