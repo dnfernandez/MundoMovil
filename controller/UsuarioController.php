@@ -329,7 +329,7 @@ class UsuarioController extends BaseController
                     $target_path = "img_perfil/";
                     $target_path = $target_path . "perfil" . $this->usuarioActual->getIdUsuario() . $extensionImg;
                     move_uploaded_file($_FILES['img_perfil']['tmp_name'], $target_path);
-                    $this->view->setVariable("recarga","true",true);
+                    $this->view->setVariable("recarga", "true", true);
                 }
 
             }
@@ -504,4 +504,197 @@ class UsuarioController extends BaseController
 
         return $notificacion;
     }
+
+    /**
+     * Panel de administracion de usuarios
+     *
+     * Si existe $_GET["filtro"]:
+     *      Se obtienen los usuarios filtrando por el tipo que es y se muestran.
+     *      Para ello se carga el texto y el tipo de filtrado de las variables de
+     *      sesion y se obtienen los usuarios filtrandolos como sea necesario.
+     *      Se envian las variables usuarios, total(numero de usuarios existentes) y filtro
+     *      para indicar que la pagina renderizada a continuacion proviene del metodo filtro.
+     * Si no existe:
+     *      Se obtienen los usuarios sin filtros y se renderiza la pagina para mostrarlos.
+     */
+
+    public function administracion()
+    {
+        if (isset($this->usuarioActual)) {
+            if ($this->usuarioActual->getRol() == "moderador" || $this->usuarioActual->getRol() == "administrador") {
+
+                if (isset($_GET["filtro"])) {
+
+                    $texto = $_SESSION["__sesion__herramienta__"]["__filtro_texto__"];
+                    $tipo_filtro = $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"];
+
+                    if (isset($_GET["pag"])) {
+                        if ($tipo_filtro == "nom_usuario") {
+                            $usuarios = $this->usuarioMapper->listarUsuarios($_GET["pag"], $texto, null);
+                            $total = $this->usuarioMapper->contarUsuarios($texto)["total"];
+                        } elseif ($tipo_filtro == "email") {
+                            $usuarios = $this->usuarioMapper->listarUsuarios($_GET["pag"], null, $texto);
+                            $total = $this->usuarioMapper->contarUsuarios(null, $texto)["total"];
+                        } else {
+                            $this->view->redirect("usuarios", "administracion");
+                        }
+                    } else {
+                        if ($tipo_filtro == "nom_usuario") {
+                            $usuarios = $this->usuarioMapper->listarUsuarios(1, $texto, null);
+                            $total = $this->usuarioMapper->contarUsuarios($texto)["total"];
+                        } elseif ($tipo_filtro == "email") {
+                            $usuarios = $this->usuarioMapper->listarUsuarios(1, null, $texto);
+                            $total = $this->usuarioMapper->contarUsuarios(null, $texto)["total"];
+                        } else {
+                            $this->view->redirect("usuarios", "administracion");
+                        }
+                    }
+
+                    $this->view->setVariable("usuarios", $usuarios);
+                    $this->view->setVariable("total", $total);
+                    $this->view->setVariable("filtro", "filtro");
+
+                } else {
+                    if (isset($_GET["pag"])) {
+                        $usuarios = $this->usuarioMapper->listarUsuarios($_GET["pag"], null, null);
+                    } else {
+                        $usuarios = $this->usuarioMapper->listarUsuarios(1, null, null);
+                    }
+                    $total = $this->usuarioMapper->contarUsuarios()["total"];
+                    $this->view->setVariable("usuarios", $usuarios);
+                    $this->view->setVariable("total", $total);
+                }
+                $this->view->render("usuario", "panelAdministracionUsuarios");
+            } else {
+                $error = "No tienes suficientes permisos para esta acci&oacute;n";
+                $this->view->setVariable("mensajeError", $error, true);
+                $this->view->redirect("noticia", "index");
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que permite filtrar usuarios por email o nombre usuario
+     *
+     * Si es una nueva busqueda (existe $_POST["tipo"]=="usuario") se almacenan
+     * el texto y el tipo de filtrado en variables de sesion.
+     * Luego redirige a noticia/index?filtro
+     */
+
+    public function filtro()
+    {
+        if ($_POST["tipo"] == "usuario") {
+            $texto = $_POST["texto"];
+            $tipo_filtro = $_POST["tipo_filtro"];
+            if (empty($texto)) {
+                $this->view->redirect("usuario", "administracion");
+            }
+            $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $texto;
+            $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = $tipo_filtro;
+        }
+
+        $this->view->redirect("usuario", "administracion", "filtro");
+    }
+
+    /**
+     * Metodo que permite eliminar un usuario.
+     *
+     * Para ello se comprueba que exista un usuario identificado
+     * en el sistema y que sea un administrador.
+     * Si se cumple se elimina el usuario mostrando el mensaje correspondiente.
+     */
+    public function eliminarUsuario()
+    {
+        if (isset($this->usuarioActual)) {
+            if ($this->usuarioActual->getRol() == "administrador") {
+                if (isset($_POST["id_usuario"])) {
+                    $id_usuario = $_POST["id_usuario"];
+                    $this->usuarioMapper->eliminar($id_usuario);
+                    $this->view->setVariable("mensajeSucces", "Usuario eliminado correctamente", true);
+                    $this->view->redirectToReferer();
+                } else {
+                    $this->view->setVariable("mensajeError", "Se necesita id de usuario", true);
+                    $this->view->redirectToReferer();
+                }
+            } else {
+                $error = "No tienes suficientes permisos para esta acci&oacute;n";
+                $this->view->setVariable("mensajeError", $error, true);
+                $this->view->redirect("noticia", "index");
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que permite modificar el rol de un usuario.
+     *
+     * Para ello se comprueba que exista un usuario identificado
+     * en el sistema y que sea un administrador.
+     * Si se cumple se modifica el rol del usuario mostrando el mensaje correspondiente.
+     */
+    public function modificarRolUsuario()
+    {
+        if (isset($this->usuarioActual)) {
+            if ($this->usuarioActual->getRol() == "administrador") {
+                if (isset($_POST["id_usuario"])) {
+                    $id_usuario = $_POST["id_usuario"];
+                    $this->usuarioMapper->actualizarRolUsuario($id_usuario);
+                    $this->view->setVariable("mensajeSucces", "Rol de usuario modificado correctamente", true);
+                    $this->view->redirectToReferer();
+                } else {
+                    $this->view->setVariable("mensajeError", "Se necesita id de usuario", true);
+                    $this->view->redirectToReferer();
+                }
+            } else {
+                $error = "No tienes suficientes permisos para esta acci&oacute;n";
+                $this->view->setVariable("mensajeError", $error, true);
+                $this->view->redirect("noticia", "index");
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que permite banear/desbanear a un usuario.
+     *
+     * Para ello se comprueba que exista un usuario identificado
+     * en el sistema y que sea un administrador o moderador.
+     * Si se cumple se cambia el estado de baneado/desbanedo del usuario mostrando el mensaje correspondiente.
+     */
+    public function banearUsuario()
+    {
+        if (isset($this->usuarioActual)) {
+            if ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador") {
+                if (isset($_POST["id_usuario"])) {
+                    $id_usuario = $_POST["id_usuario"];
+                    $this->usuarioMapper->actualizaBaneoUsuario($id_usuario);
+                    $this->view->setVariable("mensajeSucces", "Baneo/Desbaneo de usuario realizado correctamente", true);
+                    $this->view->redirectToReferer();
+                } else {
+                    $this->view->setVariable("mensajeError", "Se necesita id de usuario", true);
+                    $this->view->redirectToReferer();
+                }
+            } else {
+                $error = "No tienes suficientes permisos para esta acci&oacute;n";
+                $this->view->setVariable("mensajeError", $error, true);
+                $this->view->redirect("noticia", "index");
+            }
+        } else {
+            $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+
 }

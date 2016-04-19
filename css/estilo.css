@@ -908,3 +908,17 @@ a.btn {
     padding-top: 0.5em;
     width: 5em;
 }
+
+.admin-estilo{
+    color: #a50000;
+    font-weight: bold;
+}
+
+.moderador-estilo{
+    color: #007200;
+    font-weight: bold;
+}
+
+a.a-btn{
+    color:white;
+}

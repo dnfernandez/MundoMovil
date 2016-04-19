@@ -312,7 +312,7 @@ class UsuarioMapper
         if (!$this->comprobarEstadoUsuario($id_usuario)) {
             $this->actualizaEstadoUsuario($id_usuario);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -337,5 +337,25 @@ class UsuarioMapper
         $stmt = $this->db->prepare("select cod_validacion from usuario where email=?");
         $stmt->execute(array($email));
         return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que cuenta el numero de usuarios
+     * permitiendo filtrar por nombre de usuario y email
+     */
+
+    public function contarUsuarios($nom_usuario = null, $email = null)
+    {
+        if ($nom_usuario != null) {
+            $stmt = $this->db->prepare("select count(*) as total from usuario where nom_usuario like ?");
+            $stmt->execute(array('%' . $nom_usuario . '%'));
+        } elseif ($email != null) {
+            $stmt = $this->db->prepare("select count(*) as total from usuario where email like ?");
+            $stmt->execute(array('%' . $email . '%'));
+        } else {
+            $stmt = $this->db->query("select count(*) as total from usuario");
+        }
+        $usuarios = $stmt->fetch(PDO::FETCH_BOTH);
+        return $usuarios;
     }
 }

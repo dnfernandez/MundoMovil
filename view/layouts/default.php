@@ -75,7 +75,7 @@ $notificacion = $view->getVariable("notificacion");
                         <ul class="dropdown-menu">
                             <li><a href="usuario/general">Perfil</a></li>
                             <?php if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
-                                <li><a href="#">Administrar usuarios</a></li>
+                                <li><a href="usuario/administracion">Administrar usuarios</a></li>
                             <?php endif; ?>
                             <li><a href="usuario/logout" onclick="javascript:recarga2()">Cerrar sesi&oacute;n</a></li>
                         </ul>
