@@ -3,6 +3,10 @@ require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $usuarioActual = $view->getVariable("usuarioActual");
 $errores = $view->getVariable("errores");
+$recargar = $view->getVariable("recarga");
+if(isset($recargar) && $recargar=="true"){
+    header("Refresh:2");
+}
 ?>
 
 <div class="container content">

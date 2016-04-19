@@ -179,4 +179,17 @@ class TutorialMapper
 
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
+
+    /**
+     * Metodo que lista todas los tutoriales de un usuario por su id_usuario
+     * @param $id_usuario
+     * @return array
+     */
+
+    public function listarTutorialesPorIdUsuario($id_usuario)
+    {
+        $stmt = $this->db->prepare("select * from tutorial where id_usuario=?");
+        $stmt->execute(array($id_usuario));
+        return $stmt->fetchAll(PDO::FETCH_BOTH);
+    }
 }

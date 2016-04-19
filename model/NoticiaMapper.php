@@ -144,7 +144,8 @@ class NoticiaMapper
      * pudiendo contar filtrando por autor, pal_clave y texto
      */
 
-    public function contarNoticias($autor = null, $pal_clave = null, $texto = null){
+    public function contarNoticias($autor = null, $pal_clave = null, $texto = null)
+    {
         if ($autor != null) {
             $stmt = $this->db->prepare("select count(*) as total from noticia, usuario where noticia.id_usuario=usuario.id_usuario and usuario.nom_usuario like :elemento");
             $stmt->execute(array(':elemento' => '%' . $autor . '%'));
@@ -185,5 +186,18 @@ class NoticiaMapper
     {
         $stmt = $this->db->query("select max(id_noticia) as max_id from noticia");
         return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que lista todas las noticias de un usuario por su id_usuario
+     * @param $id_usuario
+     * @return array
+     */
+
+    public function listarNoticiasPorIdUsuario($id_usuario)
+    {
+        $stmt = $this->db->prepare("select * from noticia where id_usuario=?");
+        $stmt->execute(array($id_usuario));
+        return $stmt->fetchAll(PDO::FETCH_BOTH);
     }
 }

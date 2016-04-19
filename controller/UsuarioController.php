@@ -8,6 +8,9 @@ require_once(__DIR__ . "/../model/NoticiaMapper.php");
 require_once(__DIR__ . "/../model/TutorialMapper.php");
 require_once(__DIR__ . "/../model/PreguntaMapper.php");
 require_once(__DIR__ . "/../model/RespuestaMapper.php");
+require_once(__DIR__ . "/../model/MensajeMapper.php");
+require_once(__DIR__ . "/../model/ComentarioNoticiaMapper.php");
+require_once(__DIR__ . "/../model/ComentarioTutorialMapper.php");
 
 class UsuarioController extends BaseController
 {
@@ -16,6 +19,9 @@ class UsuarioController extends BaseController
     private $tutorialMapper;
     private $preguntaMapper;
     private $respuestaMapper;
+    private $mensajeMapper;
+    private $comentarioNoticiaMapper;
+    private $comentarioTutorialMapper;
 
     /**
      * UsuarioController constructor.
@@ -29,6 +35,9 @@ class UsuarioController extends BaseController
         $this->tutorialMapper = new TutorialMapper();
         $this->preguntaMapper = new PreguntaMapper();
         $this->respuestaMapper = new RespuestaMapper();
+        $this->mensajeMapper = new MensajeMapper();
+        $this->comentarioNoticiaMapper = new ComentarioNoticiaMapper();
+        $this->comentarioTutorialMapper = new ComentarioTutorialMapper();
     }
 
     /**
@@ -40,6 +49,7 @@ class UsuarioController extends BaseController
      * 3º. Si los datos introducidos son correctos.
      * Si cumple estos 3 pasos se valida en el sistema y se redirige a la pagina de la que viene,
      * si dicha pagina es el login_error, se redirige a noticia/index
+     * A mayores se comprueba si tiene alguna notificacion que mostrar, si es asi se le indica cual es
      * En caso de no cumplir algunos de los 3 puntos anteriores se redirige a login_error y se muestra
      * el error correspondiente.
      */
@@ -54,6 +64,17 @@ class UsuarioController extends BaseController
                 if ($this->usuarioMapper->comprobarEstadoUsuario(null, $email)) {
                     if (!$this->usuarioMapper->comprobarBaneoUsuario(null, $email)) {
                         $_SESSION["usuarioActual"] = $email;
+
+                        /**
+                         * Comprobar si el usuario tiene notificaciones a mostrar
+                         */
+
+                        $usuario = $this->usuarioMapper->listarUsuarioConcreto(null, $email);
+                        $id_usuario = $usuario["id_usuario"];
+                        $fecha_conex = $usuario["fecha_conex"];
+                        $notificacion = $this->getNotificaciones($id_usuario, $fecha_conex);
+
+                        $this->view->setVariable("notificacion", $notificacion, true);
                         $this->usuarioMapper->actualizarFechaConexion(null, $email);
                         $this->view->setVariable("mensajeSucces", "Usuario logueado correctamente", true);
                         if (strpos($_SERVER["HTTP_REFERER"], "login_error")) {
@@ -308,6 +329,7 @@ class UsuarioController extends BaseController
                     $target_path = "img_perfil/";
                     $target_path = $target_path . "perfil" . $this->usuarioActual->getIdUsuario() . $extensionImg;
                     move_uploaded_file($_FILES['img_perfil']['tmp_name'], $target_path);
+                    $this->view->setVariable("recarga","true",true);
                 }
 
             }
@@ -380,6 +402,8 @@ class UsuarioController extends BaseController
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
         }
 
         if ($error != false) {
@@ -403,4 +427,81 @@ class UsuarioController extends BaseController
         }
     }
 
+    /**
+     * Metodo que permite comprobar si un usuario tiene notificaciones
+     * al loguearse en el sistema
+     */
+
+    private function getNotificaciones($id_usuario, $fecha_conex)
+    {
+        $notificacion = array();
+
+        /**
+         * Comprobar si tiene nuevos mensajes sin leer
+         */
+        $num_mensajes = $this->mensajeMapper->contarMensajesRecibidos($id_usuario);
+        $num_paginas = ceil($num_mensajes["total"] / 15);
+        $contadorMen = 0;
+        for ($i = 1; $i <= $num_paginas; $i++) {
+            $mensajes = $this->mensajeMapper->listarMensajesRecibidos($i, $id_usuario);
+            foreach ($mensajes as $mensaje) {
+                if ($mensaje["fecha"] > $fecha_conex) {
+                    if ($mensaje["leido"] == 0) {
+                        $contadorMen++;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        if ($contadorMen > 0) {
+            $notificacion["mensajes"] = "Tienes " . $contadorMen . (($contadorMen == 1) ? " mensaje nuevo" : " mensajes nuevos") . " sin leer";
+            $notificacion["num_not"]++;
+        }
+
+        /**
+         * Comprobar si tiene nuevos comentarios en alguna noticia suya
+         */
+        $notificacion["noticias"] = array();
+        $noticias = $this->noticiaMapper->listarNoticiasPorIdUsuario($id_usuario);
+        $contadorNot = 0;
+        foreach ($noticias as $noticia) {
+            $comentarios = $this->comentarioNoticiaMapper->listarComentariosPorNoticia(null, $noticia["id_noticia"], false);
+            foreach ($comentarios as $comentario) {
+                if ($comentario["fecha"] > $fecha_conex) {
+                    $contadorNot++;
+                }
+            }
+            if ($contadorNot > 0) {
+                $notificacion["noticias"][$noticia["id_noticia"]] = $contadorNot . (($contadorNot == 1) ? " comentario nuevo" : " comentarios nuevos")
+                    . " en <a href='noticia/ver?id=" . $noticia['id_noticia'] . "' target='_blank'>" . substr($noticia["titulo"], 0, 50) . "...</a>";
+                $contadorNot = 0;
+                $notificacion["num_not"]++;
+            }
+        }
+
+        /**
+         * Comprobar si tiene nuevos comentarios en algun tutorial suyo
+         */
+        $notificacion["tutoriales"] = array();
+        $tutoriales = $this->tutorialMapper->listarTutorialesPorIdUsuario($id_usuario);
+        $contadorTut = 0;
+        foreach ($tutoriales as $tutorial) {
+            $comentarios = $this->comentarioTutorialMapper->listarComentariosPorTutorial(null, $tutorial["id_tutorial"], false);
+            foreach ($comentarios as $comentario) {
+                if ($comentario["fecha"] > $fecha_conex) {
+                    $contadorTut++;
+                }
+            }
+            if ($contadorTut > 0) {
+                $notificacion["tutoriales"][$tutorial["id_tutorial"]] = $contadorTut . (($contadorTut == 1) ? " comentario nuevo" : " comentarios nuevos")
+                    . " en <a href='tutorial/ver?id=" . $tutorial['id_tutorial'] . "' target='_blank'>" . substr($tutorial["titulo"], 0, 50) . "...</a>";
+                $contadorTut = 0;
+                $notificacion["num_not"]++;
+            }
+        }
+
+        return $notificacion;
+    }
 }

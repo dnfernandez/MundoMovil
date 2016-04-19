@@ -5,6 +5,7 @@ $base = $view->getBase();
 $usuarioActual = $view->getVariable("usuarioActual");
 $mensajeSucces = $view->getVariable("mensajeSucces");
 $mensajeError = $view->getVariable("mensajeError");
+$notificacion = $view->getVariable("notificacion");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -91,13 +92,19 @@ $mensajeError = $view->getVariable("mensajeError");
 <?php
 if (isset($mensajeSucces)) {
     echo '<script>
-               alertify.success("' . $mensajeSucces . '")
+                alertify.success("' . $mensajeSucces . '")
             </script>';
 }
 
 if (isset($mensajeError)) {
     echo '<script>
-               alertify.error("' . $mensajeError . '")
+                alertify.error("' . $mensajeError . '")
+            </script>';
+}
+
+if (isset($notificacion) && $notificacion["num_not"]>0) {
+    echo '<script>
+                alertify.notify("Tienes ' . $notificacion["num_not"] . (($notificacion["num_not"] == 1) ? " notificaci&oacute;n" : " notificaciones") . ' <br>Haz click para mostrar","custom",0, function(){mostrar_notificacion();});
             </script>';
 }
 ?>
@@ -283,6 +290,65 @@ if (isset($mensajeError)) {
     </div>
 </div>
 
+<!--Panel notificaciones -->
+
+<div id="panelNotificacion" class="formulario-js">
+    <div class="panel panel-default" data-lightbox="busqueda">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Notificaciones de MundoMovil
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        onclick="ocultar_notificacion()">&times;</button>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <?php if (isset($notificacion["noticias"]) && !empty($notificacion["noticias"])): ?>
+                        <div>
+                            <label>Noticias</label>
+                        </div>
+                        <?php foreach ($notificacion["noticias"] as $noticia): ?>
+                            <div>
+                                <?php echo $noticia;?>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="sep-notificacion"></div>
+                    <?php endif; ?>
+                    <?php if (isset($notificacion["tutoriales"]) && !empty($notificacion["tutoriales"])): ?>
+                        <div>
+                            <label>Tutoriales</label>
+                        </div>
+                        <?php foreach ($notificacion["tutoriales"] as $tutorial): ?>
+                            <div>
+                                <?php echo $tutorial;?>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="sep-notificacion"></div>
+                    <?php endif; ?>
+                    <div>
+                        <label>Foro</label>
+                    </div>
+                    <div>
+                        Han respondido en la pregunta: asdasdasd
+                    </div>
+                    <div class="sep-notificacion"></div>
+
+                    <?php if (isset($notificacion["mensajes"])): ?>
+                        <div>
+                            <label>Mensajes</label>
+                        </div>
+                        <div>
+                            <?php echo $notificacion["mensajes"] . " - "; ?>
+                            <a target="_blank" href="mensaje/recibidos">Cons&uacute;ltalos aqu&iacute;</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="js/jquery.js"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
@@ -290,10 +356,10 @@ if (isset($mensajeError)) {
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 <script src="js/ie-emulation-modes-warning.js"></script>
 <script src="js/javascript.js" type="text/javascript"></script>
-<script src="js/jquery-latest.js" type="text/javascript" ></script>
-<script src="js/jquery.tablesorter.js" type="text/javascript" ></script>
+<script src="js/jquery-latest.js" type="text/javascript"></script>
+<script src="js/jquery.tablesorter.js" type="text/javascript"></script>
 <script>
-    $(function(){
+    $(function () {
         $('#tab_ordena').tablesorter();
     });
 </script>

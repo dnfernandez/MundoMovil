@@ -37,6 +37,14 @@ function mostrar_enviar_mensaje(id_usuario, usuario) {
     document.getElementById("formBusqueda").style.display = "none";
 }
 
+function mostrar_notificacion() {
+    document.getElementById("panelNotificacion").style.display = "block";
+    document.getElementById("fade").style.display = "block";
+    document.getElementById("formLogin").style.display = "none";
+    document.getElementById("formRegistro").style.display = "none";
+    document.getElementById("formBusqueda").style.display = "none";
+}
+
 function mostrar_comentario_noticia(comentario) {
     document.getElementById("formComentNoticia").style.display = "block";
     if (comentario) {
@@ -139,6 +147,11 @@ function ocultar_modificar_foro() {
 
 function ocultar_crear_respuesta() {
     document.getElementById("formCrearRespuesta").style.display = "none";
+    document.getElementById("fade").style.display = "none";
+}
+
+function ocultar_notificacion() {
+    document.getElementById("panelNotificacion").style.display = "none";
     document.getElementById("fade").style.display = "none";
 }
 

@@ -42,7 +42,7 @@ class ComentarioNoticiaMapper
      * añadiendo el texto del comentario al que responden, en caso de tenerlo
      */
 
-    public function listarComentariosPorNoticia($pag = 1, $id_noticia)
+    public function listarComentariosPorNoticia($pag = 1, $id_noticia, $limitar = true)
     {
         $limite = 10;
         if ($pag < 1) {
@@ -50,8 +50,13 @@ class ComentarioNoticiaMapper
         }
         $inicio = ($pag - 1) * $limite;
 
-        $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? limit ?,?");
-        $stmt->execute(array($id_noticia, $inicio, $limite));
+        if(!$limitar){
+            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=?");
+            $stmt->execute(array($id_noticia));
+        }else {
+            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? limit ?,?");
+            $stmt->execute(array($id_noticia, $inicio, $limite));
+        }
         $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $comentarios2 = array();
         foreach ($comentarios as $coment) {

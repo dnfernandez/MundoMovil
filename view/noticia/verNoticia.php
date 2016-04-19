@@ -11,6 +11,10 @@ if (isset($_GET["pag"])) {
     }
 }
 $id_comentarios = $view->getVariable("id_comentarios");
+$recargar = $view->getVariable("recarga");
+if(isset($recargar) && $recargar=="true"){
+    header("Refresh:2");
+}
 ?>
 
 <div class="container content">

@@ -353,7 +353,7 @@ class NoticiaController extends BaseController
                                 $target_path = "img_noticia/";
                                 $target_path = $target_path . "noticia" . $id_notica . $extensionImg;
                                 move_uploaded_file($_FILES['img_noticia']['tmp_name'], $target_path);
-                                sleep(5);
+                                $this->view->setVariable("recarga","true",true);
                             }
                         }
 

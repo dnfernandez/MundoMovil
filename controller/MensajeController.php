@@ -143,6 +143,8 @@ class MensajeController extends BaseController
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
         }
 
         if ($error != false) {
@@ -181,6 +183,8 @@ class MensajeController extends BaseController
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
         }
 
         if ($error != false) {
@@ -219,6 +223,8 @@ class MensajeController extends BaseController
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
+            $this->view->setVariable("mensajeError", $error, true);
+            $this->view->redirect("noticia", "index");
         }
 
         if ($error != false) {

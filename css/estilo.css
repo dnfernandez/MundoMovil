@@ -208,7 +208,7 @@ body {
     margin-top: -5px;
 }
 
-#formBusqueda, #formLogin, #formRegistro, #formMensajeEnv, #formComentNoticia, #formCrearForo, #formModificarForo, #formCrearRespuesta, #formComentTutorial {
+#formBusqueda, #formLogin, #formRegistro, #formMensajeEnv, #formComentNoticia, #formCrearForo, #formModificarForo, #formCrearRespuesta, #formComentTutorial, #panelNotificacion {
     position: fixed;
     top: 20%;
     left: 0;
@@ -506,12 +506,12 @@ a.btn {
     float: left;
 }
 
-.botonesNoticia button{
+.botonesNoticia button {
     margin-top: -0.7em;
     margin-right: -1.1em;
 }
 
-.botonesNoticia form{
+.botonesNoticia form {
     display: inline;
 }
 
@@ -543,7 +543,7 @@ a.btn {
     height: auto !important;
 }
 
-.textoNoticia iframe{
+.textoNoticia iframe {
     max-width: 100% !important;
 }
 
@@ -610,7 +610,6 @@ a.btn {
     display: none;
     text-align: left;
 }
-
 
 .datosVerTut {
     margin-top: -2em;
@@ -848,8 +847,8 @@ a.btn {
     z-index: 1;
 }
 
-.error-especial{
-    color:red;
+.error-especial {
+    color: red;
     font-weight: bold;
     padding-left: 0.25em;
     padding-right: 0.25em;
@@ -857,37 +856,55 @@ a.btn {
     padding-top: 0.25em;
 }
 
-.error-especial2{
-    color:red;
+.error-especial2 {
+    color: red;
     font-weight: bold;
     animation: backgroundflash 5s forwards;
 }
 
-#error1, #error2, #error3, #error4{
+#error1, #error2, #error3, #error4 {
     display: none;
 }
 
-.form_filtrado{
+.form_filtrado {
     display: inline;
     cursor: pointer;
 }
 
-.enlaces-sinHref{
+.enlaces-sinHref {
     cursor: pointer;
 }
 
 @keyframes backgroundflash {
-    75% { opacity:1.0}
-    100% {opacity:0.0; display:none}
+    75% {
+        opacity: 1.0
+    }
+    100% {
+        opacity: 0.0;
+        display: none
+    }
 }
 
-.no-leido{
+.no-leido {
     font-weight: bold;
 }
 
-.btn-panel{
-    border:none;
+.btn-panel {
+    border: none;
     background: none;
     color: #146daf;
     padding: 0.75em;
+}
+
+.ajs-message.ajs-custom.ajs-visible {
+    color: black;
+    background-color: white;
+    border:1px solid red;
+}
+
+.sep-notificacion{
+    border-top: 1px solid #DDDDDD;
+    margin-top: 1em;
+    padding-top: 0.5em;
+    width: 5em;
 }
