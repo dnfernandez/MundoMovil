@@ -10,6 +10,9 @@ if (isset($_GET["pag"])) {
     }
 }
 $filtro = $view->getVariable("filtro", "index");
+if(isset($filtro) && $filtro=="filtro"){
+    $getUrl = "&pag";
+}
 ?>
 
 <div class="container content">

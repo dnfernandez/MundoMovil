@@ -75,12 +75,13 @@ function mostrar_crear_foro() {
     document.getElementById("fade").style.display = "block";
 }
 
-function mostrar_modificar_foro(tit, desc) {
+function mostrar_modificar_foro(tit, desc, id_foro) {
     document.getElementById("formModificarForo").style.display = "block";
     document.getElementById("fade").style.display = "block";
 
     document.getElementById("inputModForo").value = tit;
     document.getElementById("textareaModForo").innerHTML = desc;
+    document.getElementById("div_id_foro").innerHTML = "<input type='hidden' name='id_foro' value='"+id_foro+"' >";
 }
 
 function mostrar_crear_respuesta(cita) {
@@ -259,7 +260,7 @@ function defineActionBusqueda() {
     var foros = document.getElementById('opciones_3');
 
     if (foros.checked) {
-        formulario.action = "pregunta/filtro";
+        formulario.action = "foro/filtro";
     } else if (tutoriales.checked) {
         formulario.action = "tutorial/filtro";
     } else if (noticias.checked) {

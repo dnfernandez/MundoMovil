@@ -105,7 +105,11 @@ class TutorialController extends BaseController
             $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = $tipo_filtro;
         }
 
-        $this->view->redirect("tutorial", "index", "filtro");
+        if (isset($_GET["pag"])) {
+            $this->view->redirect("tutorial", "index", "filtro&pag=" . $_GET['pag']);
+        } else {
+            $this->view->redirect("tutorial", "index", "filtro");
+        }
     }
 
     /**

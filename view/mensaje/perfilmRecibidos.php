@@ -56,7 +56,7 @@ if (isset($_GET["pag"])) {
                                         <td class="col-md-3">
                                             <?php
                                             $date = date_create($mensaje["fecha"]);
-                                            echo date_format($date, 'H:i d.m.Y');
+                                            echo date_format($date, 'd.m.Y H:i');
                                             ?>
                                         </td>
                                         <td class="col-md-3">

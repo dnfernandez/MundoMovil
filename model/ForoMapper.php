@@ -22,8 +22,8 @@ class ForoMapper
 
     public function insertar(Foro $foro)
     {
-        $stmt = $this->db->prepare("insert into foro(id_foro,titulo,resumen,fecha,id_usuario) value(?,?,?,?,?)");
-        $stmt->execute(array($foro->getIdForo(), $foro->getTitulo(), $foro->getResumen(), $foro->getFecha(), $foro->getIdUsuario()));
+        $stmt = $this->db->prepare("insert into foro(id_foro,titulo,resumen,fecha,id_usuario) value(?,?,?,NOW(),?)");
+        $stmt->execute(array($foro->getIdForo(), $foro->getTitulo(), $foro->getResumen(), $foro->getIdUsuario()));
     }
 
     /**
@@ -32,8 +32,8 @@ class ForoMapper
 
     public function actualizar(Foro $foro)
     {
-        $stmt = $this->db->prepare("update foro set titulo=?, resumen=?, fecha=? where id_foro=?");
-        $stmt->execute(array($foro->getTitulo(), $foro->getResumen(), $foro->getFecha(), $foro->getIdForo()));
+        $stmt = $this->db->prepare("update foro set titulo=?, resumen=?, fecha=NOW() where id_foro=?");
+        $stmt->execute(array($foro->getTitulo(), $foro->getResumen(), $foro->getIdForo()));
     }
 
     /**
@@ -68,5 +68,15 @@ class ForoMapper
         return $forosFinal;
     }
 
+    /**
+     * Obtener el titulo de un foro
+     */
+
+    public function obtenerTituloForo($id_foro)
+    {
+        $stmt = $this->db->prepare("select titulo from foro where id_foro=?");
+        $stmt->execute(array($id_foro));
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
 
 }

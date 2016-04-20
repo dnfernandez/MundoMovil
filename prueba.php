@@ -273,3 +273,8 @@ $num_pag=35;
 for($i=1;$i<=$num_pag && $i<=5;$i++){
     echo "<br> Redondeo: ".ceil(10/3);
 }
+
+$prega = $preguntaMapper->listarPreguntasFiltradas(1,"a",null,null);
+echo "<br>";
+print_r($prega);
+echo "<br>";

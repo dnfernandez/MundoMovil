@@ -38,7 +38,7 @@ $mensaje = $view->getVariable("mensaje");
                                     <div class="row">
                                         <?php
                                         $date = date_create($mensaje["fecha"]);
-                                        echo date_format($date, 'H:i d.m.Y');
+                                        echo date_format($date, 'd.m.Y H:i');
                                         ?>
                                     </div>
                                 </div>

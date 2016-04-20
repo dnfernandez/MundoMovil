@@ -102,10 +102,12 @@ if (isset($mensajeError)) {
             </script>';
 }
 
-if (isset($notificacion) && $notificacion["num_not"]>0) {
-    echo '<script>
+if (isset($notificacion) && isset($notificacion["num_not"])) {
+    if ($notificacion["num_not"] > 0) {
+        echo '<script>
                 alertify.notify("Tienes ' . $notificacion["num_not"] . (($notificacion["num_not"] == 1) ? " notificaci&oacute;n" : " notificaciones") . ' <br>Haz click para mostrar","custom",0, function(){mostrar_notificacion();});
             </script>';
+    }
 }
 ?>
 
@@ -310,7 +312,7 @@ if (isset($notificacion) && $notificacion["num_not"]>0) {
                         </div>
                         <?php foreach ($notificacion["noticias"] as $noticia): ?>
                             <div>
-                                <?php echo $noticia;?>
+                                <?php echo $noticia; ?>
                             </div>
                         <?php endforeach; ?>
                         <div class="sep-notificacion"></div>
@@ -321,7 +323,7 @@ if (isset($notificacion) && $notificacion["num_not"]>0) {
                         </div>
                         <?php foreach ($notificacion["tutoriales"] as $tutorial): ?>
                             <div>
-                                <?php echo $tutorial;?>
+                                <?php echo $tutorial; ?>
                             </div>
                         <?php endforeach; ?>
                         <div class="sep-notificacion"></div>
@@ -360,7 +362,14 @@ if (isset($notificacion) && $notificacion["num_not"]>0) {
 <script src="js/jquery.tablesorter.js" type="text/javascript"></script>
 <script>
     $(function () {
-        $('#tab_ordena').tablesorter();
+        $('#tab_ordena').tablesorter({
+            dateFormat: "ddmmyyyy",
+            headers: {
+                0: {sorter: "largeDate"},
+                1: {sorter: "largeDate", dateFormat: "ddmmyyyy"}
+            }
+
+        });
     });
 </script>
 

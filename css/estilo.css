@@ -825,7 +825,12 @@ a.btn {
     padding-left: 2em;
 }
 
-.volver a {
+.volver2{
+    margin-top: -4.5em;
+    margin-bottom: 4.5em;
+}
+
+.volver a, .volver2 a {
     color: #AAA;
     text-decoration: none;
 }
@@ -921,4 +926,8 @@ a.btn {
 
 a.a-btn{
     color:white;
+}
+
+.sin-salto{
+    display: inline;
 }

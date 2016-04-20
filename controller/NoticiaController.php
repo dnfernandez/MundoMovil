@@ -109,7 +109,7 @@ class NoticiaController extends BaseController
                 $this->view->setVariable("id_comentarios", $array_id);
                 $this->view->render("noticia", "verNoticia");
             } else {
-                $this->view->setVariable("mensajeError","No existe noticia con ese id",true);
+                $this->view->setVariable("mensajeError", "No existe noticia con ese id", true);
                 $this->view->redirect("noticia", "index");
             }
         } else {
@@ -353,7 +353,7 @@ class NoticiaController extends BaseController
                                 $target_path = "img_noticia/";
                                 $target_path = $target_path . "noticia" . $id_notica . $extensionImg;
                                 move_uploaded_file($_FILES['img_noticia']['tmp_name'], $target_path);
-                                $this->view->setVariable("recarga","true",true);
+                                $this->view->setVariable("recarga", "true", true);
                             }
                         }
 
@@ -428,8 +428,11 @@ class NoticiaController extends BaseController
             $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $texto;
             $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = $tipo_filtro;
         }
-
-        $this->view->redirect("noticia","index","filtro");
+        if (isset($_GET["pag"])) {
+            $this->view->redirect("noticia", "index", "filtro&pag=" . $_GET['pag']);
+        } else {
+            $this->view->redirect("noticia", "index", "filtro");
+        }
     }
 
     /**
@@ -441,18 +444,19 @@ class NoticiaController extends BaseController
      * se elimina el comentario, sino se redirige a la pagina de inicio de noticias
      */
 
-    public function eliminar_comentario(){
-        if(isset($this->usuarioActual) && ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador")){
-            if(isset($_GET["id"])){
+    public function eliminar_comentario()
+    {
+        if (isset($this->usuarioActual) && ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador")) {
+            if (isset($_GET["id"])) {
                 $this->comentarioNoticiaMapper->eliminar($_GET["id"]);
-                $this->view->setVariable("mensajeSucces", "Comentario eliminado con &eacute;xito",true);
+                $this->view->setVariable("mensajeSucces", "Comentario eliminado con &eacute;xito", true);
                 $this->view->redirectToReferer();
-            }else{
-                $this->view->setVariable("mensajeError","No existe ese comentario",true);
+            } else {
+                $this->view->setVariable("mensajeError", "No existe ese comentario", true);
             }
-        }else{
-            $this->view->setVariable("mensajeError","No tienes permisos para realizar esa acci&oacute;n",true);
+        } else {
+            $this->view->setVariable("mensajeError", "No tienes permisos para realizar esa acci&oacute;n", true);
         }
-        $this->view->redirect("noticia","index");
+        $this->view->redirect("noticia", "index");
     }
 }

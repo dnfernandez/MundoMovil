@@ -596,8 +596,11 @@ class UsuarioController extends BaseController
             $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $texto;
             $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = $tipo_filtro;
         }
-
-        $this->view->redirect("usuario", "administracion", "filtro");
+        if (isset($_GET["pag"])) {
+            $this->view->redirect("usuario", "administracion", "filtro&pag=" . $_GET['pag']);
+        } else {
+            $this->view->redirect("usuario", "administracion", "filtro");
+        }
     }
 
     /**
