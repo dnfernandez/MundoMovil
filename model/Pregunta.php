@@ -176,7 +176,7 @@ class Pregunta
     public function validoParaActualizar()
     {
         $errors = array();
-        if (!isset($this->id_noticia)) {
+        if (!isset($this->id_pregunta)) {
             $errors["id_pregunta"] = "id_pregunta es obligatorio";
         }
 

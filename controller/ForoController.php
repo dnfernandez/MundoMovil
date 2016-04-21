@@ -85,16 +85,21 @@ class ForoController extends BaseController
 
             } elseif (isset($_GET["id"])) {
                 $id_foro = $_GET["id"];
-                if (isset($_GET["pag"])) {
-                    $preguntas = $this->preguntaMapper->listarPreguntasPorForo($_GET["pag"], $id_foro);
+                if ($this->foroMapper->existe($id_foro)) {
+                    if (isset($_GET["pag"])) {
+                        $preguntas = $this->preguntaMapper->listarPreguntasPorForo($_GET["pag"], $id_foro);
+                    } else {
+                        $preguntas = $this->preguntaMapper->listarPreguntasPorForo(1, $id_foro);
+                    }
+                    $titulo = $this->foroMapper->obtenerTituloForo($id_foro)["titulo"];
+                    $total = $this->preguntaMapper->contarPreguntasPorForo($id_foro)["total"];
+                    $this->view->setVariable("preguntas", $preguntas);
+                    $this->view->setVariable("total", $total);
+                    $this->view->setVariable("titulo", $titulo);
                 } else {
-                    $preguntas = $this->preguntaMapper->listarPreguntasPorForo(1, $id_foro);
+                    $this->view->setVariable("mensajeError", "No existe foro con ese id", true);
+                    $this->view->redirect("foro", "index");
                 }
-                $titulo = $this->foroMapper->obtenerTituloForo($id_foro)["titulo"];
-                $total = $this->preguntaMapper->contarPreguntasPorForo($id_foro)["total"];
-                $this->view->setVariable("preguntas", $preguntas);
-                $this->view->setVariable("total", $total);
-                $this->view->setVariable("titulo", $titulo);
             } else {
                 $this->view->redirect("foro", "index");
             }

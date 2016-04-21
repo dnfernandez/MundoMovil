@@ -79,4 +79,17 @@ class ForoMapper
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
 
+    /**
+     * Permite conocer si un foro existe mediante su id
+     */
+
+    public function existe($id_foro)
+    {
+        $stmt = $this->db->prepare("select count(*) from foro where id_foro=?");
+        $stmt->execute(array($id_foro));
+        if ($stmt->fetchColumn() > 0) {
+            return true;
+        }
+    }
+
 }

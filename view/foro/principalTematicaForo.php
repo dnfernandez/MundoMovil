@@ -17,11 +17,12 @@ if ($filtro == "filtro") {
 }
 
 $titulo = $view->getVariable("titulo", "Filtrado de foros");
+$id_foro = $_GET["id"];
 ?>
 <div class="container content">
     <div class="row">
         <div class="col-md-12">
-            <?php if (isset($usuarioActual)): ?>
+            <?php if (isset($usuarioActual) && $filtro!="filtro"): ?>
                 <form id="formPanelMos" method="post" action="usuario/preferencias">
                         <span id="panelAdminMos">
                             <button type="submit" onclick="mostrar_panel_creacion()"
@@ -33,7 +34,8 @@ $titulo = $view->getVariable("titulo", "Filtrado de foros");
                     <div id="panelAdmin" class="row botonesNoticia">
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de tema / pregunta de foro</h4>
-                            <a href="pregunta/crear" class="btn btn-default">Crear tema / pregunta</a>
+                            <a href="pregunta/crear?id=<?php echo $id_foro; ?>" class="btn btn-default">Crear tema /
+                                pregunta</a>
                             <button type="submit" class="close" data-dismiss="modal" aria-hidden="true"
                                     onclick="ocultar_panel_creacion()">&times;</button>
                         </div>

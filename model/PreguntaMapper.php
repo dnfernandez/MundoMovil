@@ -21,8 +21,8 @@ class PreguntaMapper
 
     public function insertar(Pregunta $pregunta)
     {
-        $stmt = $this->db->prepare("insert into pregunta(id_pregunta,id_foro,titulo,pal_clave,texto,fecha,id_usuario) values (?,?,?,?,?,?,?)");
-        $stmt->execute(array($pregunta->getIdPregunta(), $pregunta->getIdForo(), $pregunta->getTitulo(), $pregunta->getPalClave(), $pregunta->getTexto(), $pregunta->getFecha(), $pregunta->getIdUsuario()));
+        $stmt = $this->db->prepare("insert into pregunta(id_pregunta,id_foro,titulo,pal_clave,texto,fecha,id_usuario) values (?,?,?,?,?,NOW(),?)");
+        $stmt->execute(array($pregunta->getIdPregunta(), $pregunta->getIdForo(), $pregunta->getTitulo(), $pregunta->getPalClave(), $pregunta->getTexto(), $pregunta->getIdUsuario()));
     }
 
     /**
@@ -31,8 +31,8 @@ class PreguntaMapper
 
     public function actualizar(Pregunta $pregunta)
     {
-        $stmt = $this->db->prepare("update pregunta set titulo=? ,pal_clave=? ,texto=? ,fecha=? where id_pregunta=?");
-        $stmt->execute(array($pregunta->getTitulo(), $pregunta->getPalClave(), $pregunta->getTexto(), $pregunta->getFecha(), $pregunta->getIdPregunta()));
+        $stmt = $this->db->prepare("update pregunta set titulo=? ,pal_clave=? ,texto=? ,fecha=NOW() where id_pregunta=?");
+        $stmt->execute(array($pregunta->getTitulo(), $pregunta->getPalClave(), $pregunta->getTexto(), $pregunta->getIdPregunta()));
     }
 
     /**
@@ -151,7 +151,7 @@ class PreguntaMapper
     public function existe($id_pregunta)
     {
         $stmt = $this->db->prepare("select count(*) from pregunta where id_pregunta=?");
-        $stmt->execute($id_pregunta);
+        $stmt->execute(array($id_pregunta));
         if ($stmt->fetchColumn() > 0) {
             return true;
         }
