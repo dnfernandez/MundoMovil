@@ -328,14 +328,17 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
                         <?php endforeach; ?>
                         <div class="sep-notificacion"></div>
                     <?php endif; ?>
-                    <div>
-                        <label>Foro</label>
-                    </div>
-                    <div>
-                        Han respondido en la pregunta: asdasdasd
-                    </div>
-                    <div class="sep-notificacion"></div>
-
+                    <?php if (isset($notificacion["foros"]) && !empty($notificacion["foros"])): ?>
+                        <div>
+                            <label>Foros</label>
+                        </div>
+                        <?php foreach ($notificacion["foros"] as $foro): ?>
+                            <div>
+                                <?php echo $foro; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="sep-notificacion"></div>
+                    <?php endif; ?>
                     <?php if (isset($notificacion["mensajes"])): ?>
                         <div>
                             <label>Mensajes</label>

@@ -215,4 +215,15 @@ class PreguntaMapper
         $stmt->execute(array($id_foro));
         return $stmt->fetch(PDO::FETCH_BOTH);
     }
+
+    /**
+     * Metodo que permite listar las preguntas de un usuario concreto
+     */
+
+    public function listarPreguntasPorAutor($id_autor)
+    {
+        $stmt = $this->db->prepare("select * from pregunta where id_usuario=?");
+        $stmt->execute(array($id_autor));
+        return $stmt->fetchAll(PDO::FETCH_BOTH);
+    }
 }

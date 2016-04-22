@@ -180,30 +180,4 @@ class Respuesta
             throw new ValidationException ($errors, "Respuesta no valida");
         }
     }
-
-    /**
-     * Metodo para comprobar si el objeto respuesta es valido para modificarse
-     */
-
-    public function validoParaActualizar()
-    {
-        $errors = array();
-        if (!isset($this->id_respuesta)) {
-            $errors["id_respuesta"] = "id_respuesta es obligatorio";
-        }
-
-        try {
-            $this->validoParaCrear();
-        } catch (ValidationException $ex) {
-            foreach ($ex->getErrors() as $key => $error) {
-                $errors[$key] = $error;
-            }
-        }
-
-        if (sizeof($errors) > 0) {
-            throw new ValidationException($errors, "respuesta no valida para actualizar");
-        }
-
-    }
-
 }

@@ -502,6 +502,28 @@ class UsuarioController extends BaseController
             }
         }
 
+        /**
+         * Comprobar si tiene nuevas respuestas en algun tema o pregunta suya
+         */
+        $notificacion["foros"] = array();
+        $foros = $this->preguntaMapper->listarPreguntasPorAutor($id_usuario);
+        $contadorFor = 0;
+        foreach ($foros as $foro) {
+            $respuestas = $this->respuestaMapper->listarRespuestasPorIdPregunta($foro["id_pregunta"]);
+            foreach ($respuestas as $respuesta) {
+                if ($respuesta["fecha"] > $fecha_conex) {
+                    $contadorFor++;
+                }
+
+            }
+            if ($contadorFor > 0) {
+                $notificacion["foros"][$foro["id_pregunta"]] = $contadorFor . (($contadorFor == 1) ? " respuesta nueva" : " respuestas nuevas")
+                    . " en <a href='pregunta/ver?id=" . $foro['id_pregunta'] . "' target='_blank'>" . substr($foro["titulo"], 0, 50) . "...</a>";
+                $contadorFor = 0;
+                $notificacion["num_not"]++;
+            }
+        }
+
         return $notificacion;
     }
 

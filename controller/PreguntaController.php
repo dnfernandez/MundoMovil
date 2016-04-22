@@ -4,11 +4,13 @@ require_once(__DIR__ . "/../controller/BaseController.php");
 require_once(__DIR__ . "/../model/Pregunta.php");
 require_once(__DIR__ . "/../model/PreguntaMapper.php");
 require_once(__DIR__ . "/../model/ForoMapper.php");
+require_once(__DIR__ . "/../model/RespuestaMapper.php");
 
 class PreguntaController extends BaseController
 {
     private $preguntaMapper;
     private $foroMapper;
+    private $respuestaMapper;
 
     /**
      * PreguntaController constructor.
@@ -19,6 +21,7 @@ class PreguntaController extends BaseController
 
         $this->preguntaMapper = new PreguntaMapper();
         $this->foroMapper = new ForoMapper();
+        $this->respuestaMapper = new RespuestaMapper();
     }
 
     /**
@@ -41,7 +44,12 @@ class PreguntaController extends BaseController
                     $id_pregunta = $_POST["id_pregunta"];
                     $this->preguntaMapper->eliminar($id_pregunta);
                     $this->view->setVariable("mensajeSucces", "Pregunta eliminada correctamente", true);
-                    $this->view->redirectToReferer();
+                    if (isset($_POST["id_foro"])) {
+                        $this->view->redirect("foro", "ver", "id=".$_POST["id_foro"]);
+                    } else {
+                        $this->view->redirectToReferer();
+                    }
+
                 } else {
                     $error = "Es necesario el id de pregunta";
                     $this->view->setVariable("mensajeError", $error, true);
@@ -212,6 +220,54 @@ class PreguntaController extends BaseController
                 $this->view->redirect("foro", "index");
             }
         }
+    }
+
+    /**
+     * Metodo que permite cargar los datos para visualizar una pregunta o tema
+     * y sus respuestas asociadas.
+     */
+
+    public function ver()
+    {
+        if (isset($_GET["id"])) {
+            $id_pregunta = $_GET["id"];
+            if ($this->preguntaMapper->existe($id_pregunta)) {
+
+                if (isset($this->usuarioActual)) {
+                    if (isset($_GET["pag"])) {
+                        $respuestas = $this->respuestaMapper->listarRespuestasUsuario($_GET["pag"], $id_pregunta, $this->usuarioActual->getIdUsuario());
+                    } else {
+                        $respuestas = $this->respuestaMapper->listarRespuestasUsuario(1, $id_pregunta, $this->usuarioActual->getIdUsuario());
+                    }
+                } else {
+                    if (isset($_GET["pag"])) {
+                        $respuestas = $this->respuestaMapper->listarRespuestasUsuario($_GET["pag"], $id_pregunta);
+                    } else {
+                        $respuestas = $this->respuestaMapper->listarRespuestasUsuario(1, $id_pregunta);
+                    }
+                }
+
+                $pregunta = $this->preguntaMapper->listarPreguntaPorId($id_pregunta);
+                $total = $this->respuestaMapper->contarRespuestas($id_pregunta)["total"];
+
+                $this->view->setVariable("pregunta", $pregunta);
+                $this->view->setVariable("respuestas", $respuestas);
+                $this->view->setVariable("total", $total);
+                $this->view->render("foro", "verTema");
+
+            } else {
+                $this->view->setVariable("mensajeError", "No existe foro con ese id", true);
+                if (!$this->view->redirectToReferer()) {
+                    $this->view->redirect("foro", "index");
+                }
+            }
+        } else {
+            $this->view->setVariable("mensajeError", "Se necesita id de pregunta", true);
+            if (!$this->view->redirectToReferer()) {
+                $this->view->redirect("foro", "index");
+            }
+        }
+
     }
 
 }

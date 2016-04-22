@@ -931,3 +931,7 @@ a.a-btn{
 .sin-salto{
     display: inline;
 }
+
+blockquote{
+    font-size: 90%;
+}

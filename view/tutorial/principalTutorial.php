@@ -29,7 +29,7 @@ $filtro = $view->getVariable("filtro", "index");
                         <div class="col-md-12">
                             <h4>Panel de administraci&oacute;n de tutorial</h4>
                             <a href="tutorial/crear" class="btn btn-default">Crear</a>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            <button type="submit" class="close" data-dismiss="modal" aria-hidden="true"
                                     onclick="ocultar_panel_creacion()">&times;</button>
                         </div>
                     </div>
