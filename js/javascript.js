@@ -81,7 +81,7 @@ function mostrar_modificar_foro(tit, desc, id_foro) {
 
     document.getElementById("inputModForo").value = tit;
     document.getElementById("textareaModForo").innerHTML = desc;
-    document.getElementById("div_id_foro").innerHTML = "<input type='hidden' name='id_foro' value='"+id_foro+"' >";
+    document.getElementById("div_id_foro").innerHTML = "<input type='hidden' name='id_foro' value='" + id_foro + "' >";
 }
 
 function mostrar_crear_respuesta(cita) {
@@ -224,6 +224,7 @@ if ($(window).height() > 200) {
  */
 
 window.onload = function () {
+    url_referer();
     var pos = window.name || 0;
     window.scrollTo(0, pos);
     window.name = null;
@@ -269,7 +270,10 @@ function defineActionBusqueda() {
 
 }
 
-
+/**
+ * Permite enviar un formulario sin necesidad de recargar la
+ * pagina
+ */
 $(document).ready(function () {
     // Interceptamos el evento submit
     $('#formPanelOcul,#formPanelMos').submit(function () {
@@ -282,3 +286,20 @@ $(document).ready(function () {
         return false;
     });
 })
+
+/**
+ * Funcion que permite enviar un formulario
+ * para almacenar la url referer en una variable
+ * de sesion, en caso de ser distinta a la url
+ * actual.
+ */
+
+function url_referer() {
+    var refer = document.referrer;
+    var actual = document.location;
+
+    if (refer != actual) {
+        document.getElementById('div_url_ref').innerHTML = '<input type="hidden" name="url_ref" value="' + document.referrer + '">';
+        document.getElementById('formUrlReferer').submit();
+    }
+}

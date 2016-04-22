@@ -58,7 +58,11 @@ $datos = $view->getVariable("datos");
                             </div>
                         </div>
                         <div class="panel-footer btn-form">
-                            <button type="button" onclick="window.location.href=document.referrer"
+                            <form id="formUrlReferer" method="post" action="usuario/evitarReferencias">
+                                <div id="div_url_ref"></div>
+                            </form>
+                            <button type="button"
+                                    onclick="window.location.href = '<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>';"
                                     class="btn btn-primary">Volver
                             </button>
                         </div>

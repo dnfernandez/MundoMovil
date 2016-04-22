@@ -48,7 +48,10 @@ $mensaje = $view->getVariable("mensaje");
                             </div>
                         </div>
                         <div class="panel-footer footerMensajes">
-                            <a onclick="window.location.href=document.referrer" class="btn btn-default">Volver</a>
+                            <button type="button"
+                                    onclick="window.location.href = document.referrer;"
+                                    class="btn btn-default">Volver
+                            </button>
                         </div>
                     </div>
                 </div>

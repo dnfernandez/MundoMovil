@@ -96,7 +96,7 @@ class UsuarioController extends BaseController
             $this->view->setVariable("datos", $datos, true);
             $this->view->redirect("usuario", "login_error");
         }
-
+        $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os",true);
         $this->view->redirect("usuario", "login_error");
     }
 
@@ -214,6 +214,7 @@ class UsuarioController extends BaseController
             $this->view->redirect("usuario", "registro_error");
 
         }
+        $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os excepto el avatar",true);
         $this->view->redirect("usuario", "registro_error");
     }
 
@@ -721,5 +722,16 @@ class UsuarioController extends BaseController
         }
     }
 
+    /**
+     * Metodo que permite almacenar url para referenciarlas en caso de ser necesario
+     * almacenandolas en variables de sesion
+     */
+    public function evitarReferencias()
+    {
+        if (isset($_POST["url_ref"])) {
+            $_SESSION["__sesion__herramienta__"]["__url_ref__"] = $_POST["url_ref"];
+        }
+        $this->view->redirectToReferer();
+    }
 
 }

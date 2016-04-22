@@ -47,7 +47,13 @@ $mensaje = $view->getVariable("mensaje");
                             </div>
                         </div>
                         <div class="panel-footer footerMensajes">
-                            <a onclick="window.location.href=document.referrer" class="btn btn-default">Volver</a>
+                            <form id="formUrlReferer" method="post" action="usuario/evitarReferencias">
+                                <div id="div_url_ref"></div>
+                            </form>
+                            <button type="button"
+                                    onclick="window.location.href = 'mensaje/recibidos';"
+                                    class="btn btn-default">Volver
+                            </button>
                             <button type="button" class="btn btn-primary"
                                     onclick="mostrar_enviar_mensaje('<?php echo $mensaje["emisor"] ?>','<?php echo $mensaje["nom_usuario"]; ?>')">
                                 Responder

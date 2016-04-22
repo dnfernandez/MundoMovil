@@ -115,7 +115,10 @@ $datos = $view->getVariable("datos");
         </form>
     </div>
     <div class="volver">
-        <a href="noticia/index">
+        <form id="formUrlReferer" method="post" action="usuario/evitarReferencias">
+            <div id="div_url_ref"></div>
+        </form>
+        <a href="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
             << Volver a MundoMovil
         </a>
     </div>
