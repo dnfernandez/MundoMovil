@@ -33,7 +33,16 @@ $datos = $view->getVariable("datos");
                                 <div class="col-md-7">
                                     <ul class="list-group listaGeneral">
                                         <li>Nombre de usuario: <?php echo $datos["nom_usuario"]; ?></li>
-                                        <li>Rol en el sistema: <?php echo $datos["rol"]; ?></li>
+                                        <li>Rol en el sistema:
+                                            <span class="
+                                                 <?php if ($datos["rol"] == 'administrador') {
+                                                    echo 'admin-estilo';
+                                                } elseif ($datos['rol'] == 'moderador') {
+                                                    echo 'moderador-estilo';
+                                                } ?>">
+                                                <?php echo $datos["rol"]; ?>
+                                            </span>
+                                        </li>
                                         <li>Fecha registro:
                                             <?php
                                             $date = date_create($datos["fecha_reg"]);

@@ -77,8 +77,8 @@ class UsuarioController extends BaseController
                         $this->view->setVariable("notificacion", $notificacion, true);
                         $this->usuarioMapper->actualizarFechaConexion(null, $email);
                         $this->view->setVariable("mensajeSucces", "Usuario logueado correctamente", true);
-                        if (strpos($_SERVER["HTTP_REFERER"], "login_error")) {
-                            $this->view->redirect("noticia", "index");
+                        if (isset($_POST["url_referer"])) {
+                            header("Location: " . $_POST["url_referer"] . "");
                         } else {
                             $this->view->redirectToReferer();
                         }
@@ -91,13 +91,20 @@ class UsuarioController extends BaseController
             } else {
                 $error = "Login incorrecto";
             }
-            $this->view->setFlash($error);
-            $datos = array("email" => $email);
-            $this->view->setVariable("datos", $datos, true);
+            if ($error != null) {
+                $this->view->setFlash($error);
+                $datos = array("email" => $email);
+                $this->view->setVariable("datos", $datos, true);
+                $this->view->redirect("usuario", "login_error");
+            }
+        } else {
+            if (!empty($_POST["email"])) {
+                $datos = array("email" => $_POST["email"]);
+                $this->view->setVariable("datos", $datos, true);
+            }
+            $this->view->setFlash("No puede haber campos vac&iacute;os");
             $this->view->redirect("usuario", "login_error");
         }
-        $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os",true);
-        $this->view->redirect("usuario", "login_error");
     }
 
     /**
@@ -212,10 +219,10 @@ class UsuarioController extends BaseController
             $datos = array("nom_usuario" => $nom_usuario, "email" => $email, "ubicacion" => $ubicacion, "img_perfil" => $target_path);
             $this->view->setVariable("datos", $datos, true);
             $this->view->redirect("usuario", "registro_error");
-
         }
-        $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os excepto el avatar",true);
+        $this->view->setFlash("No puede haber campos vac&iacute;os excepto el avatar");
         $this->view->redirect("usuario", "registro_error");
+
     }
 
     /**
@@ -381,22 +388,27 @@ class UsuarioController extends BaseController
         if (isset($this->usuarioActual)) {
             if (isset($_GET["id"]) && !empty($_GET["id"])) {
                 $id_usuario = $_GET["id"];
-                if ($this->usuarioMapper->existe($id_usuario)) {
-                    $usuario = $this->usuarioMapper->listarUsuarioPorId($id_usuario);
-                    $num_not = $this->noticiaMapper->contarTotal($id_usuario);
-                    $num_tut = $this->tutorialMapper->contarTotal($id_usuario);
-                    $num_preg = $this->preguntaMapper->contarTotal($id_usuario);
-                    $num_res = $this->respuestaMapper->contarTotal($id_usuario);
-                    $num_pos = $this->respuestaMapper->contarPositivos($id_usuario);
-                    $num_neg = $this->respuestaMapper->contarNegativos($id_usuario);
 
-                    $datos = array("num_not" => $num_not, "num_tut" => $num_tut, "num_preg" => $num_preg, "num_res" => $num_res, "num_pos" => $num_pos, "num_neg" => $num_neg);
-
-                    $datos = array_merge($usuario, $datos);
-                    $this->view->setVariable("datos", $datos);
-                    $this->view->render("usuario", "perfilOtrosUsuarios");
+                if ($this->usuarioActual->getIdUsuario() == $id_usuario) {
+                    $this->general();
                 } else {
-                    $error = "No existe un usuario con ese id";
+                    if ($this->usuarioMapper->existe($id_usuario)) {
+                        $usuario = $this->usuarioMapper->listarUsuarioPorId($id_usuario);
+                        $num_not = $this->noticiaMapper->contarTotal($id_usuario);
+                        $num_tut = $this->tutorialMapper->contarTotal($id_usuario);
+                        $num_preg = $this->preguntaMapper->contarTotal($id_usuario);
+                        $num_res = $this->respuestaMapper->contarTotal($id_usuario);
+                        $num_pos = $this->respuestaMapper->contarPositivos($id_usuario);
+                        $num_neg = $this->respuestaMapper->contarNegativos($id_usuario);
+
+                        $datos = array("num_not" => $num_not, "num_tut" => $num_tut, "num_preg" => $num_preg, "num_res" => $num_res, "num_pos" => $num_pos, "num_neg" => $num_neg);
+
+                        $datos = array_merge($usuario, $datos);
+                        $this->view->setVariable("datos", $datos);
+                        $this->view->render("usuario", "perfilOtrosUsuarios");
+                    } else {
+                        $error = "No existe un usuario con ese id";
+                    }
                 }
             } else {
                 $error = "Se necesita id de usuario";
@@ -730,6 +742,22 @@ class UsuarioController extends BaseController
     {
         if (isset($_POST["url_ref"])) {
             $_SESSION["__sesion__herramienta__"]["__url_ref__"] = $_POST["url_ref"];
+
+            if (isset($_POST["errores"])) {
+                $tmp = stripslashes($_POST["errores"]);
+                $tmp = urldecode($tmp);
+                $tmp = unserialize($tmp);
+                $this->view->setVariable("errores", $tmp, true);
+            }
+            if (isset($_POST["error"])) {
+                $this->view->setFlash($_POST["error"]);
+            }
+            if (isset($_POST["datos"])) {
+                $tmp = stripslashes($_POST["datos"]);
+                $tmp = urldecode($tmp);
+                $tmp = unserialize($tmp);
+                $this->view->setVariable("datos", $tmp, true);
+            }
         }
         $this->view->redirectToReferer();
     }

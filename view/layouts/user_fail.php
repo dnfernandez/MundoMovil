@@ -26,14 +26,17 @@ $mensajeError = $view->getVariable("mensajeError");
 
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-    <link href="css/estilo.css" rel="stylesheet">
     <link href="css/alertify.min.css" rel="stylesheet">
     <link href="css/default.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/estilo.css" rel="stylesheet">
+
+    <script src="plugins/ckeditor/ckeditor.js"></script>
     <script src="js/alertify.min.js" type="text/javascript"></script>
 
 </head>
 
-<body>
+<body onload="url_referer()">
 <div class="container content2">
     <div class="row">
         <div class="col-md-12">
@@ -71,7 +74,7 @@ $mensajeError = $view->getVariable("mensajeError");
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 <script src="js/ie-emulation-modes-warning.js"></script>
 <script src="js/javascript.js" type="text/javascript"></script>
-
+<script src="js/jquery-latest.js" type="text/javascript"></script>
 
 </body>
 </html>

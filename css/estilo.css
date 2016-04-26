@@ -823,6 +823,7 @@ a.btn {
 .volver {
     margin-top: 2.5em;
     padding-left: 2em;
+    margin-bottom: 2.5em;
 }
 
 .volver2{
@@ -935,3 +936,4 @@ a.a-btn{
 blockquote{
     font-size: 90%;
 }
+

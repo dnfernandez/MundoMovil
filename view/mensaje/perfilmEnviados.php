@@ -50,8 +50,10 @@ if (isset($_GET["pag"])) {
                                         <td class="menMensaje primEl col-md-4">
                                             <a href="mensaje/enviado?id=<?php echo $mensaje["id_mensaje_env"]; ?>">
                                                 <?php if ($mensaje["leido"] == 0) {
-                                                    echo '<span class="glyphicon glyphicon-envelope"></span>';
-                                                } ?>
+                                                    echo '<span class="fa fa-envelope"></span>';
+                                                } else{
+                                                    echo '<span class="fa fa-envelope-o"></span>';
+                                                }?>
                                                 <?php echo htmlentities($mensaje["texto"]); ?>
                                             </a>
                                         </td>

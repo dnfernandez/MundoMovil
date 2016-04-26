@@ -29,16 +29,25 @@ $datos = $view->getVariable("datos");
                             como por ejemplo el avatar. Tambi&eacute;n podr&aacute;s leer tus mensajes.
                             <h4>Tu actividad</h4>
                             <ul class="list-group listaGeneral">
-                                <li>Rol en el sistema: <?php echo $usuarioActual->getRol(); ?></li>
+                                <li>Rol en el sistema:
+                                    <span class="
+                                        <?php if ($usuarioActual->getRol() == 'administrador') {
+                                            echo 'admin-estilo';
+                                        } elseif ($usuarioActual->getRol() == 'moderador') {
+                                            echo 'moderador-estilo';
+                                        } ?>">
+                                        <?php echo $usuarioActual->getRol(); ?>
+                                    </span>
+                                </li>
                                 <li>Fecha registro:
                                     <?php
-                                        $date = date_create($usuarioActual->getFechaReg());
-                                        echo date_format($date, 'H:i - d.m.Y');
+                                    $date = date_create($usuarioActual->getFechaReg());
+                                    echo date_format($date, 'H:i - d.m.Y');
                                     ?></li>
                                 <li>&Uacute;ltima conexi&oacute;n:
                                     <?php
-                                        $date = date_create($usuarioActual->getFechaConex());
-                                        echo date_format($date, 'H:i - d.m.Y');
+                                    $date = date_create($usuarioActual->getFechaConex());
+                                    echo date_format($date, 'H:i - d.m.Y');
                                     ?></li>
                                 <li>N&uacute;mero de noticias: <?php echo $datos["num_not"]; ?></li>
                                 </li>
