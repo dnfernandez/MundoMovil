@@ -98,7 +98,7 @@ class TutorialController extends BaseController
 
     public function filtro()
     {
-        if ($_POST["opciones"] == "tutorial") {
+        if (isset($_POST["opciones"]) && $_POST["opciones"] == "tutorial") {
             $texto = $_POST["texto"];
             $tipo_filtro = $_POST["tipo_filtro"];
             $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $texto;

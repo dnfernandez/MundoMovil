@@ -88,8 +88,9 @@ class UsuarioMapper
         } elseif ($email != null) {
             $stmt = $this->db->prepare("select count(*) from usuario where email=?");
             $stmt->execute(array($email));
+        } else {
+            return false;
         }
-
         if ($stmt->fetchColumn() > 0) {
             return true;
         }
@@ -234,12 +235,12 @@ class UsuarioMapper
         } elseif ($email != null) {
             $stmt = $this->db->prepare("select count(*) from usuario where email=? and estado=1");
             $stmt->execute(array($email));
+        } else {
+            return false;
         }
 
         if ($stmt->fetchColumn() > 0) {
             return true;
-        } else {
-            return false;
         }
     }
 
@@ -309,12 +310,14 @@ class UsuarioMapper
         $stmt->execute(array($cod_validacion));
         $id_usuario = $stmt->fetch(PDO::FETCH_BOTH);
         $id_usuario = $id_usuario["id_usuario"];
-        if (!$this->comprobarEstadoUsuario($id_usuario)) {
-            $this->actualizaEstadoUsuario($id_usuario);
-            return true;
-        } else {
-            return false;
+        if (!$id_usuario == null) {
+            if (!$this->comprobarEstadoUsuario($id_usuario)) {
+                $this->actualizaEstadoUsuario($id_usuario);
+                return true;
+            }
         }
+        return false;
+
     }
 
     /**

@@ -76,6 +76,16 @@ $notificacion = $view->getVariable("notificacion");
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="usuario/general">Perfil</a></li>
+                            <li class="dropdown dropdown-submenu contribuciones"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Mis contribuciones</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="usuario/misPreguntas">Mis preguntas</a></li>
+                                    <li><a href="usuario/misTutoriales">Mis tutoriales</a></li>
+                                    <?php if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
+                                        <li><a href="usuario/misNoticias">Mis noticias</a></li>
+                                    <?php endif; ?>
+
+                                </ul>
+                            </li>
                             <?php if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
                                 <li><a href="usuario/administracion">Administrar usuarios</a></li>
                             <?php endif; ?>

@@ -422,7 +422,7 @@ class NoticiaController extends BaseController
 
     public function filtro()
     {
-        if ($_POST["opciones"] == "noticia") {
+        if (isset($_POST["opciones"]) && $_POST["opciones"] == "noticia") {
             $texto = $_POST["texto"];
             $tipo_filtro = $_POST["tipo_filtro"];
             $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $texto;

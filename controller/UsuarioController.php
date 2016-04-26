@@ -198,6 +198,7 @@ class UsuarioController extends BaseController
                                 $usuario->validoParaCrear();
                                 $this->usuarioMapper->insertar($usuario);
                                 $this->view->setVariable("mensajeRegistro", "Ha sido registrado en MundoMovil como: <strong>" . $nom_usuario . "</strong> de manera satisfactoria.<br> Le enviaremos un email, para activar su cuenta, al correo: <strong>" . $email . "</strong>.", true);
+                                $this->view->setVariable("mensajeRegistro2", "Ha sido registrado en MundoMovil como: <strong>" . $nom_usuario . "</strong> de manera satisfactoria.<br> Le enviaremos un email, para activar su cuenta, al correo: <strong>" . $email . "</strong>.", true);
                                 enviar_email($usuario);
                                 $this->view->redirect("usuario", "login_error");
                             } catch (ValidationException $ex) {
@@ -253,8 +254,10 @@ class UsuarioController extends BaseController
             $cod_act = $_GET["cod_act"];
             if ($this->usuarioMapper->comprobarCodigoValidacion($cod_act)) {
                 $this->view->setVariable("mensajeSucces", "El usuario ha sido activado", true);
+                $this->view->setVariable("mensajeSucces2", "El usuario ha sido activado", true);
             } else {
                 $this->view->setVariable("mensajeError", "No se ha podido activar al usuario", true);
+                $this->view->setVariable("mensajeError2", "No se ha podido activar al usuario", true);
             }
             $this->view->redirect("usuario", "login_error");
         } else {
@@ -762,4 +765,39 @@ class UsuarioController extends BaseController
         $this->view->redirectToReferer();
     }
 
+    /**
+     * Metodo que permite almacenar el nombre del usuario actual
+     * en variables de sesion para luego filtrar preguntas del foro
+     */
+
+    public function misPreguntas()
+    {
+        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        $this->view->redirect("foro", "filtro");
+    }
+
+    /**
+     * Metodo que permite almacenar el nombre del usuario actual
+     * en variables de sesion para luego filtrar tutoriales
+     */
+
+    public function misTutoriales()
+    {
+        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        $this->view->redirect("tutorial", "filtro");
+    }
+
+    /**
+     * Metodo que permite almacenar el nombre del usuario actual
+     * en variables de sesion para luego filtrar noticias
+     */
+
+    public function misNoticias()
+    {
+        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        $this->view->redirect("noticia", "filtro");
+    }
 }

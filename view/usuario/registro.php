@@ -5,6 +5,7 @@ $base = $view->getBase();
 $error = $view->popFlash();
 $errores = $view->getVariable("errores");
 $datos = $view->getVariable("datos");
+$mensajeRegistro = $view->getVariable("mensajeRegistro");
 ?>
 <!--Formulario registro-->
 <div class="form-especial">

@@ -3,6 +3,9 @@ require_once(__DIR__ . "/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 $error = $view->popFlash();
 $datos = $view->getVariable("datos");
+$mensajeRegistro = $view->getVariable("mensajeRegistro2");
+$mensajeSucces = $view->getVariable("mensajeSucces2");
+$mensajeError = $view->getVariable("mensajeError2");
 ?>
 
 <!--Formulario login-->
@@ -26,7 +29,9 @@ $datos = $view->getVariable("datos");
             </h3>
         </div>
         <form id="idformLoginEsp" method="POST" action="usuario/login">
-            <input type="hidden" name="url_referer" value="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
+            <input type="hidden" name="url_referer"
+                   value="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
+
             <div class="panel-body">
                 <div class="form-group">
                     <label>Introduce E-mail</label>
@@ -52,22 +57,27 @@ $datos = $view->getVariable("datos");
         </form>
     </div>
     <div class="volver">
-        <form id="formUrlReferer" method="post" action="usuario/evitarReferencias">
-            <div id="div_url_ref"></div>
-            <?php
-            if (!empty($error)) {
-                echo '<input type="hidden" name="error" value="' . $error . '">';
-            }
-            if (!empty($datos)) {
-                $tmp = serialize($datos);
-                $tmp = urlencode($tmp);
-                echo '<input type="hidden" name="datos" value="' . $tmp . '">';
-            }
-            ?>
-        </form>
-
-        <a href="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
-            << Volver a MundoMovil
-        </a>
+        <?php if (empty($mensajeRegistro) && empty($mensajeError) && empty($mensajeSucces)): ?>
+            <form id="formUrlReferer" method="post" action="usuario/evitarReferencias">
+                <div id="div_url_ref"></div>
+                <?php
+                if (!empty($error)) {
+                    echo '<input type="hidden" name="error" value="' . $error . '">';
+                }
+                if (!empty($datos)) {
+                    $tmp = serialize($datos);
+                    $tmp = urlencode($tmp);
+                    echo '<input type="hidden" name="datos" value="' . $tmp . '">';
+                }
+                ?>
+            </form>
+            <a href="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
+                << Volver a MundoMovil
+            </a>
+        <?php else: ?>
+            <a href="noticia/index">
+                << Volver a MundoMovil
+            </a>
+        <?php endif; ?>
     </div>
 </div>
