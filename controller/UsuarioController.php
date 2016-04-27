@@ -77,10 +77,12 @@ class UsuarioController extends BaseController
                         $this->view->setVariable("notificacion", $notificacion, true);
                         $this->usuarioMapper->actualizarFechaConexion(null, $email);
                         $this->view->setVariable("mensajeSucces", "Usuario logueado correctamente", true);
-                        if (isset($_POST["url_referer"])) {
+                        if (isset($_POST["url_referer"]) && !empty($_POST["url_referer"])) {
                             header("Location: " . $_POST["url_referer"] . "");
                         } else {
-                            $this->view->redirectToReferer();
+                            if(!$this->view->redirectToReferer()){
+                                $this->view->redirect("noticia","index");
+                            }
                         }
                     } else {
                         $error = "Usuario baneado";
@@ -799,5 +801,120 @@ class UsuarioController extends BaseController
         $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
         $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
         $this->view->redirect("noticia", "filtro");
+    }
+
+    /**
+     * Metodo que renderiza la pagina de olvido de contrasenha si no existe un usuario
+     * validado en el sistema, en caso contrario es redirigido a noticia/index
+     */
+
+    public function contrasenha_olvido()
+    {
+        if (!isset($this->usuarioActual)) {
+            $this->view->setLayout("user_fail");
+            $this->view->render("usuario", "contrasenha");
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que permite enviar un email con un enlace para
+     * que el usuario pueda restablecer su contraseña en caso
+     * de habersela olvidado
+     *
+     * Se obtienen los datos del usuario a partir del email que
+     * ha introducido y se le envia el correo a su email
+     */
+
+    public function mail_contrasenha()
+    {
+        if (isset($_POST["email"]) && !empty($_POST["email"])) {
+            $email = $_POST["email"];
+            if ($this->usuarioMapper->existe(null, null, $email)) {
+                $this->usuarioMapper->modificarCambioContrasenha($email, 1);
+                $usuario = $this->usuarioMapper->listarUsuarioConcreto(null, $email);
+                $user = new Usuario($usuario["id_usuario"], $usuario["nom_usuario"], $usuario["email"], $usuario["ubicacion"], $usuario["contrasenha"], $usuario["avatar"], $usuario["fecha_reg"], $usuario["fecha_conex"], $usuario["rol"]);
+                enviar_email_contrasenha($user);
+                $this->view->setVariable("mensajeRegistro", "Te hemos enviado un email, para modificar su contrse&ntildea, al correo: <strong>" . $email . "</strong>.", true);
+                $this->view->setVariable("mensajeRegistro2", "Te hemos enviado un email, para modificar su contrse&ntildea, al correo: <strong>" . $email . "</strong>.", true);
+                $this->view->redirect("usuario", "login_error");
+            } else {
+                $this->view->setVariable("mensajeError", "No existe un usuario con ese email", true);
+                $this->view->redirect("usuario", "contrasenha_olvido");
+            }
+        } else {
+            $this->view->setVariable("mensajeError", "El email no puede estar vac&iacute;o", true);
+            $this->view->redirect("usuario", "contrasenha_olvido");
+        }
+    }
+
+    /**
+     * Permite renderizar la vista para modificar la contraseña de un
+     * usuario.
+     *
+     * Para ello se obtiene el usuario a partir del codigo que va en
+     * la url, y si el usuario habia solicitado un cambio de contraseña
+     * se renderiza la vista para modificarla
+     */
+    public function restablecer()
+    {
+        if (isset($_GET["cod_act"]) && !empty($_GET["cod_act"])) {
+            $cod_act = $_GET["cod_act"];
+            $usuario = $this->usuarioMapper->obtenerUsuarioCodigo($cod_act);
+            if ($usuario["cambio_contrasenha"] == 1) {
+                $this->view->setVariable("usuario", $usuario, true);
+                $this->view->setLayout("user_fail");
+                $this->view->render("usuario", "restablecer_contrasenha");
+            } else {
+                $this->view->redirect("noticia", "index");
+            }
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
+    }
+
+    /**
+     * Metodo que cambia la contraseña de un usuario recibida
+     * a partir de un formulario.
+     *
+     * Comprueba que exista un usuario y que las contraseñas no esten
+     * vacías y coincidan. Modifica la contraseña de ese usuario y lo
+     * redirige a la página de login
+     */
+    public function modificar_contrasenha()
+    {
+        if (isset($_POST["usuario"]) && !empty($_POST["usuario"])) {
+            $tmp = stripslashes($_POST["usuario"]);
+            $tmp = urldecode($tmp);
+            $usuario = unserialize($tmp);
+            if (!empty($_POST["contrasenha"]) && !empty($_POST["contrasenha2"])) {
+                $contrasenha = $_POST["contrasenha"];
+                $contrasenha2 = $_POST["contrasenha2"];
+                if ($contrasenha == $contrasenha2) {
+                    if(strlen($contrasenha)>4){
+                        $this->usuarioMapper->modificarContrasenha($usuario["id_usuario"], $contrasenha);
+                        $this->usuarioMapper->modificarCambioContrasenha($usuario["email"]);
+                        $this->view->setVariable("mensajeSucces", "Contrase&ntilde;a modificada correctamente", true);
+                        $this->view->setVariable("mensajeSucces2", "Contrase&ntilde;a modificada correctamente", true);
+                        $this->view->redirect("usuario", "login_error");
+                    }else{
+                        $this->view->setVariable("mensajeError", "La contrase&ntilde debe tener una longitud m&iacutenima de 5 caracteres", true);
+                        $this->view->setVariable("usuario", $usuario, true);
+                        $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+                    }
+                } else {
+                    $this->view->setVariable("mensajeError", "Las contrase&ntilde;as no coinciden", true);
+                    $this->view->setVariable("usuario", $usuario, true);
+                    $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+                }
+            } else {
+                $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os", true);
+                $this->view->setVariable("usuario", $usuario, true);
+                $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+            }
+        } else {
+            $this->view->redirect("noticia", "index");
+        }
     }
 }

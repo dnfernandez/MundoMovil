@@ -48,8 +48,11 @@ $mensajeError = $view->getVariable("mensajeError2");
                         <a class="btn btn-link" href="usuario/registro_error">
                             Reg&iacute;strate ahora
                         </a>
+                        <a class="btn btn-link" href="usuario/contrasenha_olvido">
+                            ¿Olvidaste tu contrase&ntilde;a?
+                        </a>
                     </div>
-                    <div class="col-md-6 btn-form">
+                    <div class="col-md-6 btn-form boton-login">
                         <button type="submit" class="btn btn-primary">Entrar</button>
                     </div>
                 </div>

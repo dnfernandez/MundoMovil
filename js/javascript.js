@@ -303,3 +303,17 @@ function url_referer() {
         document.getElementById('formUrlReferer').submit();
     }
 }
+/**
+ * Funcion que impide el reenvio de un formulario
+ */
+
+var contador = 0;
+
+function enviado() {
+    if(contador==0){
+        contador++;
+        return true;
+    }else{
+        return false;
+    }
+}

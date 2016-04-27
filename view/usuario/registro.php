@@ -8,7 +8,7 @@ $datos = $view->getVariable("datos");
 $mensajeRegistro = $view->getVariable("mensajeRegistro");
 ?>
 <!--Formulario registro-->
-<div class="form-especial">
+<div id="test" class="form-especial">
     <a rel="home" href="noticia/index" title="Mundo Movil">
         <img class="logo2 img-responsive" src="images/letra.png">
     </a>

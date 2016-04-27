@@ -981,3 +981,7 @@ blockquote{
         display: none;
     }
 }
+
+.panel-footer .boton-login{
+    margin-top: 4%;
+}

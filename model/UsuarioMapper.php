@@ -47,10 +47,10 @@ class UsuarioMapper
         $stmt1 = $this->db->query("select NOW() as fecha_actual");
         $fechareg = $stmt1->fetch(PDO::FETCH_BOTH);
 
-        $stmt2 = $this->db->prepare("insert into usuario(id_usuario, nom_usuario, email, contrasenha, ubicacion, avatar, fecha_reg, fecha_conex, rol, estado, baneado, cod_validacion)
-                values(?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt2 = $this->db->prepare("insert into usuario(id_usuario, nom_usuario, email, contrasenha, ubicacion, avatar, fecha_reg, fecha_conex, rol, estado, baneado, cod_validacion, cambio_contrasenha)
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $stmt2->execute(array($usuario->getIdUsuario(), $usuario->getNomUsuario(), $usuario->getEmail(), $usuario->getContrasenha(), $usuario->getUbicacion(),
-            $usuario->getAvatar(), $fechareg["fecha_actual"], $usuario->getFechaConex(), $usuario->getRol(), 0, 0, $cod_validacion));
+            $usuario->getAvatar(), $fechareg["fecha_actual"], $usuario->getFechaConex(), $usuario->getRol(), 0, 0, $cod_validacion, 0));
     }
 
     /**
@@ -345,6 +345,9 @@ class UsuarioMapper
     /**
      * Metodo que cuenta el numero de usuarios
      * permitiendo filtrar por nombre de usuario y email
+     * @param null $nom_usuario
+     * @param null $email
+     * @return mixed
      */
 
     public function contarUsuarios($nom_usuario = null, $email = null)
@@ -360,5 +363,42 @@ class UsuarioMapper
         }
         $usuarios = $stmt->fetch(PDO::FETCH_BOTH);
         return $usuarios;
+    }
+
+    /**
+     * Metodo para modificar el campo cambio_contrasenha de un usuario
+     * @param $email
+     * @param int $cambio
+     */
+
+    public function modificarCambioContrasenha($email, $cambio = 0)
+    {
+        $stmt = $this->db->prepare("update usuario set cambio_contrasenha=? where email=?");
+        $stmt->execute(array($cambio, $email));
+    }
+
+    /**
+     * Metodo que comprueba quien es el usuario con el codigo de validacion pasado por parametro
+     * @param $cod_validacion
+     * @return mixed
+     */
+
+    public function obtenerUsuarioCodigo($cod_validacion)
+    {
+        $stmt = $this->db->prepare("select * from usuario where cod_validacion=?");
+        $stmt->execute(array($cod_validacion));
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    /**
+     * Metodo que permite modificar la contrasenha de un usuario por su id
+     * @param $id_usuario
+     * @param $contrasenha
+     */
+
+    public function modificarContrasenha($id_usuario, $contrasenha)
+    {
+        $stmt = $this->db->prepare("update usuario set contrasenha=? where id_usuario=?");
+        $stmt->execute(array($contrasenha, $id_usuario));
     }
 }
