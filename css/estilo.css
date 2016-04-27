@@ -860,6 +860,7 @@ a.btn {
     padding-right: 0.25em;
     text-align: justify;
     padding-top: 0.25em;
+    display: none;
 }
 
 .error-especial2 {
@@ -984,4 +985,8 @@ blockquote{
 
 .panel-footer .boton-login{
     margin-top: 4%;
+}
+
+.help-block{
+    color:red !important;
 }

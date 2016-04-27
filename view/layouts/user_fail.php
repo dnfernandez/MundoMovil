@@ -33,6 +33,7 @@ $mensajeError = $view->getVariable("mensajeError");
 
     <script src="plugins/ckeditor/ckeditor.js"></script>
     <script src="js/alertify.min.js" type="text/javascript"></script>
+    <script src="js/md5.js" type="text/javascript"></script>
 
 </head>
 
@@ -75,6 +76,7 @@ $mensajeError = $view->getVariable("mensajeError");
 <script src="js/ie-emulation-modes-warning.js"></script>
 <script src="js/javascript.js" type="text/javascript"></script>
 <script src="js/jquery-latest.js" type="text/javascript"></script>
+<script src="js/validacion.js" type="text/javascript"></script>
 
 </body>
 </html>

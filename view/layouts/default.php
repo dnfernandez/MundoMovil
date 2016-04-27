@@ -32,6 +32,7 @@ $notificacion = $view->getVariable("notificacion");
 
     <script src="plugins/ckeditor/ckeditor.js"></script>
     <script src="js/alertify.min.js" type="text/javascript"></script>
+    <script src="js/md5.js" type="text/javascript"></script>
 
 </head>
 
@@ -76,7 +77,9 @@ $notificacion = $view->getVariable("notificacion");
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="usuario/general">Perfil</a></li>
-                            <li class="dropdown dropdown-submenu contribuciones"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Mis contribuciones</a>
+                            <li class="dropdown dropdown-submenu contribuciones"><a href="#" class="dropdown-toggle"
+                                                                                    data-toggle="dropdown">Mis
+                                    contribuciones</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="usuario/misPreguntas">Mis preguntas</a></li>
                                     <li><a href="usuario/misTutoriales">Mis tutoriales</a></li>
@@ -221,12 +224,18 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
         </div>
         <form id="idformLogin" method="POST" action="usuario/login">
             <div class="panel-body">
-                <div class="form-group">
-                    <input type="text" class="form-control inp-log" name="email" placeholder="Introduce E-mail">
+                <div id="div-emailLogin" class="form-group">
+                    <input type="text" class="form-control inp-log" name="email" placeholder="Introduce E-mail"
+                           id="emailLogin" onblur="valida_email(this.id)">
+
+                    <div id="help-emailLogin" class="help-block"></div>
                 </div>
-                <div class="form-group">
+                <div id="div-passLogin" class="form-group">
                     <input type="password" class="form-control inp-log" name="contrasenha"
-                           placeholder="Introduce contrase&ntilde;a">
+                           placeholder="Introduce contrase&ntilde;a" id="passLogin"
+                           onblur="valida_contrasenha(this.id)">
+
+                    <div id="help-passLogin" class="help-block"></div>
                 </div>
             </div>
             <div class="panel-footer">
@@ -237,8 +246,12 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
                         </a>
                     </div>
                     <div class="col-md-6 btn-form">
-                        <button type="reset" class="btn btn-default" onclick="ocultar_login()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" onclick="recarga2()">Entrar</button>
+                        <button type="reset" class="btn btn-default"
+                                onclick="limpia_form(['emailLogin','passLogin']);ocultar_login();">Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                onclick="recarga2(); validaLogin(['idformLogin','emailLogin','passLogin'])">Entrar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -261,24 +274,38 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-7">
-                        <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="nom_usuario"
+                        <div id="div-nom_usuarioReg" class="form-group">
+                            <input type="text" class="form-control inp-log" name="nom_usuario" id="nom_usuarioReg"
+                                   onblur="valida_nom_usuario(this.id)"
                                    placeholder="Nombre usuario">
+
+                            <div id="help-nom_usuarioReg" class="help-block"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="email" placeholder="E-mail">
+                        <div id="div-emailReg" class="form-group">
+                            <input type="text" class="form-control inp-log" name="email" placeholder="E-mail"
+                                   id="emailReg" onblur="valida_email(this.id)">
+
+                            <div id="help-emailReg" class="help-block"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control inp-log" name="ubicacion"
-                                   placeholder="Ubicaci&oacute;n">
+                        <div id="div-ubicacionReg" class="form-group">
+                            <input type="text" class="form-control inp-log" name="ubicacion" id="ubicacionReg"
+                                   placeholder="Ubicaci&oacute;n" onblur="valida_alfanumerico(this.id)">
+
+                            <div id="help-ubicacionReg" class="help-block"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control inp-log" name="contrasenha"
+                        <div id="div-passReg" class="form-group">
+                            <input type="password" class="form-control inp-log" name="contrasenha" id="passReg"
+                                   onblur="valida_contrasenha(this.id)"
                                    placeholder="Contrase&ntilde;a">
+
+                            <div id="help-passReg" class="help-block"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control inp-log" name="contrasenha2"
+                        <div id="div-passReg2" class="form-group">
+                            <input type="password" class="form-control inp-log" name="contrasenha2" id="passReg2"
+                                   onblur="valida_contrasenha(this.id)"
                                    placeholder="Repite contrase&ntilde;a">
+
+                            <div id="help-passReg2" class="help-block"></div>
                         </div>
                     </div>
                     <div class="col-md-5 imagenReg">
@@ -297,8 +324,14 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
                 </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_registro()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Registrar</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['nom_usuarioReg','emailReg','ubicacionReg','passReg','passReg2']);ocultar_registro()">
+                    Cancelar
+                </button>
+                <button type="button" id="btn-reg"
+                        onclick="validaRegistro(['idformRegistro','nom_usuarioReg','emailReg','ubicacionReg','passReg','passReg2','btn-reg'])"
+                        class="btn btn-primary">Registrar
+                </button>
             </div>
         </form>
     </div>
@@ -375,6 +408,7 @@ if (isset($notificacion) && isset($notificacion["num_not"])) {
 <script src="js/javascript.js" type="text/javascript"></script>
 <script src="js/jquery-latest.js" type="text/javascript"></script>
 <script src="js/jquery.tablesorter.js" type="text/javascript"></script>
+<script src="js/validacion.js" type="text/javascript"></script>
 <script>
     $(function () {
         $('#tab_ordena').tablesorter({

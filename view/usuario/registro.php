@@ -31,11 +31,13 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-7">
-                        <div class="form-group">
+                        <div id="div-nom_usuarioRegEsp" class="form-group">
                             <label>Nombre de usuario</label>
-                            <input type="text" class="form-control inp-log" name="nom_usuario"
+                            <input type="text" class="form-control inp-log" name="nom_usuario" id="nom_usuarioRegEsp"
+                                   onblur="valida_nom_usuario(this.id)"
                                    value="<?php echo $datos['nom_usuario']; ?>">
 
+                            <div id="help-nom_usuarioRegEsp" class="help-block"></div>
                             <div id="errorE1" class="error-especial">
                                 <?php if (isset($errores["nomUsuario"]) && !empty($errores["nomUsuario"])):
                                     echo '<script>
@@ -45,10 +47,13 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                                 endif; ?>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="div-emailRegEsp" class="form-group">
                             <label>Email</label>
-                            <input type="text" class="form-control inp-log" name="email"
+                            <input type="text" class="form-control inp-log" name="email" id="emailRegEsp"
+                                   onblur="valida_email(this.id)"
                                    value="<?php echo $datos['email']; ?>">
+
+                            <div id="help-emailRegEsp" class="help-block"></div>
 
                             <div id="errorE2" class="error-especial">
                                 <?php if (isset($errores["email"]) && !empty($errores["email"])):
@@ -59,10 +64,13 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                                 endif; ?>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="div-ubicacionRegEsp" class="form-group">
                             <label>Ubicaci&oacute;n</label>
-                            <input type="text" class="form-control inp-log" name="ubicacion"
+                            <input type="text" class="form-control inp-log" name="ubicacion" id="ubicacionRegEsp"
+                                   onblur="valida_alfanumerico(this.id)"
                                    value="<?php echo $datos['ubicacion']; ?>">
+
+                            <div id="help-ubicacionRegEsp" class="help-block"></div>
 
                             <div id="errorE3" class="error-especial">
                                 <?php if (isset($errores["ubicacion"]) && !empty($errores["ubicacion"])):
@@ -73,11 +81,13 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                                 endif; ?>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="div-passRegEsp" class="form-group">
                             <label>Contrasen&ntilde;a</label>
-                            <input type="password" class="form-control inp-log" name="contrasenha"
+                            <input type="password" class="form-control inp-log" name="contrasenha" id="passRegEsp"
+                                   onblur="valida_contrasenha(this.id)"
                                    placeholder="Contrase&ntilde;a">
 
+                            <div id="help-passRegEsp" class="help-block"></div>
                             <div id="errorE4" class="error-especial">
                                 <?php if (isset($errores["contrasenha"]) && !empty($errores["contrasenha"])):
                                     echo '<script>
@@ -87,10 +97,13 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                                 endif; ?>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="div-passRegEsp2" class="form-group">
                             <label>Repite contrase&ntilde;a</label>
-                            <input type="password" class="form-control inp-log" name="contrasenha2"
+                            <input type="password" class="form-control inp-log" name="contrasenha2" id="passRegEsp2"
+                                   onblur="valida_contrasenha(this.id)"
                                    placeholder="Repite contrase&ntilde;a">
+
+                            <div id="help-passRegEsp2" class="help-block"></div>
                         </div>
                     </div>
                     <div class="col-md-5 imagenReg">
@@ -114,7 +127,10 @@ $mensajeRegistro = $view->getVariable("mensajeRegistro");
                 </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="submit" class="btn btn-primary">Registrar</button>
+                <button type="button" id="btn-regEsp"
+                        onclick="validaRegistro(['idformRegistroEspecial','nom_usuarioRegEsp','emailRegEsp','ubicacionRegEsp','passRegEsp','passRegEsp2','btn-regEsp'])"
+                        class="btn btn-primary">Registrar
+                </button>
             </div>
         </form>
     </div>

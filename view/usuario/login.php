@@ -33,13 +33,15 @@ $mensajeError = $view->getVariable("mensajeError2");
                    value="<?php echo $_SESSION["__sesion__herramienta__"]["__url_ref__"]; ?>">
 
             <div class="panel-body">
-                <div class="form-group">
+                <div id="div-emailLoginEsp" class="form-group">
                     <label>Introduce E-mail</label>
-                    <input type="text" class="form-control inp-log" name="email" value="<?php echo $datos['email']; ?>">
+                    <input type="text" class="form-control inp-log" name="email" value="<?php echo $datos['email']; ?>" id="emailLoginEsp" onblur="valida_email(this.id)">
+                    <div id="help-emailLoginEsp" class="help-block"></div>
                 </div>
-                <div class="form-group">
+                <div id="div-passLoginEsp" class="form-group">
                     <label>Introduce Contrase&ntilde;a</label>
-                    <input type="password" class="form-control inp-log" name="contrasenha">
+                    <input type="password" class="form-control inp-log" name="contrasenha" id="passLoginEsp" onblur="valida_contrasenha(this.id)">
+                    <div id="help-passLoginEsp" class="help-block"></div>
                 </div>
             </div>
             <div class="panel-footer">
@@ -53,7 +55,7 @@ $mensajeError = $view->getVariable("mensajeError2");
                         </a>
                     </div>
                     <div class="col-md-6 btn-form boton-login">
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <button type="button" onclick="validaLogin(['idformLoginEsp','emailLoginEsp','passLoginEsp'])" class="btn btn-primary">Entrar</button>
                     </div>
                 </div>
             </div>
