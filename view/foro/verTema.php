@@ -184,10 +184,15 @@ if (isset($_GET["pag"])) {
                                                     </a>
                                                 <?php else: ?>
                                                     <span class="botonesAdministracion">
-                                                    <a href="javascript:mostrar_crear_respuesta('<?php echo $respuesta["texto"]; ?>')">
-                                                        Citar
-                                                    </a>
-                                                </span>
+                                                        <a href="javascript:recarga2();mostrar_crear_respuesta('<?php echo htmlentities($respuesta["texto"]); ?>')">
+                                                            Citar
+                                                        </a>
+                                                        <?php
+                                                            if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador") {
+                                                                echo ' - <a onclick="javascript:recarga2()" href="respuesta/eliminar_respuesta?id=' . $respuesta["id_respuesta"] . '" class="glyphicon glyphicon-trash"></a>';
+                                                            }
+                                                        ?>
+                                                    </span>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="cuerpoPregunta">

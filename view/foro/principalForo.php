@@ -76,11 +76,11 @@ $foros = $view->getVariable("foros", array());
                                         <td class="temForo primEl col-md-6">
                                             <a href="foro/ver?id=<?php echo $foro['id_foro']; ?>" class="titTemForo">
                                                 <span class="glyphicon glyphicon-comment"></span>
-                                                <?php echo $foro["titulo"]; ?>
+                                                <?php echo htmlentities($foro["titulo"]); ?>
                                             </a>
 
                                             <div class="resumForo">
-                                                <?php echo $foro["resumen"]; ?>
+                                                <?php echo htmlentities($foro["resumen"]); ?>
                                             </div>
                                         </td>
                                         <td class="col-md-2 vertAlign">
@@ -96,7 +96,7 @@ $foros = $view->getVariable("foros", array());
                                         <?php if (isset($usuarioActual)):
                                             if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador"): ?>
                                                 <td class="col-md-2 vertAlign">
-                                                    <a href="javascript:mostrar_modificar_foro(<?php echo '\'' . $foro["titulo"] . '\',\'' . $foro["resumen"] . '\',\'' . $foro["id_foro"] . '\''; ?>)">
+                                                    <a href="javascript:mostrar_modificar_foro(<?php echo '\'' . htmlentities($foro["titulo"]) . '\',\'' . htmlentities($foro["resumen"]) . '\',\'' . $foro["id_foro"] . '\''; ?>)">
                                                         Modificar
                                                     </a>
                                                     |
@@ -147,13 +147,27 @@ $foros = $view->getVariable("foros", array());
                 Introduzca el t&iacute;tulo y descripci&oacute;n del foro y pulse Crear
                 <div></div>
                 <label class="lbl-dest">T&iacute;tulo:</label>
-                <input type="text" name="titulo" class="form-control">
-                <label class="lbl-dest">Descripci&oacute;n:</label>
-                <textarea type="text" class="form-control" name="resumen"></textarea>
+
+                <div id="div-titFor" class="form-group">
+                    <input type="text" name="titulo" id="titFor" onblur="valida_titulo(this.id)" class="form-control">
+
+                    <div id="help-titFor" class="help-block"></div>
+                </div>
+                <div id="div-textFor" class="form-group">
+                    <label class="lbl-dest">Descripci&oacute;n:</label>
+                    <textarea type="text" id="textFor" onblur="valida_texto(this.id)" class="form-control"
+                              name="resumen"></textarea>
+
+                    <div id="help-textFor" class="help-block"></div>
+                </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_crear_foro()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Crear</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['titFor','textFor']);ocultar_crear_foro()">Cancelar
+                </button>
+                <button type="button" id="btnCrearForo" onclick="validaForo([this.form.id,'titFor','textFor',this.id])"
+                        class="btn btn-primary">Crear
+                </button>
             </div>
         </form>
     </div>
@@ -175,15 +189,23 @@ $foros = $view->getVariable("foros", array());
                 Introduzca el t&iacute;tulo y descripci&oacute;n del foro y pulse Modificar
                 <div></div>
                 <label class="lbl-dest">T&iacute;tulo:</label>
-                <input type="text" id="inputModForo" name="titulo" class="form-control">
-                <label class="lbl-dest">Descripci&oacute;n:</label>
-                <textarea type="text" class="form-control" name="resumen" id="textareaModForo"></textarea>
 
+                <div id="div-inputModForo" class="form-group">
+                    <input type="text" id="inputModForo" onblur="valida_titulo(this.id)" name="titulo"
+                           class="form-control">
+
+                    <div id="help-inputModForo" class="help-block"></div>
+                </div>
+                <div id="div-textareaModForo" class="form-group">
+                    <label class="lbl-dest">Descripci&oacute;n:</label>
+                    <textarea type="text" class="form-control" name="resumen" id="textareaModForo" onblur="valida_texto(this.id)"></textarea>
+                    <div id="help-textareaModForo" class="help-block"></div>
+                </div>
                 <div id="div_id_foro"></div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_modificar_foro()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Modificar</button>
+                <button type="reset" class="btn btn-default" onclick="limpia_form(['inputModForo','textareaModForo']);ocultar_modificar_foro()">Cancelar</button>
+                <button type="button" id="btnModForo" onclick="validaForo([this.form.id,'inputModForo','textareaModForo',this.id])" class="btn btn-primary">Modificar</button>
             </div>
         </form>
     </div>

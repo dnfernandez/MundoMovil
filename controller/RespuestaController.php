@@ -90,6 +90,7 @@ class RespuestaController extends BaseController
                     $this->view->setVariable("mensajeSucces","Voto enviado correctamente",true);
                     $this->view->redirectToReferer();
                 } catch (ValidationException $ex) {
+                    $this->view->redirectToReferer();
                     $errores = $ex->getErrors();
                     $this->view->setVariable("errores", $errores, true);
                 }
@@ -105,6 +106,31 @@ class RespuestaController extends BaseController
                 $this->view->redirect("foro", "index");
             }
         }
+    }
+
+    /**
+     * Metodo que permite eliminar una respuesta de una pregunta
+     *
+     * Solo pueden eliminar una respuesta los moderadores y administradores
+     * en caso de que no cumpla con las reglas de participacion.
+     * Entonces si es administrador o moderador el usuario validado
+     * se elimina la respuesta, sino se redirige a la pagina de inicio de noticias
+     */
+
+    public function eliminar_respuesta()
+    {
+        if (isset($this->usuarioActual) && ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador")) {
+            if (isset($_GET["id"])) {
+                $this->respuestaMapper->eliminar($_GET["id"]);
+                $this->view->setVariable("mensajeSucces", "Respuesta eliminada con &eacute;xito", true);
+                $this->view->redirectToReferer();
+            } else {
+                $this->view->setVariable("mensajeError", "No existe esa respuesta", true);
+            }
+        } else {
+            $this->view->setVariable("mensajeError", "No tienes permisos para realizar esa acci&oacute;n", true);
+        }
+        $this->view->redirect("noticia", "index");
     }
 
 }

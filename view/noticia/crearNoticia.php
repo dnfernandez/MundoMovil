@@ -66,7 +66,7 @@ $datos = $view->getVariable("datos");
                                 <div id="div-textareaCuerpoNoticia" class="form-group">
                                     <label>Cuerpo de noticia</label>
                                     <textarea id="textareaCuerpoNoticia" type="text" class="form-control" name="texto"
-                                              placeholder=""><?php echo $datos['texto']; ?></textarea>
+                                              placeholder=""><?php echo htmlentities($datos['texto']); ?></textarea>
                                     <script type="text/javascript">
                                         CKEDITOR.replace('textareaCuerpoNoticia');
                                         CKEDITOR.config.height = '35em';

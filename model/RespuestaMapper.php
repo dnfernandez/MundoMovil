@@ -105,7 +105,7 @@ class RespuestaMapper
 
     public function votarRespuestas($id_respuesta, $id_usuario, $tipo)
     {
-        $stmt = $this->db->prepare("select tipo_votacion from votacion where id_respuesta=? and $id_usuario=? ");
+        $stmt = $this->db->prepare("select tipo_votacion from votacion where id_respuesta=? and id_usuario=? ");
         $stmt->execute(array($id_respuesta, $id_usuario));
         $votacion = $stmt->fetch(PDO::FETCH_BOTH);
         if ($votacion == null) {
@@ -190,4 +190,12 @@ class RespuestaMapper
         return $contador;
     }
 
+    /** Metodo que permite eliminar una respuesta a partir de su id
+     * @param $id_respuesta
+     */
+    public function eliminar($id_respuesta)
+    {
+        $stmt = $this->db->prepare("delete from respuesta where id_respuesta=?");
+        $stmt->execute(array($id_respuesta));
+    }
 }

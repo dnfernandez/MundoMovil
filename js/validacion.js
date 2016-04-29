@@ -2,13 +2,13 @@
  * Funcion que permite limpiar los efectos de error de un formulario
  * @param array Es un array que contiene los id que se utilizan en el formulario
  */
-function limpia_form(array,opc) {
+function limpia_form(array, opc) {
     opc = opc || 0;
     if (array != null) {
         for (var elem in array) {
             $("#div-" + array[elem]).removeClass("has-error");
             document.getElementById("help-" + array[elem]).style.display = "none";
-            if (opc != 0 ){
+            if (opc != 0) {
                 document.getElementById("cke_" + array[elem]).style.border = "1px solid #b6b6b6";
             }
         }
@@ -163,15 +163,15 @@ function valida_texto(id, opc) {
         $("#div-" + id).addClass("has-error");
         document.getElementById("help-" + id).innerHTML = "El campo no puede estar vac&iacute;o";
         document.getElementById("help-" + id).style.display = "block";
-        if(opc!=0){
-            document.getElementById("cke_"+ id).style.border = "1px solid #a94442";
+        if (opc != 0) {
+            document.getElementById("cke_" + id).style.border = "1px solid #a94442";
         }
         return false;
     } else {
         $("#div-" + id).removeClass("has-error");
         document.getElementById("help-" + id).style.display = "none";
-        if(opc!=0){
-            document.getElementById("cke_"+ id).style.border = "1px solid #b6b6b6";
+        if (opc != 0) {
+            document.getElementById("cke_" + id).style.border = "1px solid #b6b6b6";
         }
         return true;
     }
@@ -208,12 +208,12 @@ function valida_imagen(id) {
         $("#div-" + id).addClass("has-error");
         document.getElementById("help-" + id).innerHTML = "Introduzca una imagen con extensi&oacute;n jpg, jpeg, gif o png";
         document.getElementById("help-" + id).style.display = "block";
-        document.getElementById("imgPerfil").style.border="1px solid #a94442";
+        document.getElementById("imgPerfil").style.border = "1px solid #a94442";
         return false;
     } else {
         $("#div-" + id).removeClass("has-error");
         document.getElementById("help-" + id).style.display = "none";
-        document.getElementById("imgPerfil").style.border="none";
+        document.getElementById("imgPerfil").style.border = "none";
         return true;
     }
 }
@@ -436,7 +436,7 @@ function validaComentario(form) {
 }
 
 /**
- * Funcion que permite validar el formulario de crear tutoriañ
+ * Funcion que permite validar el formulario de crear tutorial
  * @param form Array que contiene todos los id's necesarios
  * que estan dentro del formulario para crear el tutorial
  */
@@ -498,13 +498,64 @@ function validaModificarTutorial(form) {
  */
 function validaRespuesta(form) {
     var bool = true;
-    if (!valida_texto(form[1],1)) {
+    if (!valida_texto(form[1], 1)) {
         bool = false;
     }
 
     if (bool) {
         document.getElementById(form[2]).disabled = true;
         document.getElementById(form[2]).innerHTML = "Enviando...";
+        document.forms[form[0]].submit();
+    }
+}
+
+/**
+ * Funcion que permite validar el formulario para crear
+ * un foro.
+ * @param form Array con id formulario, id titulo, id campo texto,
+ * id boton envio formulario.
+ */
+function validaForo(form) {
+    var bool = true;
+
+    if (!valida_titulo(form[1])) {
+        bool = false;
+    }
+
+    if (!valida_texto(form[2])) {
+        bool = false;
+    }
+
+    if (bool) {
+        document.getElementById(form[3]).disabled = true;
+        document.getElementById(form[3]).innerHTML = "Creando...";
+        document.forms[form[0]].submit();
+    }
+}
+
+/**
+ * Funcion que permite validar el formulario de crear pregunta
+ * @param form Array que contiene todos los id's necesarios
+ * que estan dentro del formulario para crear el pregunta
+ */
+function validaCrearPregunta(form) {
+    var bool = true;
+
+    if (!valida_titulo(form[1])) {
+        bool = false;
+    }
+
+    if (!valida_clave(form[2])) {
+        bool = false;
+    }
+
+    if (!valida_texto(form[3], 1)) {
+        bool = false;
+    }
+
+    if (bool) {
+        document.getElementById(form[4]).disabled = true;
+        document.getElementById(form[4]).innerHTML = "Guardando...";
         document.forms[form[0]].submit();
     }
 }

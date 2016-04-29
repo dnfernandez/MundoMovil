@@ -199,15 +199,6 @@ $(window).scroll(function () {
 });
 
 
-//Funcion de confirmación de eliminación
-
-function preguntarEliminar(enlace) {
-    eliminar = confirm("¿Eliminar elemento?");
-    if (eliminar) {
-        window.location.href = enlace;
-    }
-}
-
 /**
  * Permite crear boton de scroll to top cuando se hace scroll vertical
  */

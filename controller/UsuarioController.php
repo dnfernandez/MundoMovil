@@ -80,8 +80,8 @@ class UsuarioController extends BaseController
                         if (isset($_POST["url_referer"]) && !empty($_POST["url_referer"])) {
                             header("Location: " . $_POST["url_referer"] . "");
                         } else {
-                            if(!$this->view->redirectToReferer()){
-                                $this->view->redirect("noticia","index");
+                            if (!$this->view->redirectToReferer()) {
+                                $this->view->redirect("noticia", "index");
                             }
                         }
                     } else {
@@ -774,8 +774,10 @@ class UsuarioController extends BaseController
 
     public function misPreguntas()
     {
-        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
-        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        if (isset($this->usuarioActual)) {
+            $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+            $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        }
         $this->view->redirect("foro", "filtro");
     }
 
@@ -786,8 +788,10 @@ class UsuarioController extends BaseController
 
     public function misTutoriales()
     {
-        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
-        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        if (isset($this->usuarioActual)) {
+            $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+            $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        }
         $this->view->redirect("tutorial", "filtro");
     }
 
@@ -798,8 +802,10 @@ class UsuarioController extends BaseController
 
     public function misNoticias()
     {
-        $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
-        $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        if (isset($this->usuarioActual)) {
+            $_SESSION["__sesion__herramienta__"]["__filtro_texto__"] = $this->usuarioActual->getNomUsuario();
+            $_SESSION["__sesion__herramienta__"]["__filtro_tipo__"] = "autor";
+        }
         $this->view->redirect("noticia", "filtro");
     }
 
@@ -892,26 +898,26 @@ class UsuarioController extends BaseController
                 $contrasenha = $_POST["contrasenha"];
                 $contrasenha2 = $_POST["contrasenha2"];
                 if ($contrasenha == $contrasenha2) {
-                    if(strlen($contrasenha)>4){
+                    if (strlen($contrasenha) > 4) {
                         $this->usuarioMapper->modificarContrasenha($usuario["id_usuario"], $contrasenha);
                         $this->usuarioMapper->modificarCambioContrasenha($usuario["email"]);
                         $this->view->setVariable("mensajeSucces", "Contrase&ntilde;a modificada correctamente", true);
                         $this->view->setVariable("mensajeSucces2", "Contrase&ntilde;a modificada correctamente", true);
                         $this->view->redirect("usuario", "login_error");
-                    }else{
+                    } else {
                         $this->view->setVariable("mensajeError", "La contrase&ntilde debe tener una longitud m&iacutenima de 5 caracteres", true);
                         $this->view->setVariable("usuario", $usuario, true);
-                        $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+                        $this->view->redirect("usuario", "restablecer", "cod_act=" . $_POST["codigo"]);
                     }
                 } else {
                     $this->view->setVariable("mensajeError", "Las contrase&ntilde;as no coinciden", true);
                     $this->view->setVariable("usuario", $usuario, true);
-                    $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+                    $this->view->redirect("usuario", "restablecer", "cod_act=" . $_POST["codigo"]);
                 }
             } else {
                 $this->view->setVariable("mensajeError", "No puede haber campos vac&iacute;os", true);
                 $this->view->setVariable("usuario", $usuario, true);
-                $this->view->redirect("usuario", "restablecer", "cod_act=".$_POST["codigo"]);
+                $this->view->redirect("usuario", "restablecer", "cod_act=" . $_POST["codigo"]);
             }
         } else {
             $this->view->redirect("noticia", "index");
