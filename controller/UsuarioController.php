@@ -836,8 +836,8 @@ class UsuarioController extends BaseController
                 $usuario = $this->usuarioMapper->listarUsuarioConcreto(null, $email);
                 $user = new Usuario($usuario["id_usuario"], $usuario["nom_usuario"], $usuario["email"], $usuario["ubicacion"], $usuario["contrasenha"], $usuario["avatar"], $usuario["fecha_reg"], $usuario["fecha_conex"], $usuario["rol"]);
                 enviar_email_contrasenha($user);
-                $this->view->setVariable("mensajeRegistro", "Te hemos enviado un email, para modificar su contrse&ntildea, al correo: <strong>" . $email . "</strong>.", true);
-                $this->view->setVariable("mensajeRegistro2", "Te hemos enviado un email, para modificar su contrse&ntildea, al correo: <strong>" . $email . "</strong>.", true);
+                $this->view->setVariable("mensajeRegistro", "Te hemos enviado un email, para modificar su contrase&ntildea, al correo: <strong>" . $email . "</strong>.", true);
+                $this->view->setVariable("mensajeRegistro2", "Te hemos enviado un email, para modificar su contrase&ntildea, al correo: <strong>" . $email . "</strong>.", true);
                 $this->view->redirect("usuario", "login_error");
             } else {
                 $this->view->setVariable("mensajeError", "No existe un usuario con ese email", true);

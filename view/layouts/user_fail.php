@@ -43,7 +43,6 @@ $mensajeError = $view->getVariable("mensajeError");
         <div class="col-md-12">
             <!------------------------------------ Las vistas vienen aqui ------------------------------------------------->
             <?= $view->getFragment(ViewManager::DEFAULT_FRAGMENT) ?>
-
             <?php
             if (isset($mensajeSucces)) {
                 echo '<script>

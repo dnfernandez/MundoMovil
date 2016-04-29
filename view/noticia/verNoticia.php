@@ -12,7 +12,7 @@ if (isset($_GET["pag"])) {
 }
 $id_comentarios = $view->getVariable("id_comentarios");
 $recargar = $view->getVariable("recarga");
-if(isset($recargar) && $recargar=="true"){
+if (isset($recargar) && $recargar == "true") {
     header("Refresh:2");
 }
 ?>
@@ -329,16 +329,25 @@ if(isset($recargar) && $recargar=="true"){
                         onclick="ocultar_comentario_noticia()">&times;</button>
             </h3>
         </div>
-        <form id="idformBusq" method="POST" action="noticia/comentar">
+        <form id="idformComNot" method="POST" action="noticia/comentar">
             <div class="panel-body">
                 Introduzca el contenido del comentario y pulse Enviar
                 <div></div>
                 <label class="lbl-dest">Comentario:</label>
-                <textarea type="text" class="form-control" name="texto_com" placeholder="..."></textarea>
+                <div id="div-comNot" class="form-group">
+                    <textarea type="text" class="form-control" name="texto_com" placeholder="..." id="comNot"
+                              onblur="valida_texto(this.id)"></textarea>
+
+                    <div id="help-comNot" class="help-block"></div>
+                </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_comentario_noticia()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['comNot']);ocultar_comentario_noticia()">Cancelar
+                </button>
+                <button id="btnComNot" type="button" onclick="validaComentario([this.form.id,'comNot',this.id])"
+                        class="btn btn-primary">Enviar
+                </button>
             </div>
             <input type="hidden" name="id_noticia" value="<?php echo $noticia["id_noticia"]; ?>">
 
