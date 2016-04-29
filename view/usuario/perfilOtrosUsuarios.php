@@ -36,10 +36,10 @@ $datos = $view->getVariable("datos");
                                         <li>Rol en el sistema:
                                             <span class="
                                                  <?php if ($datos["rol"] == 'administrador') {
-                                                    echo 'admin-estilo';
-                                                } elseif ($datos['rol'] == 'moderador') {
-                                                    echo 'moderador-estilo';
-                                                } ?>">
+                                                echo 'admin-estilo';
+                                            } elseif ($datos['rol'] == 'moderador') {
+                                                echo 'moderador-estilo';
+                                            } ?>">
                                                 <?php echo $datos["rol"]; ?>
                                             </span>
                                         </li>
@@ -113,18 +113,23 @@ $datos = $view->getVariable("datos");
                         onclick="ocultar_enviar_mensaje()">&times;</button>
             </h3>
         </div>
-        <form id="idformBusq" method="POST" action="mensaje/enviar">
+        <form id="idformMenPriv" method="POST" action="mensaje/enviar">
             <div class="panel-body">
                 Introduzca el contenido del mensaje y pulse Enviar
                 <div></div>
                 <label class="lbl-dest">Destinatario:</label>
                 <span id="idDestinatario" class="form-control" disabled="disabled"></span>
                 <label class="lbl-dest">Mensaje:</label>
-                <textarea type="text" class="form-control" name="texto" placeholder="..."></textarea>
+
+                <div id="div-mensajePriv" class="form-group">
+                    <textarea type="text" class="form-control" name="texto" placeholder="..." id="mensajePriv"
+                              onblur="valida_texto(this.id)"></textarea>
+                    <div id="help-mensajePriv" class="help-block"></div>
+                </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_enviar_mensaje()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="reset" class="btn btn-default" onclick="limpia_form(['mensajePriv']);ocultar_enviar_mensaje()">Cancelar</button>
+                <button id="btnMenPriv" type="button" onclick="validaComentario([this.form.id,'mensajePriv',this.id])" class="btn btn-primary">Enviar</button>
             </div>
             <div id="idDesHid"></div>
         </form>

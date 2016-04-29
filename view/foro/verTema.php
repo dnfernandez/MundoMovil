@@ -42,6 +42,11 @@ if (isset($_GET["pag"])) {
                                                     onclick="javascript:alertify.message('Debes estar identificado en el sistema')">
                                                 Mensaje privado
                                             </button>
+                                        <?php elseif (isset($usuarioActual) && $usuarioActual->getIdUsuario() == $pregunta["id_usuario"]): ?>
+                                            <button class="btn btn-default"
+                                                    onclick="javascript:alertify.message('No puedes enviarte un mensaje a ti mismo')">
+                                                Mensaje privado
+                                            </button>
                                         <?php else : ?>
                                             <button type="button" class="btn btn-default"
                                                     onclick="mostrar_enviar_mensaje('<?php echo $pregunta["id_usuario"] ?>','<?php echo $pregunta["nom_usuario"]; ?>')">
@@ -150,6 +155,11 @@ if (isset($_GET["pag"])) {
                                             <?php if (!isset($usuarioActual)): ?>
                                                 <button class="btn btn-default"
                                                         onclick="javascript:alertify.message('Debes estar identificado en el sistema')">
+                                                    Mensaje privado
+                                                </button>
+                                            <?php elseif (isset($usuarioActual) && $usuarioActual->getIdUsuario() == $respuesta["id_usuario"]): ?>
+                                                <button class="btn btn-default"
+                                                        onclick="javascript:alertify.message('No puedes enviarte un mensaje a ti mismo')">
                                                     Mensaje privado
                                                 </button>
                                             <?php else : ?>
@@ -357,11 +367,21 @@ if (isset($_GET["pag"])) {
                 <label class="lbl-dest">Destinatario:</label>
                 <span id="idDestinatario" class="form-control" disabled="disabled"></span>
                 <label class="lbl-dest">Mensaje:</label>
-                <textarea type="text" class="form-control" name="texto" placeholder="..."></textarea>
+
+                <div id="div-mensajePriv" class="form-group">
+                    <textarea type="text" class="form-control" name="texto" placeholder="..." id="mensajePriv"
+                              onblur="valida_texto(this.id)"></textarea>
+
+                    <div id="help-mensajePriv" class="help-block"></div>
+                </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_enviar_mensaje()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['mensajePriv']);ocultar_enviar_mensaje()">Cancelar
+                </button>
+                <button id="btnMenPriv" type="button" onclick="validaComentario([this.form.id,'mensajePriv',this.id])"
+                        class="btn btn-primary">Enviar
+                </button>
             </div>
             <div id="idDesHid"></div>
         </form>
@@ -384,18 +404,30 @@ if (isset($_GET["pag"])) {
                 Introduzca el contenido de la respuesta y pulse Crear
                 <div></div>
                 <label class="lbl-dest">Respuesta:</label>
-                <textarea id="textareaRespuesta" type="text" class="form-control" name="texto"></textarea>
-                <script type="text/javascript">
-                    CKEDITOR.replace('textareaRespuesta');
-                    CKEDITOR.config.height = '25em';
-                </script>
+
+                <div id="div-textareaRespuesta" class="form-group">
+                    <textarea id="textareaRespuesta" type="text" class="form-control" name="texto"></textarea>
+                    <script type="text/javascript">
+                        CKEDITOR.replace('textareaRespuesta');
+                        CKEDITOR.config.height = '25em';
+                        CKEDITOR.instances['textareaRespuesta'].on('blur', function () {
+                            valida_texto('textareaRespuesta', 1);
+                        })
+                    </script>
+                    <div id="help-textareaRespuesta" class="help-block"></div>
+                </div>
             </div>
             <input type="hidden" name="id_pregunta" value="<?php echo $pregunta["id_pregunta"] ?>">
             <input type="hidden" name="id_foro" value="<?php echo $pregunta["id_foro"] ?>">
 
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_crear_respuesta()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Crear</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['textareaRespuesta'],1);ocultar_crear_respuesta()">Cancelar
+                </button>
+                <button id="btnResPreg" type="button"
+                        onclick="validaRespuesta([this.form.id,'textareaRespuesta',this.id])" class="btn btn-primary">
+                    Crear
+                </button>
             </div>
         </form>
     </div>

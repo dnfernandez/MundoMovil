@@ -317,11 +317,19 @@ $id_comentarios = $view->getVariable("id_comentarios");
                 Introduzca el contenido del comentario y pulse Enviar
                 <div></div>
                 <label class="lbl-dest">Comentario:</label>
-                <textarea type="text" class="form-control" name="texto_com" placeholder="..."></textarea>
+
+                <div id="div-comTut" class="form-group">
+                    <textarea type="text" class="form-control" name="texto_com" placeholder="..." id="comTut"
+                              onblur="valida_texto(this.id)"></textarea>
+
+                    <div id="help-comTut" class="help-block"></div>
+                </div>
             </div>
             <div class="panel-footer btn-form">
-                <button type="reset" class="btn btn-default" onclick="ocultar_comentario_tutorial()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="reset" class="btn btn-default"
+                        onclick="limpia_form(['comTut']);ocultar_comentario_tutorial()">Cancelar
+                </button>
+                <button id="btnComTut" type="button" onclick="validaComentario([this.form.id,'comTut',this.id])" class="btn btn-primary">Enviar</button>
             </div>
             <input type="hidden" name="id_tutorial" value="<?php echo $tutorial["id_tutorial"]; ?>">
 

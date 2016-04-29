@@ -24,37 +24,48 @@ $usuarioActual = $view->getVariable("usuarioActual");
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div id="div-titTut" class="form-group">
                                     <label>T&iacute;tulo</label>
-                                    <input type="text" class="form-control inp-log" name="titulo"
-                                           value="<?php echo $tutorial['titulo']; ?>">
+                                    <input type="text" class="form-control inp-log" name="titulo" id="titTut"
+                                           onblur="valida_titulo(this.id)"
+                                           value="<?php echo htmlentities($tutorial['titulo']); ?>">
+
+                                    <div id="help-titTut" class="help-block"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div id="div-clavTut" class="form-group">
                                     <label>Palabras clave</label>
-                                    <input type="text" class="form-control inp-log" name="pal_clave"
-                                           value="<?php echo $tutorial['pal_clave']; ?>">
+                                    <input type="text" class="form-control inp-log" name="pal_clave" id="clavTut"
+                                           onblur="valida_clave(this.id)"
+                                           value="<?php echo htmlentities($tutorial['pal_clave']); ?>">
+                                    <div id="help-clavTut" class="help-block"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div id="div-textareaCuerpoTutorial" class="form-group">
                                     <label>Cuerpo del tutorial</label>
                                     <textarea id="textareaCuerpoTutorial" type="text" class="form-control" name="texto"
-                                              placeholder=""><?php echo $tutorial['texto']; ?></textarea>
+                                              placeholder=""><?php echo htmlentities($tutorial['texto']); ?></textarea>
                                     <script type="text/javascript">
                                         CKEDITOR.replace('textareaCuerpoTutorial');
                                         CKEDITOR.config.height = '35em';
+                                        CKEDITOR.instances['textareaCuerpoTutorial'].on('blur', function() {
+                                            valida_texto('textareaCuerpoTutorial',1);})
                                     </script>
+                                    <div id="help-textareaCuerpoTutorial" class="help-block"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer btn-form">
-                        <button type="button" onclick="window.location.href='tutorial/ver?id=<?php echo $tutorial["id_tutorial"];?>'" class="btn btn-default">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button"
+                                onclick="window.location.href='tutorial/ver?id=<?php echo $tutorial["id_tutorial"]; ?>'"
+                                class="btn btn-default">Cancelar
+                        </button>
+                        <button id="btnModTut" type="button" onclick="validaModificarTutorial([this.form.id,'titTut','clavTut','textareaCuerpoTutorial', this.id])" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
             </div>

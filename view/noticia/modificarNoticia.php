@@ -30,7 +30,7 @@ if (!isset($noticia)) {
                                     <label>T&iacute;tulo</label>
                                     <input type="text" class="form-control inp-log" name="titulo" id="titNot"
                                            onblur="valida_titulo(this.id)"
-                                           value="<?php echo $noticia['titulo']; ?>">
+                                           value="<?php echo htmlentities($noticia['titulo']); ?>">
 
                                     <div id="help-titNot" class="help-block"></div>
                                 </div>
@@ -38,21 +38,21 @@ if (!isset($noticia)) {
                                     <label>Resumen</label>
                                     <textarea type="text" class="form-control"
                                               name="resumen" id="resNot"
-                                              onblur="valida_texto(this.id)"><?php echo $noticia['resumen']; ?></textarea>
+                                              onblur="valida_texto(this.id)"><?php echo htmlentities($noticia['resumen']); ?></textarea>
 
                                     <div id="help-resNot" class="help-block"></div>
                                 </div>
                                 <div id="div-clavNot" class="form-group">
                                     <label>Palabras clave</label>
                                     <input type="text" class="form-control inp-log" name="pal_clave"
-                                           value="<?php echo $noticia['pal_clave']; ?>" id="clavNot"
+                                           value="<?php echo htmlentities($noticia['pal_clave']); ?>" id="clavNot"
                                            onblur="valida_clave(this.id)">
                                     <div id="help-clavNot" class="help-block"></div>
                                 </div>
                             </div>
                             <div class=" col-md-5 imagenReg2">
                                 <div id="div-files" class="form-group img-noticia">
-                                    <img id="imgPerfil" src="<?php echo $noticia['rutaImagen']; ?>"
+                                    <img id="imgPerfil" src="<?php echo htmlentities($noticia['rutaImagen']); ?>"
                                          alt="ImagenNoticia"
                                          class="img-rounded img-responsive">
                                 </div>
@@ -71,7 +71,7 @@ if (!isset($noticia)) {
                                 <div id="div-textareaCuerpoNoticia" class="form-group">
                                     <label>Cuerpo de noticia</label>
                                     <textarea id="textareaCuerpoNoticia" type="text" class="form-control" name="texto"
-                                              placeholder=""><?php echo $noticia['texto']; ?></textarea>
+                                              placeholder=""><?php echo htmlentities($noticia['texto']); ?></textarea>
                                     <script type="text/javascript">
                                         CKEDITOR.replace('textareaCuerpoNoticia');
                                         CKEDITOR.config.height = '35em';
