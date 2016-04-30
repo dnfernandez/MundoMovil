@@ -37,28 +37,29 @@ class PreguntaController extends BaseController
     public function eliminarPregunta()
     {
         if (isset($this->usuarioActual)) {
-            if ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador"
-                || $this->usuarioActual->getIdUsuario() == $_POST["id_pregunta_usuario"]
-            ) {
-                if (isset($_POST["id_pregunta"])) {
-                    $id_pregunta = $_POST["id_pregunta"];
+            if (isset($_POST["id_pregunta"])) {
+                $id_pregunta = $_POST["id_pregunta"];
+                $id_usuario = $this->preguntaMapper->listarPreguntaPorId($id_pregunta)["id_usuario"];
+                if ($this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador"
+                    || $this->usuarioActual->getIdUsuario() == $id_usuario
+                ) {
                     $this->preguntaMapper->eliminar($id_pregunta);
                     $this->view->setVariable("mensajeSucces", "Pregunta eliminada correctamente", true);
                     if (isset($_POST["id_foro"])) {
-                        $this->view->redirect("foro", "ver", "id=".$_POST["id_foro"]);
+                        $this->view->redirect("foro", "ver", "id=" . $_POST["id_foro"]);
                     } else {
                         $this->view->redirectToReferer();
                     }
 
                 } else {
-                    $error = "Es necesario el id de pregunta";
+                    $error = "No tienes suficientes permisos para esta acci&oacute;n";
                     $this->view->setVariable("mensajeError", $error, true);
-                    $this->view->redirectToReferer();
+                    $this->view->redirect("foro", "index");
                 }
             } else {
-                $error = "No tienes suficientes permisos para esta acci&oacute;n";
+                $error = "Es necesario el id de pregunta";
                 $this->view->setVariable("mensajeError", $error, true);
-                $this->view->redirect("foro", "index");
+                $this->view->redirectToReferer();
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
@@ -156,8 +157,13 @@ class PreguntaController extends BaseController
             if (isset($_GET["id"])) {
                 if ($this->preguntaMapper->existe($_GET["id"])) {
                     $pregunta = $this->preguntaMapper->listarPreguntaPorId($_GET["id"]);
-                    $this->view->setVariable("pregunta", $pregunta);
-                    $this->view->render("foro", "modificarTema");
+                    if ($pregunta["id_usuario"] == $this->usuarioActual->getIdUsuario() || $this->usuarioActual->getRol() == "administrador" || $this->usuarioActual->getRol() == "moderador") {
+                        $this->view->setVariable("pregunta", $pregunta);
+                        $this->view->render("foro", "modificarTema");
+                    } else {
+                        $this->view->setVariable("mensajeError", "No tienes permisos para realizar esa acci&oacute;n", true);
+                        $this->view->redirect("foro", "index");
+                    }
                 } else {
                     $this->view->setVariable("mensajeError", "No existe ese tema / pregunta con ese id", true);
                     $this->view->redirect("foro", "index");

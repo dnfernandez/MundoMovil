@@ -139,7 +139,7 @@ class MensajeController extends BaseController
                     $error = "El texto no puede estar vac&iacute;o";
                 }
             } else {
-                $error = "Se id de usuario destinatario";
+                $error = "Se necesita id de usuario destinatario";
             }
         } else {
             $error = "Se necesita estar validado en el sistema para esta acci&oacute;n";
