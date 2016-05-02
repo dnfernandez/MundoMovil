@@ -75,7 +75,8 @@ class PreguntaMapper
     }
 
     /**
-     * Medoto para filtrar preguntas por texto, palabras clave o autor
+     * Medoto para filtrar preguntas por texto, palabras clave, autor o nada añadiendole un campo
+     * con el numero total de repuestas a cada pregunta.
      */
 
     public function listarPreguntasFiltradas($pag = 1, $texto = null, $pal_clave = null, $autor = null)
@@ -113,23 +114,26 @@ class PreguntaMapper
         } elseif ($autor != null) {
             $stmt = $this->db->prepare("select * from pregunta, usuario where pregunta.id_usuario = usuario.id_usuario and  usuario.nom_usuario like ? order by fecha desc limit ?,?");
             $stmt->execute(array('%' . $autor . '%', $inicio, $limite));
+        } else {
+            $stmt = $this->db->prepare("select * from pregunta, usuario where pregunta.id_usuario = usuario.id_usuario order by fecha desc limit ?,?");
+            $stmt->execute(array($inicio, $limite));
         }
 
-        if (($texto || $pal_clave || $autor) != null) {
-            $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $preguntasFinal = array();
-            foreach ($preguntas as $pregunta) {
-                $preguntaTotal = $pregunta;
-                $stmt2 = $this->db->prepare("select count(*) as total from pregunta, respuesta where pregunta.id_pregunta=respuesta.id_pregunta and pregunta.id_pregunta=?");
-                $stmt2->execute(array($pregunta["id_pregunta"]));
-                $numTotal = $stmt2->fetch(PDO::FETCH_BOTH);
-                $numTotal = $numTotal["total"];
-                array_push($preguntaTotal, $numTotal);
-                array_push($preguntasFinal, $preguntaTotal);
-            }
 
-            return $preguntasFinal;
+        $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $preguntasFinal = array();
+        foreach ($preguntas as $pregunta) {
+            $preguntaTotal = $pregunta;
+            $stmt2 = $this->db->prepare("select count(*) as total from pregunta, respuesta where pregunta.id_pregunta=respuesta.id_pregunta and pregunta.id_pregunta=?");
+            $stmt2->execute(array($pregunta["id_pregunta"]));
+            $numTotal = $stmt2->fetch(PDO::FETCH_BOTH);
+            $numTotal = $numTotal["total"];
+            array_push($preguntaTotal, $numTotal);
+            array_push($preguntasFinal, $preguntaTotal);
         }
+
+        return $preguntasFinal;
+
     }
 
     /**
@@ -220,10 +224,10 @@ class PreguntaMapper
      * Metodo que permite listar las preguntas de un usuario concreto
      */
 
-    public function listarPreguntasPorAutor($id_autor)
+    public function listarPreguntasPorAutor($id_usuario)
     {
         $stmt = $this->db->prepare("select * from pregunta where id_usuario=?");
-        $stmt->execute(array($id_autor));
+        $stmt->execute(array($id_usuario));
         return $stmt->fetchAll(PDO::FETCH_BOTH);
     }
 }

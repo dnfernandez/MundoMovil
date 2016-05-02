@@ -189,9 +189,23 @@ if (isset($_GET["pag"])) {
                                                         </a>
                                                         <?php
                                                             if ($usuarioActual->getRol() == "administrador" || $usuarioActual->getRol() == "moderador") {
-                                                                echo ' - <a onclick="javascript:recarga2()" href="respuesta/eliminar_respuesta?id=' . $respuesta["id_respuesta"] . '" class="glyphicon glyphicon-trash"></a>';
+                                                                //echo ' - <a onclick="javascript:recarga2()" href="respuesta/eliminar_respuesta?id=' . $respuesta["id_respuesta"] . '" class="glyphicon glyphicon-trash"></a>';
+                                                                echo ' -
+                                                                    <a
+                                                                        onclick="javascript:alertify.confirm(\'¿Est\u00E1 seguro de querer eliminar la respuesta?\').autoCancel(10).set(\'title\',\'MundoMovil\')
+                                                                        .set(\'onok\', function(closeEvent){ window.location.href=\'respuesta/eliminar_respuesta?id=\' . $respuesta[\'id_respuesta\'] . \'\'} );recarga2();"
+
+                                                                        class="enlaces-sinHref glyphicon glyphicon-trash">
+                                                                    </a>
+                                                                ';
                                                             }
                                                         ?>
+
+                                                        <a
+                                                            onclick="javascript:alertify.confirm('¿Est\u00E1 seguro de querer eliminar la respuesta?').autoCancel(10).set('title','MundoMovil')
+                                                                .set('onok', function(closeEvent){ window.href.location=''});"
+                                                            class="enlaces-sinHref">Eliminar
+                                                        </a>
                                                     </span>
                                                 <?php endif; ?>
                                             </div>

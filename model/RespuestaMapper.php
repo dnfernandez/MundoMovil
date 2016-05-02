@@ -99,7 +99,7 @@ class RespuestaMapper
      * y se suma en positivo o negativo.
      * Si el usuario ya habia votado y vota por otro tipo,
      * se modifica el tipo del voto, y se incrementa y decrementa
-     * postiva y negativamente en respuesta.
+     * positiva y negativamente en respuesta.
      * En caso contrario se lanza un error de ya votado
      */
 

@@ -80,7 +80,7 @@ class TutorialMapper
      * Si autor !=null filtramos por autor
      * Si pal_clave !=null filtramos por palabras clave, para ello las descomponemos y buscamos una por una
      * Si text != null filtramos por texto
-     * Si todas son null mostramos todaos los tutoriales
+     * Si todas son null mostramos todos los tutoriales
      */
 
     public function listarTutorialesFiltro($pag = 1, $autor = null, $pal_clave = null, $texto = null)

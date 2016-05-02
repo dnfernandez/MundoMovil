@@ -43,7 +43,7 @@ class UsuarioController extends BaseController
     /**
      * Metodo que permite loguear a un usuario en el sistema.
      *
-     * Si existe un email se comprueba y contraseña:
+     * Si existe un email  y contraseña se comprueba:
      * 1º. Si el usuario es un usuario que esta activado en el sistema.
      * 2º. Si el usuario no esta baneado.
      * 3º. Si los datos introducidos son correctos.

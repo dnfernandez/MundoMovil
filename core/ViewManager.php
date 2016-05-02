@@ -256,7 +256,7 @@ class ViewManager
     /**
      * Renderiza la vista especificada del controlador especificado
      *
-     * Si el controlador es $controlador=micotrolador y $vista=myvista
+     * Si el controlador es $controlador=micotrolador y $vista=mivista
      * se seleccionara el fichero php: /view/micontrolador/mivista.php
      *
      * Si se usa un layout (via setLayout) o el layout por defecto no ha
