@@ -78,7 +78,11 @@ class UsuarioController extends BaseController
                         $this->usuarioMapper->actualizarFechaConexion(null, $email);
                         $this->view->setVariable("mensajeSucces", "Usuario logueado correctamente", true);
                         if (isset($_POST["url_referer"]) && !empty($_POST["url_referer"])) {
-                            header("Location: " . $_POST["url_referer"] . "");
+                            if (isset($_SESSION["__sesion__herramienta__"]["__url_ref__"])){
+								header("Location: " . $_POST["url_referer"] . "");
+							}else{
+								$this->view->redirect("noticia", "index");
+							}
                         } else {
                             if (!$this->view->redirectToReferer()) {
                                 $this->view->redirect("noticia", "index");

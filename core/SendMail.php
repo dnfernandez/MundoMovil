@@ -17,7 +17,10 @@ function getURL($tipo)
     $d_actual = $d_actual[count($d_actual) - 1];
     $pos = strpos($_SERVER["REQUEST_URI"], $d_actual);
     $uri = substr($_SERVER["REQUEST_URI"], 0, $pos) . $d_actual;
-
+	
+	if ($uri=="html" || $uri == "www"){
+		$uri="";
+	}
 
     if ($_SERVER["SERVER_PORT"] == 80) {
         $url = $_SERVER["HTTP_HOST"] . $uri . "/usuario/$tipo?cod_act=";
