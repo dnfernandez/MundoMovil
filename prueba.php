@@ -10,15 +10,15 @@ require_once(__DIR__ . "/./model/ForoMapper.php");
 require_once(__DIR__ . "/./model/PreguntaMapper.php");
 require_once(__DIR__ . "/./model/RespuestaMapper.php");
 
-$noticia = new Noticia(1, "escoba", "asa", "asa as", "2.", "asd", "2015-02-02 00:00:00", 1);
+/*$noticia = new Noticia(1, "escoba", "asa", "asa as", "2.", "asd", "2015-02-02 00:00:00", 1);
 $noticiaMapper = new NoticiaMapper();
-
+*/
 /*$noticiaMapper->eliminar($noticia->getIdNoticia());
 $noticiaMapper->insertar($noticia);
 $noticia2 = new Noticia(1,"escobeta","asadora","asa as","2.","asd","2016-02-02 00:00:00",1);
 $noticiaMapper->actualizar($noticia2);*/
 
-$noticias = $noticiaMapper->listarNoticiasFiltro(1,null,"lg",null);
+/*$noticias = $noticiaMapper->listarNoticiasFiltro(1,null,"lg",null);
 if ($noticias != null) {
     foreach ($noticias as $not) {
         echo $not["id_noticia"] . " ---- Usuario: " . $not["id_usuario"] ." --- Titulo: ".$not["titulo"] ." --- Palabras: ".$not["pal_clave"] ."<br>";
@@ -26,14 +26,14 @@ if ($noticias != null) {
 }
 
 echo "<br> TOTAL: ".$noticiaMapper->contarNoticias(null,null,"modificaciones")["total"]."<br>";
-
+*/
 /*$lnotId = $noticiaMapper->listarNoticiaPorId(10);
 
 if($lnotId!=null){
     echo "<br>".$lnotId["id_noticia"]. " ---- Fecha: ". $not["fecha"]."<br>";
 }*/
 
-echo "<br><br>";
+/*echo "<br><br>";
 
 $comentarioMapper = new ComentarioNoticiaMapper();
 $comentarioN1 = new ComentarioNoticia(null, 1, 1, "asdasdsa", "2015-02-02 00:00:00", null);
@@ -278,3 +278,29 @@ $prega = $preguntaMapper->listarPreguntasFiltradas(1,"a",null,null);
 echo "<br>";
 print_r($prega);
 echo "<br>";
+*/
+
+function getURL($tipo)
+{
+    $directorio = getcwd();
+    $d_actual = explode("/", $directorio);
+    $d_actual = $d_actual[count($d_actual) - 1];
+    $pos = strpos($_SERVER["REQUEST_URI"], $d_actual);
+    $uri = substr($_SERVER["REQUEST_URI"], 0, $pos) . $d_actual;
+	
+	echo $_SERVER["HTTP_HOST"]."<br>";
+	echo $uri."<br>";
+	if ($uri=="html" || $uri == "www"){
+		$uri="";
+	}
+	
+    if ($_SERVER["SERVER_PORT"] == 80) {
+        $url = $_SERVER["HTTP_HOST"] . $uri . "/usuario/$tipo?cod_act=";
+    } else {
+        $url = $_SERVER["HTTP_HOST"] . ":" . $_SERVER["SERVER_PORT"] . $uri . "/usuario/$tipo?cod_act=";
+    }
+
+    return $url;
+}
+
+echo getURL("baba");

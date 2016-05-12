@@ -215,10 +215,10 @@ if ($(window).height() > 200) {
  */
 
 window.onload = function () {
-    url_referer();
     var pos = window.name || 0;
     window.scrollTo(0, pos);
     window.name = null;
+    url_referer();
 }
 
 /**

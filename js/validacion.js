@@ -116,7 +116,7 @@ function valida_nom_usuario(id) {
  */
 function valida_alfanumerico(id) {
     valor = document.getElementById(id).value;
-    if ((!(/^[a-z\d_ ]{1,50}$/i).test(valor)) || /^\s*$/.test(valor)) {
+    if ((!(/^[a-z\d_ ñáéíóúÑÁÉÍÓÚ]{1,50}$/i).test(valor)) || /^\s*$/.test(valor)) {
         $("#div-" + id).addClass("has-error");
         document.getElementById("help-" + id).innerHTML = "Debe contener caracteres alfanum&eacutericos (m&aacuteximo 50) ";
         document.getElementById("help-" + id).style.display = "block";
@@ -135,7 +135,7 @@ function valida_alfanumerico(id) {
  */
 function valida_titulo(id) {
     valor = document.getElementById(id).value;
-    if ((!(/^([a-zA-Z\d_ !?¿¡:.,]){1,150}$/i).test(valor)) || /^\s*$/.test(valor)) {
+    if ((!(/^([a-zA-Z\d_ !?¿¡:.,ñáéíóúÑÁÉÍÓÚ]){1,150}$/i).test(valor)) || /^\s*$/.test(valor)) {
         $("#div-" + id).addClass("has-error");
         document.getElementById("help-" + id).innerHTML = "Debe contener caracteres alfanum&eacutericos (m&aacuteximo 150) ";
         document.getElementById("help-" + id).style.display = "block";
@@ -184,7 +184,7 @@ function valida_texto(id, opc) {
  */
 function valida_clave(id) {
     valor = document.getElementById(id).value;
-    if (/^\s*$/.test(valor) || (!(/^([a-z][a-z\d_]+[ ]*)+$/i).test(valor))) {
+    if (/^\s*$/.test(valor) || (!(/^([a-z][a-z\d_ñáéíóúÑÁÉÍÓÚ]+[ ]*)+$/i).test(valor))) {
         $("#div-" + id).addClass("has-error");
         document.getElementById("help-" + id).innerHTML = "Introduzca palabras separadas por espacios";
         document.getElementById("help-" + id).style.display = "block";
