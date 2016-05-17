@@ -697,7 +697,6 @@ a.btn {
 
 .cuerpoPregunta img, .cuerpoPregunta iframe {
     max-width: 100%;
-    height: auto !important;
 }
 
 .tagsPregunta {
