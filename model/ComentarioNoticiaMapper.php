@@ -51,10 +51,10 @@ class ComentarioNoticiaMapper
         $inicio = ($pag - 1) * $limite;
 
         if(!$limitar){
-            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=?");
+            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? order by fecha asc");
             $stmt->execute(array($id_noticia));
         }else {
-            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? limit ?,?");
+            $stmt = $this->db->prepare("select * from comentario_noticia, usuario where comentario_noticia.id_usuario=usuario.id_usuario and id_noticia=? order by fecha asc limit ?,?");
             $stmt->execute(array($id_noticia, $inicio, $limite));
         }
         $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -94,7 +94,7 @@ class ComentarioNoticiaMapper
      * @return array
      */
     public function calcularIdSecuenciales($id_noticia){
-        $stmt = $this->db->prepare("select * from comentario_noticia where id_noticia=?");
+        $stmt = $this->db->prepare("select * from comentario_noticia where id_noticia=? order by fecha asc");
         $stmt->execute(array($id_noticia));
         $comentarios = $stmt->fetchAll(PDO::FETCH_BOTH);
         $array = array();

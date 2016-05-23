@@ -52,10 +52,10 @@ class ComentarioTutorialMapper
         }
         $inicio = ($pag - 1) * $limite;
         if (!$limitar) {
-            $stmt = $this->db->prepare("select * from comentario_tutorial, usuario where comentario_tutorial.id_usuario = usuario.id_usuario and id_tutorial=?");
+            $stmt = $this->db->prepare("select * from comentario_tutorial, usuario where comentario_tutorial.id_usuario = usuario.id_usuario and id_tutorial=? order by fecha asc");
             $stmt->execute(array($id_tutorial));
         } else {
-            $stmt = $this->db->prepare("select * from comentario_tutorial, usuario where comentario_tutorial.id_usuario = usuario.id_usuario and id_tutorial=? limit ?,?");
+            $stmt = $this->db->prepare("select * from comentario_tutorial, usuario where comentario_tutorial.id_usuario = usuario.id_usuario and id_tutorial=? order by fecha asc limit ?,?");
             $stmt->execute(array($id_tutorial, $inicio, $limite));
         }
         $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -97,7 +97,7 @@ class ComentarioTutorialMapper
      */
     public function calcularIdSecuenciales($id_tutorial)
     {
-        $stmt = $this->db->prepare("select * from comentario_tutorial where id_tutorial=?");
+        $stmt = $this->db->prepare("select * from comentario_tutorial where id_tutorial=? order by fecha asc");
         $stmt->execute(array($id_tutorial));
         $comentarios = $stmt->fetchAll(PDO::FETCH_BOTH);
         $array = array();
